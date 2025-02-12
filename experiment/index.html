@@ -15,6 +15,14 @@
     <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
 
+    <!-- Eye Tracking -->
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
+
+
+
+
     <!-- Custom scripts -->
     <script src="demographics.js"></script>
     <script src="questionnaires.js"></script>
@@ -97,6 +105,10 @@
     // timeline.push(questionnaire_bait)
     // timeline.push(questionnaire_cops)
     // timeline.push(questionnaire_mint)
+
+    // Eye-tracking ==============================================================
+    timeline.push(eyetracking_consent)
+    timeline.push(eyetracking_calibration) // include full-screen 
 
     // Fiction
 
