@@ -140,127 +140,127 @@ const fiction_instructions2 = {
     },
 }
 
-// // preload stimuli 
-// const fiction_preloadstims = {
-//     type: jsPsychPreload,
-//     message:
-//         "Please wait while the experiment is being loaded (it can take a few seconds)",
-//     images: stimuli_list.map((a) => "stimuli/" + a.stimulus),
-//     on_load: function () {
-//         stimuli = assignCondition(stimuli_list)
-//     },
-// }
+// preload stimuli 
+const fiction_preloadstims = {
+    type: jsPsychPreload,
+    message:
+        "Please wait while the experiment is being loaded (it can take a few seconds)",
+    images: stimuli_list.map((a) => "stimuli/" + a.stimulus),
+    on_load: function () {
+        stimuli = assignCondition(stimuli_list)
+    },
+}
 
-// // fixation cross 1
-// const fiction_fixation1a = {
-//     type: jsPsychHtmlKeyboardResponse,
-//     // on_start: function () {
-//     //     document.body.style.cursor = "none"
-//     // },
-//     stimulus:
-//         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
-//     choices: ["s"],
-//     trial_duration: 500,
-//     save_trial_parameters: { trial_duration: true },
-//     data: function () {
-//         return {
-//             screen: "fiction_fixation1a",
-//             item: jsPsych.evaluateTimelineVariable("stimulus"),
-//         }
-//     },
-// }
+// fixation cross 1
+const fiction_fixation1a = {
+    type: jsPsychHtmlKeyboardResponse,
+    // on_start: function () {
+    //     document.body.style.cursor = "none"
+    // },
+    stimulus:
+        "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: ["s"],
+    trial_duration: 500,
+    save_trial_parameters: { trial_duration: true },
+    data: function () {
+        return {
+            screen: "fiction_fixation1a",
+            item: jsPsych.evaluateTimelineVariable("stimulus"),
+        }
+    },
+}
 
-// // stimuli cue 
-// const fiction_cue = {
-//     type: jsPsychHtmlKeyboardResponse,
-//     stimulus: function () {
-//         var cond = jsPsych.evaluateTimelineVariable("Condition")
-//         return (
-//             "<div style='font-size:450%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%; color: " +
-//             color_cues[cond] +
-//             "'><b>" +
-//             text_cue[cond] +
-//             "</b></div>"
-//         )
-//     },
-//     data: function () {
-//         var cond = jsPsych.evaluateTimelineVariable("Condition")
-//         return {
-//             screen: "fiction_cue",
-//             color: color_cues[cond],
-//             condition: cond,
-//             item: jsPsych.evaluateTimelineVariable("stimulus"),
-//         }
-//     },
-//     choices: ["s"],
-//     trial_duration: 1000,
-//     save_trial_parameters: { trial_duration: true },
-// }
+// stimuli cue 
+const fiction_cue = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: function () {
+        var cond = jsPsych.evaluateTimelineVariable("Condition")
+        return (
+            "<div style='font-size:450%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%; color: " +
+            color_cues[cond] +
+            "'><b>" +
+            text_cue[cond] +
+            "</b></div>"
+        )
+    },
+    data: function () {
+        var cond = jsPsych.evaluateTimelineVariable("Condition")
+        return {
+            screen: "fiction_cue",
+            color: color_cues[cond],
+            condition: cond,
+            item: jsPsych.evaluateTimelineVariable("stimulus"),
+        }
+    },
+    choices: ["s"],
+    trial_duration: 1000,
+    save_trial_parameters: { trial_duration: true },
+}
 
-// // fixation cross 2
-// const fiction_fixation1b = {
-//     type: jsPsychHtmlKeyboardResponse,
-//     stimulus:
-//         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
-//     choices: ["s"],
-//     trial_duration: 500,
-//     save_trial_parameters: { trial_duration: true },
-//     data: function () {
-//         return {
-//             screen: "fiction_fixation1b",
-//             item: jsPsych.evaluateTimelineVariable("stimulus"),
-//         }
-//     },
-//     extensions: [
-//         {
-//             type: jsPsychExtensionWebgazer,
-//             params: { targets: ["#jspsych-html-keyboard-response-stimulus"] },
-//         },
-//     ],
-// }
+// fixation cross 2
+const fiction_fixation1b = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:
+        "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: ["s"],
+    trial_duration: 500,
+    save_trial_parameters: { trial_duration: true },
+    data: function () {
+        return {
+            screen: "fiction_fixation1b",
+            item: jsPsych.evaluateTimelineVariable("stimulus"),
+        }
+    },
+    extensions: [
+        {
+            type: jsPsychExtensionWebgazer,
+            params: { targets: ["#jspsych-html-keyboard-response-stimulus"] },
+        },
+    ],
+}
 
-// // image shown
-// const fiction_showimage1 = {
-//     type: jsPsychImageKeyboardResponse,
-//     stimulus: function () {
-//         return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")
-//     },
-//     stimulus_height: function () {
-//         if (window.innerHeight < window.innerWidth) {
-//             return Math.round(0.9 * window.innerHeight)
-//         } else {
-//             return null
-//         }
-//     },
-//     stimulus_width: function () {
-//         if (window.innerHeight > window.innerWidth) {
-//             return Math.round(0.9 * window.innerWidth)
-//         } else {
-//             return null
-//         }
-//     },
-//     trial_duration: 2000,
-//     choices: ["s"],
-//     save_trial_parameters: { trial_duration: true },
-//     data: function () {
-//         return {
-//             screen: "fiction_image1",
-//             window_width: window.innerWidth,
-//             window_height: window.innerHeight,
-//             trial_number: fiction_trialnumber,
-//         }
-//     },
-//     on_finish: function () {
-//         fiction_trialnumber += 1
-//     },
-//     // Enable webgazer
-//     extensions: [
-//         {
-//             type: jsPsychExtensionWebgazer,
-//             params: { targets: ["#jspsych-image-keyboard-response-stimulus"] },
-//         },
-//     ],
-// }
+// image shown
+const fiction_showimage1 = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: function () {
+        return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")
+    },
+    stimulus_height: function () {
+        if (window.innerHeight < window.innerWidth) {
+            return Math.round(0.9 * window.innerHeight)
+        } else {
+            return null
+        }
+    },
+    stimulus_width: function () {
+        if (window.innerHeight > window.innerWidth) {
+            return Math.round(0.9 * window.innerWidth)
+        } else {
+            return null
+        }
+    },
+    trial_duration: 2000,
+    choices: ["s"],
+    save_trial_parameters: { trial_duration: true },
+    data: function () {
+        return {
+            screen: "fiction_image1",
+            window_width: window.innerWidth,
+            window_height: window.innerHeight,
+            trial_number: fiction_trialnumber,
+        }
+    },
+    on_finish: function () {
+        fiction_trialnumber += 1
+    },
+    // Enable webgazer
+    extensions: [
+        {
+            type: jsPsychExtensionWebgazer,
+            params: { targets: ["#jspsych-image-keyboard-response-stimulus"] },
+        },
+    ],
+}
 
 // Ratings ==========================================================================
 
@@ -271,13 +271,13 @@ const fiction_ratings1 = {
         goNextPageAutomatic: true,
         showQuestionNumbers: false,
         showNavigationButtons: false,
-        // title: function () {
-        //     return (
-        //         "Rating - " +
-        //         Math.round(((fiction_trialnumber - 1) / stimuli.length) * 100) +
-        //         "%"
-        //     )
-        // },
+        title: function () {
+            return (
+                "Rating - " +
+                Math.round(((fiction_trialnumber - 1) / stimuli.length) * 100) +
+                "%"
+            )
+        },
         description: "Think of the person that you just saw.",
         pages: [
             {
@@ -324,9 +324,12 @@ const fiction_ratings1 = {
                         name: "Physiological Arousal",
                         title: "How did this image made you feel in your body?",
                         isRequired: true,
-                        rateType: "smileys",
-                        rateCount: "5",
-                        rateMax: "5",
+                        rateMin: 0,
+                        rateMax: 5,
+                        // add negative for sexually turned off?
+                        // change wording
+                        minRateDescription: "No arousal",
+                        maxRateDescription: "Highest arousal",
                         displayMode: "buttons",
                     }
                 ]

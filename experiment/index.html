@@ -111,16 +111,66 @@
     timeline.push(eyetracking_calibration) // include full-screen 
 
     // Fiction
+    timeline.push({
+        timeline: [fiction_instructions1],
+        on_finish() {
 
-    timeline.push(fiction_ratings1)
+            //Phase 1A -------------------------------------------------------------
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    0,
+                    Math.ceil(stimuli.length / 2)
+                ),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_ratings1,
+                ],
+            })
 
-    // Feedback
-    timeline.push(experiment_feedback)
+            // // Break ----------------------------------------------------------------
+            timeline.push(fiction_phase1_break)
+            timeline.push(eyetracking_recalibration)
 
-    //End
-    timeline.push(demographics_debriefing)
-    timeline.push(fullscreen_off)
-    timeline.push(demographics_endscreen)
+            // Phase 1B -------------------------------------------------------------
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    Math.ceil(stimuli.length / 2),
+                    stimuli.length
+                ),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_ratings1,
+                ],
+            })
+
+            // Stage 2 ==============================================================
+            timeline.push(fiction_instructions2)
+            timeline.push({
+                timeline_variables: jsPsych.randomization.shuffleNoRepeats(stimuli),
+                timeline: [
+                    fiction_fixation2,
+                    fiction_showimage2,
+                    fiction_ratings2,
+                ],
+            })
+
+            // Feedback
+            timeline.push(experiment_feedback)
+
+            //End======================================================================
+            timeline.push(demographics_debriefing)
+
+            // Exit fullscreen mode
+            timeline.push(fullscreen_off)
+            timeline.push(demographics_endscreen)
+        },
+    })
 
     // Run the timeline -------------------------------------------------------
     jsPsych.run(timeline)
