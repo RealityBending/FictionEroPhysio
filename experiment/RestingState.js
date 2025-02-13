@@ -1,0 +1,135 @@
+const RS_instructions = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+        "<p><b>Instructions</b></p>" +
+        // Don't give exact time so that participants don't count
+        "<p>A rest period of about 8 minutes is about to start.</p>" +
+        "<p>Simply <b>relax</b> and remain seated quietly with your eyes closed. Please try <b>not to fall asleep</b>.</p> " +
+        "<p>Once the resting period is over, you will hear a beep. You can then open your eyes and proceed.</p>" +
+        "<p>Once you are ready, close your eyes. The rest period will shortly begin.</p>",
+    choices: ["Continue"],
+}
+
+
+// Resting state questionnaire
+const rs_items = {
+    DoM_1: "I had busy thoughts",
+    DoM_2: "I had rapidly switching thoughts",
+    DoM_3: "I had difficulty holding onto my thoughts",
+    ToM_1: "I thought about others",
+    ToM_2: "I thought about people I like",
+    ToM_3: "I placed myself in other people's shoes",
+    Self_1: "I thought about my feelings",
+    Self_2: "I thought about my behaviour",
+    Self_3: "I thought about myself",
+    Plan_1: "I thought about things I need to do",
+    Plan_2: "I thought about solving problems",
+    Plan_3: "I thought about the future",
+    Sleep_1: "I felt sleepy",
+    Sleep_2: "I felt tired",
+    Sleep_3: "I had difficulty staying awake",
+    Comfort_1: "I felt comfortable",
+    Comfort_2: "I felt happy",
+    Comfort_3: "I felt relaxed",
+    SomA_1: "I was conscious of my body",
+    SomA_2: "I thought about my heartbeat",
+    SomA_3: "I thought about my breathing",
+}
+
+// Tasks ======================================================================
+// Create blank grey screen just before rest period
+var RS_buffer = {
+    type: jsPsychHtmlKeyboardResponse,
+    on_start: function () {
+        document.body.style.backgroundColor = "#808080"
+        document.body.style.cursor = "none"
+        create_marker(marker1, (color = "white"))
+    },
+    on_finish: function () {
+        document.querySelector("#marker1").remove()
+    },
+    stimulus: "",
+    choices: ["s"],
+    trial_duration: 1000, // 1 second
+    css_classes: ["RS_fixation"],
+}
+
+// Create blank grey screen for resting state
+var RS_task = {
+    type: jsPsychHtmlKeyboardResponse,
+    on_load: function () {
+        create_marker(marker1)
+        create_marker_2(marker2)
+    },
+    stimulus: "<p style='font-size:150px;'>+</p>",
+    choices: ["s"],
+    trial_duration: 8 * 60 * 1000,
+    css_classes: ["fixation"],
+    data: {
+        screen: "RS_resting",
+        time_start: function () {
+            return performance.now()
+        },
+    },
+    on_finish: function (data) {
+        document.querySelector("#marker1").remove()
+        document.querySelector("#marker2").remove()
+        data.duration = (performance.now() - data.time_start) / 1000 / 60
+    },
+}
+
+// Play beep
+var RS_beep = {
+    type: jsPsychAudioButtonResponse,
+    on_start: function () {
+        document.body.style.backgroundColor = "#FFFFFF"
+        document.body.style.cursor = "auto"
+    },
+    stimulus: ["utils/beep.mp3"],
+    prompt: "<p>It's over! Please press continue.</p>",
+    choices: ["Continue"],
+}
+
+// Debriefing Questionnaire ========================================================================
+
+function rs_questions (items, required = true, ticks = ["Completely Disagree", "Completely Agree"]){
+    items = shuffleObject(items)
+
+    questions = []
+    for (const key of Object.keys(items)) {
+        q = {
+            title: items[key],
+            name: key,
+            type: "rating",
+            displayMode: "buttons",
+            isRequired: required,
+            minRateDescription: ticks[0],
+            maxRateDescription: ticks[1],
+            rateValues: [0, 1, 2, 3, 4, 5, 6],
+        }
+        questions.push(q)
+    }
+    return [
+        {
+            elements: questions,
+            description:
+                "We are interested in the potential feelings and thoughts you may have experienced during the resting period." +
+                "Please indicate the extent to which you agree with each statement.",
+        },
+    ]
+}
+
+// Questions
+const RS_questionnaire ={
+    type: jsPsychSurvey,
+    survey_json: {
+        title: "About the resting period",
+        showQuestionNumbers: false,
+        goNextPageAutomatic: true,
+        // showProgressBar: "aboveHeader",
+        pages: rs_questions(rs_items),
+    },
+    data: {
+        screen: "questionnaire_bait",
+    },
+}

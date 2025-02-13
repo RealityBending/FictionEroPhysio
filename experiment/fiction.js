@@ -315,10 +315,6 @@ const fiction_ratings1 = {
                         maxRateDescription: "Pleasant",
                         displayMode: "buttons",
                     },
-                ],
-            },
-            {
-                elements: [
                     {
                         type: "rating",
                         name: "Physiological Arousal",

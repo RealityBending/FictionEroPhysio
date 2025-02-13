@@ -14,19 +14,26 @@
     <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
     <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+
 
     <!-- Eye Tracking -->
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@8.1.0/examples/js/webgazer/webgazer.js"></script>
+    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
-
-
-
 
     <!-- Custom scripts -->
     <script src="demographics.js"></script>
     <script src="questionnaires.js"></script>
     <script src="fiction.js"></script>
+    <script src="RestingState.js"></script>
+    <script src="Tapping.js"></script>
 
     <!-- CSS -->
     <style>
@@ -79,38 +86,40 @@
                 }.json`
             )
         },
-        // extensions: [{ type: jsPsychExtensionWebgazer }],
+        extensions: [{ type: jsPsychExtensionWebgazer }],
     })
 
-    /* ----------------- Preloading ----------------- */
-    // // Preload audio variables
-    // var beep = ["utils/beep.mp3"]
-    // timeline.push({
-    //     type: jsPsychPreload,
-    //     auto_preload: true,
-    //     audio: beep,
-    // })
+    // Preloading ===========================
+    var beep = ["utils/beep.mp3"] //Preload audio variables
+    timeline.push({
+        type: jsPsychPreload,
+        auto_preload: true,
+        audio: beep,
+    })
 
     // Initialize timeline
     var timeline = []
 
+
     // Full screen
-    // timeline.push(fullscreen_on)
+    timeline.push(fullscreen_on)
 
     // Demographics ===========================================================
     timeline.push(demographics_consent)
-    // timeline.push(demographics_questions)
+    timeline.push(demographics_questions)
 
-    // // Questionnaires
-    // timeline.push(questionnaire_bait)
-    // timeline.push(questionnaire_cops)
-    // timeline.push(questionnaire_mint)
+    //Resting State ================================================
+    timeline.push(RS_instructions)// Instructions
+    timeline.push(RS_buffer) // Create blank grey screen just before rest period
+    timeline.push(RS_task)// Create blank grey screen for resting state
+    timeline.push(RS_beep)// Play beep
+    timeline.push(RS_questionnaire)// Add debriefing questionnaire
 
-    // Eye-tracking ==============================================================
+    // Eye-tracking ==================================================
     timeline.push(eyetracking_consent)
     timeline.push(eyetracking_calibration) // include full-screen 
 
-    // Fiction
+    // Fiction ========================================================
     timeline.push({
         timeline: [fiction_instructions1],
         on_finish() {
@@ -149,6 +158,11 @@
                 ],
             })
 
+            /*---------------------- Questionnaires----------- */
+                timeline.push(questionnaire_bait)
+                timeline.push(questionnaire_cops)
+                timeline.push(questionnaire_mint)
+
             // Stage 2 ==============================================================
             timeline.push(fiction_instructions2)
             timeline.push({
@@ -162,15 +176,48 @@
 
             // Feedback
             timeline.push(experiment_feedback)
-
-            //End======================================================================
-            timeline.push(demographics_debriefing)
-
-            // Exit fullscreen mode
-            timeline.push(fullscreen_off)
-            timeline.push(demographics_endscreen)
         },
+        })
+
+    // Tapping ============================
+    timeline.push(TAP_instructions1) // Instructions
+    timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
+    timeline.push(TAP_instructions2) // Insert a break
+    timeline.push(create_TAP_sequence("TAP_slower", (repetitions = 90)))
+    timeline.push(TAP_instructions3) // Insert a break
+    timeline.push(create_TAP_sequence("TAP_faster", (repetitions = 90)))
+    timeline.push(TAP_items)
+    timeline.push(TAP_instructions4) // Insert a break
+    timeline.push(create_TAP_sequence("TAP_random", (repetitions = 90)))
+    timeline.push(TAP_instructions5) // Insert a break
+    timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
+
+    /* ----------------- HCT ----------------- */
+    // Instructions
+    timeline.push(HCT_instructions)
+
+    timeline.push({
+        timeline: [
+            HCT_countdown,
+            HCT_interval(),
+            HCT_beep,
+            HCT_count,
+            HCT_confidence,
+        ],
+        // Loop comprehension for duration vector
+        timeline_variables: HCT_durations.map((i) => ({
+            duration: i * 1000,
+        })),
+        randomize_order: true,
     })
+
+
+    //End======================================================================
+    timeline.push(demographics_debriefing)
+
+    // Exit fullscreen mode
+    timeline.push(fullscreen_off)
+    timeline.push(demographics_endscreen)
 
     // Run the timeline -------------------------------------------------------
     jsPsych.run(timeline)
