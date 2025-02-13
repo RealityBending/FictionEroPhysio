@@ -93,7 +93,6 @@ function create_TAP_trial(
 ) {
     return {
         type: jsPsychHtmlKeyboardResponse,
-        extensions: extensions,
         on_load: function () {
             create_marker(marker1, (color = marker))
             create_marker_2(marker2)

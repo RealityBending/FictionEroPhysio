@@ -130,6 +130,6 @@ const RS_questionnaire ={
         pages: rs_questions(rs_items),
     },
     data: {
-        screen: "questionnaire_bait",
+        screen: "questionnaire_RS",
     },
 }

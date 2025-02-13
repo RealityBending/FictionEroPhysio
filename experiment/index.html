@@ -29,11 +29,14 @@
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
 
     <!-- Custom scripts -->
+    <script src="stimuli_selection/stimuli_list.js"></script>
     <script src="demographics.js"></script>
+    <script src="eye_tracking.js"></script>
     <script src="questionnaires.js"></script>
     <script src="fiction.js"></script>
     <script src="RestingState.js"></script>
     <script src="Tapping.js"></script>
+    <script src="HCT.js"></script>
 
     <!-- CSS -->
     <style>
@@ -89,17 +92,15 @@
         extensions: [{ type: jsPsychExtensionWebgazer }],
     })
 
-    // Preloading ===========================
+    // Initialize timeline
+    var timeline = []
+
     var beep = ["utils/beep.mp3"] //Preload audio variables
     timeline.push({
         type: jsPsychPreload,
         auto_preload: true,
         audio: beep,
     })
-
-    // Initialize timeline
-    var timeline = []
-
 
     // Full screen
     timeline.push(fullscreen_on)
@@ -201,8 +202,7 @@
             HCT_countdown,
             HCT_interval(),
             HCT_beep,
-            HCT_count,
-            HCT_confidence,
+            HCT_items,
         ],
         // Loop comprehension for duration vector
         timeline_variables: HCT_durations.map((i) => ({

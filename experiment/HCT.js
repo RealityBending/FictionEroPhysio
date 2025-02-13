@@ -86,35 +86,38 @@ var HCT_beep = {
     choices: ["Continue"],
 }
 
-var HCT_count = {
-    type: jsPsychSurveyText,
-    questions: [
-        {
-            prompt: "<b>How many heartbeats did you count?</b>",
-            placeholder: "Enter number",
-            name: "HCT_count",
-        },
-    ],
-    data: {
-        screen: "HCT_count",
+var HCT_items = {
+    type: jsPsychSurvey,
+    survey_json: {
+        pages: [
+            {
+                elements: [
+                    {
+                    title: "How many heartbeats did you count?",
+                    type: "text",
+                    placeholder: "Enter number",
+                    name:"HCT_count",
+                    }
+                ]
+            },
+            {
+                elements: [
+                    {
+                    title: "How confident are you that your answer was correct?",
+                    name: "HCT_confidence",
+                    type: "rating",
+                    displayMode: "buttons",
+                    isRequired: true,
+                    minRateDescription: "Not confident",
+                    maxRateDescription: "Very confident",
+                    rateMin: 0 ,
+                    rateMax: 5,
+                    }
+                ]
+            }
+        ]
     },
-}
-
-var HCT_confidence = {
-    type: jsPsychMultipleSlider,
-    questions: [
-        {
-            prompt: "<b>How confident are you that your answer was correct?</b>",
-            name: "HCT_confidence",
-            min: 0,
-            max: 1,
-            step: 0.01,
-            slider_start: 0.5,
-            ticks: ["Not confident", "Very confident"],
-            required: true,
-        },
-    ],
     data: {
-        screen: "HCT_confidence",
-    },
+        screen: "HCT_items"
+    }
 }
