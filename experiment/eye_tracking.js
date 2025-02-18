@@ -12,6 +12,19 @@ var eyetracking_consent = {
     },
 }
 
+// Full screen
+var fullscreen_text =
+    "<p>The experiment will switch to full screen mode when you press the button below</p>"
+var fullscreen_button = "Continue"
+
+var fullscreen_on = {
+    type: jsPsychFullscreen,
+    message: fullscreen_text,
+    button_label: fullscreen_button,
+    fullscreen_mode: true,
+    delay_after: 0,
+}
+
 // Calibration ====================================================================
 const calibration_points = [
     [20, 20],
@@ -187,5 +200,4 @@ var eyetracking_recalibration = {
         }
     },
 }
-
 

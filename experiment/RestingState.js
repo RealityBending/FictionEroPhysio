@@ -36,6 +36,16 @@ const rs_items = {
     SomA_3: "I thought about my breathing",
 }
 
+// Convernience function to shuffle an object (used internally)
+function shuffleObject(obj) {
+    const entries = Object.entries(obj)
+    for (let i = entries.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1))
+            ;[entries[i], entries[j]] = [entries[j], entries[i]]
+    }
+    return Object.fromEntries(entries)
+}
+
 // Tasks ======================================================================
 // Create blank grey screen just before rest period
 var RS_buffer = {
@@ -43,7 +53,7 @@ var RS_buffer = {
     on_start: function () {
         document.body.style.backgroundColor = "#808080"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "white"))
+        create_marker(marker1, (color = "white")) // create black screen 
     },
     on_finish: function () {
         document.querySelector("#marker1").remove()
@@ -92,7 +102,7 @@ var RS_beep = {
 
 // Debriefing Questionnaire ========================================================================
 
-function rs_questions (items, required = true, ticks = ["Completely Disagree", "Completely Agree"]){
+function rs_questions(items, required = true, ticks = ["Completely Disagree", "Completely Agree"]) {
     items = shuffleObject(items)
 
     questions = []
@@ -120,7 +130,7 @@ function rs_questions (items, required = true, ticks = ["Completely Disagree", "
 }
 
 // Questions
-const RS_questionnaire ={
+const RS_questionnaire = {
     type: jsPsychSurvey,
     survey_json: {
         title: "About the resting period",

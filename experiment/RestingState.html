@@ -1,0 +1,120 @@
+<!DOCTYPE HTM>
+<html>
+
+<head>
+    <!-- Title shown in tab -->
+    <title>Experiment</title>
+
+    <!--Load JsPsych -->
+    <script src="https://unpkg.com/jspsych@8.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+    <!--Load plugins-->
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+
+    <!-- Custom scripts -->
+    <script src="demographics.js"></script>
+    <script src="parameters.js"></script>
+    <script src="RestingState.js"></script>
+
+    <!-- CSS -->
+    <style>
+        .narrow-text {
+            max-width: 50%;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(3) {
+            background-color: #ef9a9a;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(4) {
+            background-color: #ffab91;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(5) {
+            background-color: #ffe082;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(6) {
+            background-color: #fff59d;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(7) {
+            background-color: #e6ee9c;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(8) {
+            background-color: #c5e1a5;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(9) {
+            background-color: #a5d6a7;
+        }
+    </style>
+</head>
+
+
+<body></body>
+
+<script>
+    // Initialize experiment ===============================================================
+    var jsPsych = initJsPsych({
+        show_progress_bar: true,
+        message_progress_bar: "Progress",
+        on_finish: function () {
+            // Get participant ID
+            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+
+            // Get all demographic responses
+            let demographic_data = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response
+
+            // Save to localStorage to use later on fiction.js
+            localStorage.setItem(`P${participantID}_demographic_data`, JSON.stringify(demographic_data))
+
+            // Save as JSON file locally
+            jsPsych.data.get().localSave(
+                "json",
+                `P${participantID}_rs.json`
+            )
+        }
+    })
+
+
+    // Initialize timeline
+    var timeline = []
+
+    // Demographics ===========================================================
+    timeline.push(demographics_consent)
+    timeline.push(demographics_questions)
+
+    //Resting State ================================================
+    timeline.push(RS_instructions)// Instructions
+    timeline.push(RS_buffer) // Create blank grey screen just before rest period
+    timeline.push(RS_task)// Create blank grey screen for resting state
+    timeline.push(RS_beep)// Play beep
+    timeline.push(RS_questionnaire)// Add debriefing questionnaire
+
+
+    // // save data via DataPipe
+    // timeline.push({
+    //     type: jsPsychPipe,
+    //     action: "save",
+    //     experiment_id: "818NyQh9EBvw", // This in generated in the DataPipe interface
+    //     filename: `${participantID}.csv`,
+    //     data_string: () => jsPsych.data.get().csv(),
+    // })
+
+    // Run the timeline =================================================================
+    jsPsych.run(timeline)
+</script>
+
+</html>

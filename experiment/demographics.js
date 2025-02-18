@@ -31,21 +31,21 @@ const demographics_consent = {
             // Description
             "<p align='left'><b>Why have I been invited and what will I do?</b><br>" +
             "The goal is to study how new technology can impact <b>human perception</b>." +
-            "In this study, you will be shown <b>erotic images</b> and asked to complete a few questionnaires and perform some tasks. " +
+            " In this study, you will be shown <b>erotic images</b> and asked to complete a few questionnaires and perform some tasks. " +
             "We will also measure your physiological processes to assess the relationship between how you experience your body and how you perceive the world." +
             //Physiological signals
             "<p align='left'><b>Physiological Signals</b><br>" +
-            "We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences" +
-            "Since this study is being undertaken for research purposes only, we will not be able to provide any feedback or information on clinical aspects of the data obtained." +
-            "For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse 2 headset which contains electrodes that will be placed in your forehead and behind the ears" +
-            "We kindly ask that you refrain from participating if you are aware of having skin reactions or allergies to adhesives or the materials used in the electrodes – primarily composed of silver and silver chloride." +
+            "We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences. " +
+            "Since this study is being undertaken for research purposes only, we will not be able to provide any feedback or information on clinical aspects of the data obtained. " +
+            "For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse 2 headset which contains electrodes that will be placed in your forehead and behind the ears. " +
+            "We kindly ask that you refrain from participating if you are aware of having skin reactions or allergies to adhesives or the materials used in the electrodes -\ primarily composed of silver and silver chloride." +
             // Results and personal information
             "<p align='left'><b>What will happen to the results and my personal information?</b><br>" +
             "The results of this research may be written into a scientific publication. Your anonymity will be ensured in the way described in the consent information below. <b>Please read this information carefully</b> and then, if you wish to take part, please acknowledge that you have fully understood this sheet, and that you consent to take part in the study as it is described here.</p>" +
             "<p align='left'><b>Consent</b><br></p>" +
             // Bullet points
             "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that by signing below I am agreeing to take part in the University of Sussex research described here, and that I have read and understood this information sheet</li>" +
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalised in any way. </li>" +
+            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalized in any way. </li>" +
             "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that since the study is anonymous, it will be impossible to withdraw my data once I have completed it.</li>" +
             "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that my personal data will be used for the purposes of this research study and will be handled in accordance with Data Protection legislation." +
             "I understand that the University's Privacy Notice provides further information on how the University uses personal data in its research.</li>" +
@@ -54,7 +54,7 @@ const demographics_consent = {
             // Incentive
             "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
             "</p>" +
-            "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>), Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>) or Maisie Bennett (<i style='color:DodgerBlue;'>mb2021@sussex.ac.uk</i>)." +
+            "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>), Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>) or Maisie Bennett (<i style='color:DodgerBlue;'>mb2021@sussex.ac.uk</i>). " +
             "This research has been approved (xx/xxx/xx) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>"
         return text
     },
@@ -91,7 +91,6 @@ const demographics_questions = {
                         title: "What is your gender?",
                         name: "Gender",
                         type: "radiogroup",
-                        // Should change other to prefer to self-describe ? (for ethical approval)
                         choices: ["Male", "Female", "Other"],
                         isRequired: true,
                         colCount: 0,

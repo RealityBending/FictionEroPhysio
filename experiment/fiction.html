@@ -1,0 +1,205 @@
+<!DOCTYPE HTM>
+<html>
+
+<head>
+    <!-- Title shown in tab -->
+    <title>Experiment</title>
+
+    <!--Load JsPsych -->
+    <script src="https://unpkg.com/jspsych@8.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+
+    <!--Load plugins-->
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe"></script>
+
+    <!-- Eye Tracking -->
+    <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@8.1.0/examples/js/webgazer/webgazer.js"></script>
+    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
+
+    <!-- Custom scripts -->
+    <script src="eye_tracking.js"></script>
+    <script src="stimuli_selection/stimuli_list.js"></script>
+    <script src="parameters.js"></script>
+    <script src="questionnaires.js"></script>
+    <script src="fiction.js"></script>
+
+
+    <!-- CSS -->
+    <style>
+        .narrow-text {
+            max-width: 50%;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(3) {
+            background-color: #ef9a9a;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(4) {
+            background-color: #ffab91;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(5) {
+            background-color: #ffe082;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(6) {
+            background-color: #fff59d;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(7) {
+            background-color: #e6ee9c;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(8) {
+            background-color: #c5e1a5;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(9) {
+            background-color: #a5d6a7;
+        }
+    </style>
+</head>
+
+
+<body></body>
+
+<script>
+
+    var participantID = {
+        type: jsPsychSurvey,
+        survey_json: {
+            title: "About yourself",
+            completeText: "Continue",
+            pageNextText: "Next",
+            pagePrevText: "Previous",
+            goNextPageAutomatic: false,
+            showQuestionNumbers: false,
+            pages: [
+                {
+                    elements: [
+                        {
+                            title: "Enter the participant's ID:",
+                            type: "text",
+                            placeholder: "000",
+                            name: "Participant_ID",
+                            isRequired: true
+                        }
+                    ]
+                },
+            ]
+        }
+    }
+
+    // Initialize experiment ===============================================================
+    var jsPsych = initJsPsych({
+        show_progress_bar: true,
+        message_progress_bar: "Progress",
+        extensions: [{ type: jsPsychExtensionWebgazer }],
+        on_finish: function () {
+            // Save as JSON file locally
+            jsPsych.data.get().localSave(
+                "json",
+                `P${participantID}_fiction.json`
+            )
+        }
+    })
+
+
+
+    if (storedData) {
+        console.log("Retrieved demographics:", storedData)
+        var participantID = storedData.Participant_ID // Get participant ID
+
+
+        // Store demographic data in jsPsych
+        jsPsych.data.addProperties({
+            participant_id: participantID,
+            gender: storedData.Gender,
+            sexual_orientation: storedData.SexualOrientation,
+            stimuli_choice: storedData.StimuliChoice,
+        })
+    }
+
+    // Initialize timeline
+    var timeline = []
+
+    // Eye-tracking ==================================================
+    // timeline.push(eyetracking_consent)
+    // timeline.push(eyetracking_calibration) // include full-screen 
+
+    // Fiction ========================================================
+    timeline.push({
+        timeline: [fiction_instructions1],
+        on_finish() {
+
+            //Phase 1A -------------------------------------------------------------
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    0,
+                    Math.ceil(stimuli.length / 2)
+                ),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_ratings1,
+                ],
+            })
+
+            // // Break ----------------------------------------------------------------
+            timeline.push(fiction_phase1_break)
+            timeline.push(eyetracking_recalibration)
+
+            // Phase 1B -------------------------------------------------------------
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    Math.ceil(stimuli.length / 2),
+                    stimuli.length
+                ),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_ratings1,
+                ],
+            })
+
+            /*---------------------- Questionnaires----------- */
+            timeline.push(questionnaire_bait)
+            timeline.push(questionnaire_cops)
+
+            // Stage 2 ==============================================================
+            timeline.push(fiction_instructions2)
+            timeline.push({
+                timeline_variables: jsPsych.randomization.shuffleNoRepeats(stimuli),
+                timeline: [
+                    fiction_fixation2,
+                    fiction_showimage2,
+                    fiction_ratings2,
+                ],
+            })
+
+            // Feedback
+            timeline.push(experiment_feedback)
+        },
+    })
+
+    // Run the timeline -------------------------------------------------------
+    jsPsych.run(timeline)
+</script>
+
+</html>
