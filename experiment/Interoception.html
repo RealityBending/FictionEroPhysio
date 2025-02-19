@@ -1,2 +1,23 @@
 <!DOCTYPE HTM>
 <html>
+
+<script>
+
+
+// HCT 
+// Instructions
+timeline.push(HCT_instructions)
+
+timeline.push({
+    timeline: [
+        HCT_countdown,
+        HCT_interval(),
+        HCT_beep,
+        HCT_items,
+    ],
+    // Loop comprehension for duration vector
+    timeline_variables: HCT_durations.map((i) => ({
+        duration: i * 1000,
+    })),
+    randomize_order: true,
+})
