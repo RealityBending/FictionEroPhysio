@@ -1,0 +1,97 @@
+<!DOCTYPE HTM>
+<html>
+
+<head>
+    <!--create title shown in tab; not the same as header on webpage-->
+    <title>FictionEroPhysio</title>
+
+    <script src="utils/jspsych/jspsych.js"></script>
+
+    <!--Load all necessary plugins stored in utils-->
+    <script src="utils/jspsych/plugin-html-keyboard-response.js"></script>
+    <script src="utils/jspsych/plugin-html-button-response.js"></script>
+    <script src="utils/jspsych/plugin-fullscreen.js"></script>
+    <script src="utils/jspsych/plugin-audio-button-response.js"></script>
+    <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
+    <script src="utils/jspsych/plugin-preload.js"></script>
+    <script src="utils/jspsych/multiple-slider.js"></script>
+    <script src="utils/jspsych/plugin-survey-text.js"></script>
+    <script src="utils/jspsych/extension-record-video.js"></script>
+    <script src="utils/jspsych/plugin-initialize-camera.js"></script>
+
+    <!-- Load task specific code -->
+    <script src="parameters.js"></script>
+    <script src="RestingState.js"></script>
+    <script src="Tapping.js"></script>
+    <script src="HCT.js"></script>
+    <script src="Questionnaires.js"></script>
+
+    <!-- Applying default style here -->
+    <link
+        href="utils/jspsych/jspsych.css"
+        rel="stylesheet"
+        type="text/css"
+    />
+    <style>
+        /* set canvas to be full screen */
+        .jspsych-content {
+            max-width: 100%;
+        }
+    </style>
+</head>
+
+<body></body>
+
+
+<script>
+
+// questionnaires ================== 
+
+timeline.variable(questionnaire_mint)
+tiemline.variable(questionnaire_maia)
+
+// TAP ===============================
+        // Instructions
+        timeline.push(TAP_instructions1)
+
+        timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
+
+        timeline.push(TAP_instructions2) // Insert a break
+
+        timeline.push(create_TAP_sequence("TAP_slower", (repetitions = 90)))
+
+        timeline.push(TAP_instructions3) // Insert a break
+
+        timeline.push(create_TAP_sequence("TAP_faster", (repetitions = 90)))
+
+        // Debriefing questionnaire
+        timeline.push(TAP_influenced)
+        timeline.push(TAP_strategy)
+
+        timeline.push(TAP_instructions4) // Insert a break
+
+        timeline.push(create_TAP_sequence("TAP_random", (repetitions = 90)))
+
+        timeline.push(TAP_instructions5) // Insert a break
+
+        timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
+
+
+// HCT ===============================
+    // Instructions
+
+timeline.push(HCT_instructions)
+
+timeline.push({
+    timeline: [
+        HCT_countdown,
+        HCT_interval(),
+        HCT_beep,
+        HCT_items,
+    ],
+    // Loop comprehension for duration vector
+    timeline_variables: HCT_durations.map((i) => ({
+        duration: i * 1000,
+    })),
+    randomize_order: true,
+})
