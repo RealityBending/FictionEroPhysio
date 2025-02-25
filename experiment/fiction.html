@@ -29,6 +29,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
 
     <!-- Custom scripts -->
+    <script src="demographics.js"></script>
     <script src="eye_tracking.js"></script>
     <script src="stimuli_selection/stimuli_list.js"></script>
     <script src="parameters.js"></script>
@@ -98,107 +99,33 @@
                         }
                     ]
                 }
-            ] 
-        }          
-    }     
-
-// Gender, sexuality and stimulus choice 
-
-const demographics_data = {
-    type: jsPsychSurvey,
-    survey_json: {
-        title: "About yourself",
-        completeText: "Continue",
-        pageNextText: "Next",
-        pagePrevText: "Previous",
-        goNextPageAutomatic: false,
-        showQuestionNumbers: false,
-        pages: [
-            {
-                elements: [
-                    {
-                        title: "What is your gender?",
-                        name: "Gender",
-                        type: "radiogroup",
-                        choices: ["Male", "Female", "Other"],
-                        isRequired: true,
-                        colCount: 0,
-                    },    
-                ],
-
-                elements: [
-                    {
-                        title: "What sexual orientation do you identify with?",
-                        description:
-                            "These questions are important to understand the results in the latter part of the experiment.",
-                        name: "SexualOrientation",
-                        type: "radiogroup",
-                        choices: ["Heterosexual", "Homosexual", "Bisexual"],
-                        showOtherItem: true,
-                        otherText: "Other",
-                        otherPlaceholder: "Please specify",
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                    {
-                        visibleIf:
-                            "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
-                        title: "Which types of images do you find the most arousing?",
-                        description:
-                            "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
-                        name: "StimuliChoice",
-                        type: "radiogroup",
-                        choices: [
-                            "Women (and heterosexual couples)",
-                            "Men (and heterosexual couples)",
-                            "Only women (and lesbian couples)",
-                            "Only men (and gay couples)",
-                        ],
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                ],
-            },
-        ]
-    },
-    data: {
-        screen: "demographic_questions",
+            ]
+        }
     }
-}
 
-
-// Initialize experiment ===============================================================
+    // Initialize experiment ===============================================================
     var jsPsych = initJsPsych({
         show_progress_bar: true,
         message_progress_bar: "Progress",
         extensions: [{ type: jsPsychExtensionWebgazer }],
         on_finish: function () {
+            // Get participant ID
+            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+
             // Save as JSON file locally
             jsPsych.data.get().localSave(
                 "json",
-                `P${participantID}_fiction.json`
+                `P${participantID}_rs.json`
             )
         }
     })
 
-
-
-    if (storedData) {
-        console.log("Retrieved demographics:", storedData)
-        var participantID = storedData.Participant_ID // Get participant ID
-
-
-        // Store demographic data in jsPsych
-        jsPsych.data.addProperties({
-            participant_id: participantID,
-            gender: storedData.Gender,
-            sexual_orientation: storedData.SexualOrientation,
-            stimuli_choice: storedData.StimuliChoice,
-        })
-    }
-
     // Initialize timeline
     var timeline = []
+
+    // Demographics
+    timeline.push(participant_ID)
+    timeline.push(demographics_data2)
 
     // Eye-tracking ==================================================
     // timeline.push(eyetracking_consent)
