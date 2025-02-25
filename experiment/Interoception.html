@@ -18,19 +18,15 @@
     <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
     <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
-    //
-    <script src="utils/jspsych/extension-record-video.js"></script>
-    //
-    <script src="utils/jspsych/plugin-initialize-camera.js"></script>
 
-    <!-- // do we want to add the eye tracking on the interoception bit? -->
-    <script src="parameters.js"></script>
 
     <!-- Load task specific code -->
     <script src="demographics.js"></script>
-    <script src="Tapping.js"></script>
+    <script src="parameters.js"></script>
+    <!-- <script src="Tapping.js"></script> change to new  -->
     <script src="HCT.js"></script>
     <script src="Questionnaires.js"></script>
+    <script src="TAP.js"></script>
 
 
     <!-- CSS -->
@@ -109,22 +105,37 @@
             // Save as JSON file locally
             jsPsych.data.get().localSave(
                 "json",
-                `P${participantID}_rs.json`
+                `P${participantID}_int.json`
             )
         }
     })
 
+
     // Initialize timeline
     var timeline = []
 
-    // Questionnaires ================== 
-    // randomise order of questionnaires
-    questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])
-    timeline.push(questionnaires)
+    // Preload beep sound
+    var beep = ["utils/beep.mp3"]
+    timeline.push({
+        type: jsPsychPreload,
+        auto_preload: true,
+        audio: beep,
+    })
+
+    timneline.push(TAP_timeline)
+
+    // Demographics
+    // timeline.push(participant_ID)
+    // timeline.push(demographics_data2)
+
+    // // Questionnaires ================== 
+    // questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])  // randomise order of questionnaires
+    // timeline.push(questionnaires)
 
     // TAP ===============================
     // Instructions
     timeline.push(TAP_instructions1)
+    timeline.push(TAP_beep)
 
     timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
 
@@ -149,24 +160,24 @@
     timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
 
 
-    // HCT ===============================
-    // Instructions
+    // // HCT ===============================
+    // // Instructions
 
-    timeline.push(HCT_instructions)
+    // timeline.push(HCT_instructions)
 
-    timeline.push({
-        timeline: [
-            HCT_countdown,
-            HCT_interval(),
-            HCT_beep,
-            HCT_items,
-        ],
-        // Loop comprehension for duration vector
-        timeline_variables: HCT_durations.map((i) => ({
-            duration: i * 1000,
-        })),
-        randomize_order: true,
-    })
+    // timeline.push({
+    //     timeline: [
+    //         HCT_countdown,
+    //         HCT_interval(),
+    //         HCT_beep,
+    //         HCT_items,
+    //     ],
+    //     // Loop comprehension for duration vector
+    //     timeline_variables: HCT_durations.map((i) => ({
+    //         duration: i * 1000,
+    //     })),
+    //     randomize_order: true,
+    // })
 
     // Run the timeline -------------------------------------------------------
     jsPsych.run(timeline)
