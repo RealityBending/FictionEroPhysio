@@ -9,8 +9,10 @@ const TAP_instructions1 = {
     choices: [" "]
 }
 
+var beep = ["utils/beep.mp3"]
+
 // Countdown before each trial
-var TAP_countdown = {
+const TAP_countdown = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: function () {
         let count = 3
@@ -30,62 +32,76 @@ var TAP_countdown = {
                 clearInterval(countdownInterval)
             }
         }, 1000)
-    }
+    },
 }
 
-// Beep phase with participant tapping in sync
+// Create beep
 const TAP_beep = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: beep,
     choices: [" "],
-    trial_duration: 1428, // 42 BPM converted to milliseconds
+    trial_duration: 1429, // 42 BPM converted to milliseconds
     response_ends_trial: false,
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     },
     data: {
-        phase: "tap_beep"
+        screen: "tap_beep"
     }
 }
 
 // create sequence of beeps
 const TAP_beep_sequence = {
     timeline: [TAP_beep],
-    repetitions: 30, // 30 beeps
+    repetitions: 10, // 30 beeps
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     }
 }
 
-// Continuation phase where participant maintains the rhythm
-var TAP_continuation = {
+// Continuation phase (100 taps required)
+let tapcount = 0
+
+const TAP_continuation = {
     type: jsPsychHtmlKeyboardResponse,
     choices: [" "],
-    trial_duration: 142800, // Duration for 100 taps at 42 BPM
     response_ends_trial: false,
-    data: {
-        phase: "tap_continuation"
+    stimulus: "<p>Keep tapping at the same rhythm!</p>",
+    data: { screen: "tap_continuation" },
+    on_start: function () {
+        tapcount = 0
+    },// reset trial count when trial starts
+    on_load: function () {
+        let displayElement = jsPsych.getDisplayElement() // Get current trial display
+        function countTaps(event) {
+            if (event.code === "Space") { // Ensure only spacebar is counted
+                tapcount++
+                if (tapcount >= 100) {
+                    displayElement.removeEventListener("keydown", countTaps) // Remove listener
+                    jsPsych.finishTrial() // End trial after 100 taps
+                }
+            }
+        }
+        displayElement.addEventListener("keydown", countTaps)
     }
 }
 
-// Trial combining beeps and continuation phase in a sequence
+// Trial combining 30 beeps and continuation phase
 const TAP_trial = {
     timeline: [
-        TAP_beep, // Beep phase where participant taps in sync
-        TAP_continuation // Continuation phase where they keep tapping the rhythm
-    ],
-    repetitions: 30, // 30 beeps and continuation phase after
+        TAP_beep_sequence,
+        TAP_continuation],
     on_start: function () {
-        document.body.style.backgroundColor = "#FFFFFF" // Set background to white
-        document.body.style.cursor = "auto" // Reset cursor
-    }
+        document.body.style.backgroundColor = "#FFFFFF"
+        document.body.style.cursor = "auto"
+    },
+    data: { screen: "tap_trial" }
 }
 
 //TAP_trial
 const TAP_timeline = [
     TAP_instructions1,  // Instructions to the participant
     TAP_countdown,      // Countdown before the trial starts
-    TAP_trial           // Beep phase followed by continuation phase
-]
+    TAP_trial]      // Beep phase followed by continuation phase
