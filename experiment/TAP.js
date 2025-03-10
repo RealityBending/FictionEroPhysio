@@ -46,62 +46,63 @@ const TAP_beep = {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     },
-    data: {
-        screen: "tap_beep"
-    }
+    data: { screen: "tap_beep" }
 }
 
 // create sequence of beeps
 const TAP_beep_sequence = {
     timeline: [TAP_beep],
-    repetitions: 10, // 30 beeps
+    repetitions: 10, // 10 beeps
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     }
 }
 
-// Continuation phase (100 taps required)
-let tapcount = 0
-
-const TAP_continuation = {
-    type: jsPsychHtmlKeyboardResponse,
-    choices: [" "],
-    response_ends_trial: false,
-    stimulus: "<p>Keep tapping at the same rhythm!</p>",
-    data: { screen: "tap_continuation" },
-    on_start: function () {
-        tapcount = 0
-    },// reset trial count when trial starts
-    on_load: function () {
-        let displayElement = jsPsych.getDisplayElement() // Get current trial display
-        function countTaps(event) {
-            if (event.code === "Space") { // Ensure only spacebar is counted
-                tapcount++
-                if (tapcount >= 100) {
-                    displayElement.removeEventListener("keydown", countTaps) // Remove listener
-                    jsPsych.finishTrial() // End trial after 100 taps
-                }
-            }
-        }
-        displayElement.addEventListener("keydown", countTaps)
+function create_TAP_trial(
+    screen = "tap",
+    trial_duration = null,
+    marker = "white"
+) {
+    return {
+        type: jsPsychHtmlKeyboardResponse,
+        // extensions: extensions,
+        on_load: function () {
+            create_marker(marker1, (color = marker))
+            create_marker_2(marker2)
+        },
+        stimulus: "<b>Keep tapping at the same rhythm!</b>",
+        choices: [" "],
+        trial_duration: trial_duration,
+        css_classes: ["fixation"],
+        data: {
+            screen: screen,
+            time_start: function () {
+                return performance.now()
+            },
+        },
+        on_finish: function (data) {
+            document.querySelector("#marker1").remove()
+            document.querySelector("#marker2").remove()
+            data.duration = (performance.now() - data.time_start) / 1000 / 60
+        },
     }
 }
 
-// Trial combining 30 beeps and continuation phase
-const TAP_trial = {
-    timeline: [
-        TAP_beep_sequence,
-        TAP_continuation],
-    on_start: function () {
-        document.body.style.backgroundColor = "#FFFFFF"
-        document.body.style.cursor = "auto"
-    },
-    data: { screen: "tap_trial" }
+function create_TAP_sequence(screen = "TAP1", repetitions = 100) {
+    return {
+        timeline: [
+            create_TAP_trial(screen + "_waiting", null, "white"),
+            create_TAP_trial(screen + "_tap", 60, "black"),
+        ],
+        repetitions: repetitions,
+        // trial_duration: 5,  // Needs https://github.com/jspsych/jsPsych/discussions/3110
+    }
 }
 
 //TAP_trial
-const TAP_timeline = [
-    TAP_instructions1,  // Instructions to the participant
-    TAP_countdown,      // Countdown before the trial starts
-    TAP_trial]      // Beep phase followed by continuation phase
+// const TAP_timeline = [
+//     // TAP_instructions1,  // Instructions to the participant
+//     // TAP_countdown,      // Countdown before the trial starts
+//     // TAP_beep_sequence,
+//     TAP_continuation]      // Beep phase followed by continuation phase

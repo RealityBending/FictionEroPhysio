@@ -99,16 +99,16 @@
     var jsPsych = initJsPsych({
         show_progress_bar: true,
         message_progress_bar: "Progress",
-        on_finish: function () {
-            // Get participant ID
-            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+        // on_finish: function () {
+        //     // Get participant ID
+        //     let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
 
-            // Save as JSON file locally
-            jsPsych.data.get().localSave(
-                "json",
-                `P${participantID}_int.json`
-            )
-        }
+        //     // Save as JSON file locally
+        //     jsPsych.data.get().localSave(
+        //         "json",
+        //         `P${participantID}_int.json`
+        //     )
+        // }
     })
 
 
@@ -122,7 +122,12 @@
         audio: beep,
     })
 
-    timeline.push(TAP_timeline)
+    //TAP_trial
+
+    timeline.push(TAP_instructions1) // Instructions to the participant
+    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push(TAP_beep_sequence)
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 10))
 
     // Demographics
     // timeline.push(participant_ID)
