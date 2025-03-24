@@ -93,25 +93,25 @@ var HCT_items = {
             {
                 elements: [
                     {
-                    title: "How many heartbeats did you count?",
-                    type: "text",
-                    placeholder: "Enter number",
-                    name:"HCT_count",
+                        title: "How many heartbeats did you count?",
+                        type: "text",
+                        placeholder: "Enter number",
+                        name: "HCT_count",
                     }
                 ]
             },
             {
                 elements: [
                     {
-                    title: "How confident are you that your answer was correct?",
-                    name: "HCT_confidence",
-                    type: "rating",
-                    displayMode: "buttons",
-                    isRequired: true,
-                    minRateDescription: "Not confident",
-                    maxRateDescription: "Very confident",
-                    rateMin: 0 ,
-                    rateMax: 5,
+                        title: "How confident are you that your answer was correct?",
+                        name: "HCT_confidence",
+                        type: "rating",
+                        displayMode: "buttons",
+                        isRequired: true,
+                        minRateDescription: "Not confident",
+                        maxRateDescription: "Very confident",
+                        rateMin: 0,
+                        rateMax: 5,
                     }
                 ]
             }

@@ -74,12 +74,6 @@
             // Get participant ID
             let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
 
-            // Get all demographic responses
-            let demographic_data = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response
-
-            // Save to localStorage to use later on fiction.js
-            localStorage.setItem(`P${participantID}_demographic_data`, JSON.stringify(demographic_data))
-
             // Save as JSON file locally
             jsPsych.data.get().localSave(
                 "json",
@@ -94,7 +88,7 @@
 
     // Demographics ===========================================================
     timeline.push(demographics_consent)
-    timeline.push(demographics_questions)
+    timeline.push(demographics_questions1)
 
     //Resting State ================================================
     timeline.push(RS_instructions)// Instructions
@@ -102,16 +96,6 @@
     timeline.push(RS_task)// Create blank grey screen for resting state
     timeline.push(RS_beep)// Play beep
     timeline.push(RS_questionnaire)// Add debriefing questionnaire
-
-
-    // // save data via DataPipe
-    // timeline.push({
-    //     type: jsPsychPipe,
-    //     action: "save",
-    //     experiment_id: "818NyQh9EBvw", // This in generated in the DataPipe interface
-    //     filename: `${participantID}.csv`,
-    //     data_string: () => jsPsych.data.get().csv(),
-    // })
 
     // Run the timeline =================================================================
     jsPsych.run(timeline)

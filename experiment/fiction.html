@@ -29,6 +29,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
 
     <!-- Custom scripts -->
+    <script src="demographics.js"></script>
     <script src="eye_tracking.js"></script>
     <script src="stimuli_selection/stimuli_list.js"></script>
     <script src="parameters.js"></script>
@@ -98,6 +99,7 @@
                         }
                     ]
                 }
+
             ] 
         }          
     }     
@@ -160,43 +162,40 @@ const demographics_data = {
     },
     data: {
         screen: "demographic_questions",
+=======
+            ]
+        }
     }
-}
+
 
 
 
 // Initialize experiment ===============================================================
+=======
+    // Initialize experiment ===============================================================
+
     var jsPsych = initJsPsych({
         show_progress_bar: true,
         message_progress_bar: "Progress",
         extensions: [{ type: jsPsychExtensionWebgazer }],
         on_finish: function () {
+            // Get participant ID
+            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+
             // Save as JSON file locally
             jsPsych.data.get().localSave(
                 "json",
-                `P${participantID}_fiction.json`
+                `P${participantID}_fict.json`
             )
         }
     })
 
-
-
-    if (storedData) {
-        console.log("Retrieved demographics:", storedData)
-        var participantID = storedData.Participant_ID // Get participant ID
-
-
-        // Store demographic data in jsPsych
-        jsPsych.data.addProperties({
-            participant_id: participantID,
-            gender: storedData.Gender,
-            sexual_orientation: storedData.SexualOrientation,
-            stimuli_choice: storedData.StimuliChoice,
-        })
-    }
-
     // Initialize timeline
     var timeline = []
+
+    // Demographics
+    timeline.push(participant_ID)
+    timeline.push(demographics_data2)
 
     // Eye-tracking ==================================================
     // timeline.push(eyetracking_consent)

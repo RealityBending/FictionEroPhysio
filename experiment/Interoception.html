@@ -5,37 +5,63 @@
     <!--create title shown in tab; not the same as header on webpage-->
     <title>FictionEroPhysio</title>
 
-    <script src="utils/jspsych/jspsych.js"></script>
+    <!--Load JsPsych -->
+    <script src="https://unpkg.com/jspsych@8.1.0"></script>
+    <link href="https://unpkg.com/jspsych@8.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
 
     <!--Load all necessary plugins stored in utils-->
-    <script src="utils/jspsych/plugin-html-keyboard-response.js"></script>
-    <script src="utils/jspsych/plugin-html-button-response.js"></script>
-    <script src="utils/jspsych/plugin-fullscreen.js"></script>
-    <script src="utils/jspsych/plugin-audio-button-response.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.0"></script>
     <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
-    <script src="utils/jspsych/plugin-preload.js"></script>
-    <script src="utils/jspsych/multiple-slider.js"></script>
-    <script src="utils/jspsych/plugin-survey-text.js"></script>
-    <script src="utils/jspsych/extension-record-video.js"></script>
-    <script src="utils/jspsych/plugin-initialize-camera.js"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+
 
     <!-- Load task specific code -->
+    <script src="demographics.js"></script>
     <script src="parameters.js"></script>
-    <script src="RestingState.js"></script>
-    <script src="Tapping.js"></script>
+    <!-- <script src="Tapping.js"></script> change to new  -->
     <script src="HCT.js"></script>
     <script src="Questionnaires.js"></script>
+    <script src="TAP.js"></script>
 
-    <!-- Applying default style here -->
-    <link
-        href="utils/jspsych/jspsych.css"
-        rel="stylesheet"
-        type="text/css"
-    />
+
+    <!-- CSS -->
     <style>
-        /* set canvas to be full screen */
-        .jspsych-content {
-            max-width: 100%;
+        .narrow-text {
+            max-width: 50%;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(3) {
+            background-color: #ef9a9a;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(4) {
+            background-color: #ffab91;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(5) {
+            background-color: #ffe082;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(6) {
+            background-color: #fff59d;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(7) {
+            background-color: #e6ee9c;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(8) {
+            background-color: #c5e1a5;
+        }
+
+        .colored-scale .sd-rating__item:nth-child(9) {
+            background-color: #a5d6a7;
         }
     </style>
 </head>
@@ -44,54 +70,122 @@
 
 
 <script>
+    var participant_ID = {
+        type: jsPsychSurvey,
+        survey_json: {
+            title: "About yourself",
+            completeText: "Continue",
+            pageNextText: "Next",
+            pagePrevText: "Previous",
+            goNextPageAutomatic: false,
+            showQuestionNumbers: false,
+            pages: [
+                {
+                    elements: [
+                        {
+                            title: "Enter the participant's ID:",
+                            type: "text",
+                            placeholder: "000",
+                            name: "Participant_ID",
+                            isRequired: true
+                        }
+                    ]
+                }
+            ]
+        }
+    }
 
-// questionnaires ================== 
+    // Initialize experiment ===============================================================
+    var jsPsych = initJsPsych({
+        show_progress_bar: true,
+        message_progress_bar: "Progress",
+        // on_finish: function () {
+        //     // Get participant ID
+        //     let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
 
-timeline.variable(questionnaire_mint)
-tiemline.variable(questionnaire_maia)
-
-// TAP ===============================
-        // Instructions
-        timeline.push(TAP_instructions1)
-
-        timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
-
-        timeline.push(TAP_instructions2) // Insert a break
-
-        timeline.push(create_TAP_sequence("TAP_slower", (repetitions = 90)))
-
-        timeline.push(TAP_instructions3) // Insert a break
-
-        timeline.push(create_TAP_sequence("TAP_faster", (repetitions = 90)))
-
-        // Debriefing questionnaire
-        timeline.push(TAP_influenced)
-        timeline.push(TAP_strategy)
-
-        timeline.push(TAP_instructions4) // Insert a break
-
-        timeline.push(create_TAP_sequence("TAP_random", (repetitions = 90)))
-
-        timeline.push(TAP_instructions5) // Insert a break
-
-        timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
+        //     // Save as JSON file locally
+        //     jsPsych.data.get().localSave(
+        //         "json",
+        //         `P${participantID}_int.json`
+        //     )
+        // }
+    })
 
 
-// HCT ===============================
-    // Instructions
+    // Initialize timeline
+    var timeline = []
 
-timeline.push(HCT_instructions)
+    // Preload beep sound
+    timeline.push({
+        type: jsPsychPreload,
+        auto_preload: true,
+        audio: beep,
+    })
 
-timeline.push({
-    timeline: [
-        HCT_countdown,
-        HCT_interval(),
-        HCT_beep,
-        HCT_items,
-    ],
-    // Loop comprehension for duration vector
-    timeline_variables: HCT_durations.map((i) => ({
-        duration: i * 1000,
-    })),
-    randomize_order: true,
-})
+    //TAP_trial
+
+    timeline.push(TAP_instructions1) // Instructions to the participant
+    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push(TAP_beep_sequence)
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 10))
+
+    // Demographics
+    // timeline.push(participant_ID)
+    // timeline.push(demographics_data2)
+
+    // // Questionnaires ================== 
+    // questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])  // randomise order of questionnaires
+    // timeline.push(questionnaires)
+
+    // TAP ===============================
+    // // Instructions
+    // timeline.push(TAP_instructions1)
+    // timeline.push(TAP_beep)
+
+    // timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
+
+    // timeline.push(TAP_instructions2) // Insert a break
+
+    // timeline.push(create_TAP_sequence("TAP_slower", (repetitions = 90)))
+
+    // timeline.push(TAP_instructions3) // Insert a break
+
+    // timeline.push(create_TAP_sequence("TAP_faster", (repetitions = 90)))
+
+    // // Debriefing questionnaire
+    // timeline.push(TAP_influenced)
+    // timeline.push(TAP_strategy)
+
+    // timeline.push(TAP_instructions4) // Insert a break
+
+    // timeline.push(create_TAP_sequence("TAP_random", (repetitions = 90)))
+
+    // timeline.push(TAP_instructions5) // Insert a break
+
+    // timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
+
+
+    // // HCT ===============================
+    // // Instructions
+
+    // timeline.push(HCT_instructions)
+
+    // timeline.push({
+    //     timeline: [
+    //         HCT_countdown,
+    //         HCT_interval(),
+    //         HCT_beep,
+    //         HCT_items,
+    //     ],
+    //     // Loop comprehension for duration vector
+    //     timeline_variables: HCT_durations.map((i) => ({
+    //         duration: i * 1000,
+    //     })),
+    //     randomize_order: true,
+    // })
+
+    // Run the timeline -------------------------------------------------------
+    jsPsych.run(timeline)
+</script>
+
+</html>
