@@ -122,12 +122,6 @@
         audio: beep,
     })
 
-    //TAP_trial
-
-    timeline.push(TAP_instructions1) // Instructions to the participant
-    timeline.push(TAP_countdown)      // Countdown before the trial starts
-    timeline.push(TAP_beep_sequence)
-    timeline.push(create_TAP_sequence("Tap_Synchrony", 10))
 
     // Demographics
     // timeline.push(participant_ID)
@@ -138,32 +132,10 @@
     // timeline.push(questionnaires)
 
     // TAP ===============================
-    // // Instructions
-    // timeline.push(TAP_instructions1)
-    // timeline.push(TAP_beep)
-
-    // timeline.push(create_TAP_sequence("TAP_baseline", (repetitions = 90)))
-
-    // timeline.push(TAP_instructions2) // Insert a break
-
-    // timeline.push(create_TAP_sequence("TAP_slower", (repetitions = 90)))
-
-    // timeline.push(TAP_instructions3) // Insert a break
-
-    // timeline.push(create_TAP_sequence("TAP_faster", (repetitions = 90)))
-
-    // // Debriefing questionnaire
-    // timeline.push(TAP_influenced)
-    // timeline.push(TAP_strategy)
-
-    // timeline.push(TAP_instructions4) // Insert a break
-
-    // timeline.push(create_TAP_sequence("TAP_random", (repetitions = 90)))
-
-    // timeline.push(TAP_instructions5) // Insert a break
-
-    // timeline.push(create_TAP_sequence("TAP_heart", (repetitions = 60)))
-
+    timeline.push(TAP_instructions1) // Instructions to the participant
+    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push(TAP_beep_sequence)
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 10))
 
     // // HCT ===============================
     // // Instructions

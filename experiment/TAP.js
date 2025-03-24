@@ -99,10 +99,3 @@ function create_TAP_sequence(screen = "TAP1", repetitions = 100) {
         // trial_duration: 5,  // Needs https://github.com/jspsych/jsPsych/discussions/3110
     }
 }
-
-//TAP_trial
-// const TAP_timeline = [
-//     // TAP_instructions1,  // Instructions to the participant
-//     // TAP_countdown,      // Countdown before the trial starts
-//     // TAP_beep_sequence,
-//     TAP_continuation]      // Beep phase followed by continuation phase
