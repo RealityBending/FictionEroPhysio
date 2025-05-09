@@ -72,7 +72,7 @@
         message_progress_bar: "Progress",
         on_finish: function () {
             // Get participant ID
-            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions1" }).values()[0].response["Participant_ID"]
 
             // Save as JSON file locally
             jsPsych.data.get().localSave(
@@ -82,12 +82,11 @@
         }
     })
 
-
     // Initialize timeline
     var timeline = []
 
     // Demographics ===========================================================
-    timeline.push(demographics_consent)
+    // timeline.push(demographics_consent)
     timeline.push(demographics_questions1)
 
     //Resting State ================================================

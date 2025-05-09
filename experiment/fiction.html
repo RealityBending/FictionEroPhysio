@@ -78,7 +78,7 @@
 
 <script>
 
-    var participant_ID = {
+    const participant_ID = {
         type: jsPsychSurvey,
         survey_json: {
             title: "About yourself",
@@ -106,72 +106,66 @@
 
 // Gender, sexuality and stimulus choice 
 
-const demographics_data = {
-    type: jsPsychSurvey,
-    survey_json: {
-        title: "About yourself",
-        completeText: "Continue",
-        pageNextText: "Next",
-        pagePrevText: "Previous",
-        goNextPageAutomatic: false,
-        showQuestionNumbers: false,
-        pages: [
-            {
-                elements: [
-                    {
-                        title: "What is your gender?",
-                        name: "Gender",
-                        type: "radiogroup",
-                        choices: ["Male", "Female", "Other"],
-                        isRequired: true,
-                        colCount: 0,
-                    },
-                    {
-                        title: "What sexual orientation do you identify with?",
-                        description:
-                            "These questions are important to understand the results in the latter part of the experiment.",
-                        name: "SexualOrientation",
-                        type: "radiogroup",
-                        choices: ["Heterosexual", "Homosexual", "Bisexual"],
-                        showOtherItem: true,
-                        otherText: "Other",
-                        otherPlaceholder: "Please specify",
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                    {
-                        visibleIf:
-                            "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
-                        title: "Which types of images do you find the most arousing?",
-                        description:
-                            "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
-                        name: "StimuliChoice",
-                        type: "radiogroup",
-                        choices: [
-                            "Women (and heterosexual couples)",
-                            "Men (and heterosexual couples)",
-                            "Only women (and lesbian couples)",
-                            "Only men (and gay couples)",
-                        ],
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                ],
-            },
-        ]
-    },
-    data: {
-        screen: "demographic_questions",
-=======
+    const demographics_data = {
+        type: jsPsychSurvey,
+        survey_json: {
+            title: "About yourself",
+            completeText: "Continue",
+            pageNextText: "Next",
+            pagePrevText: "Previous",
+            goNextPageAutomatic: false,
+            showQuestionNumbers: false,
+            pages: [
+                {
+                    elements: [
+                        {
+                            title: "What is your gender?",
+                            name: "Gender",
+                            type: "radiogroup",
+                            choices: ["Male", "Female", "Other"],
+                            isRequired: true,
+                            colCount: 0,
+                        },
+                        {
+                            title: "What sexual orientation do you identify with?",
+                            description:
+                                "These questions are important to understand the results in the latter part of the experiment.",
+                            name: "SexualOrientation",
+                            type: "radiogroup",
+                            choices: ["Heterosexual", "Homosexual", "Bisexual"],
+                            showOtherItem: true,
+                            otherText: "Other",
+                            otherPlaceholder: "Please specify",
+                            isRequired: true,
+                            colCount: 1,
+                        },
+                        {
+                            visibleIf:
+                                "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
+                            title: "Which types of images do you find the most arousing?",
+                            description:
+                                "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
+                            name: "StimuliChoice",
+                            type: "radiogroup",
+                            choices: [
+                                "Women (and heterosexual couples)",
+                                "Men (and heterosexual couples)",
+                                "Only women (and lesbian couples)",
+                                "Only men (and gay couples)",
+                            ],
+                            isRequired: true,
+                            colCount: 1,
+                        },
+                    ],
+                },
             ]
+        },
+        data: {
+            screen: "demographic_questions3",
+            }
         }
-    }
 
 
-
-
-// Initialize experiment ===============================================================
-=======
     // Initialize experiment ===============================================================
 
     var jsPsych = initJsPsych({
@@ -185,7 +179,7 @@ const demographics_data = {
             // Save as JSON file locally
             jsPsych.data.get().localSave(
                 "json",
-                `P${participantID}_fict.json`
+                `P${participantID}_fic.json`
             )
         }
     })
@@ -195,11 +189,13 @@ const demographics_data = {
 
     // Demographics
     timeline.push(participant_ID)
-    timeline.push(demographics_data2)
+    timeline.push(demographics_data)
 
     // Eye-tracking ==================================================
     // timeline.push(eyetracking_consent)
-    // timeline.push(eyetracking_calibration) // include full-screen 
+    // timeline.push(eyetracking_calibration) // include full-screen #
+    timeline.push(fiction_preloadstims)
+
 
     // Fiction ========================================================
     timeline.push({
@@ -223,7 +219,7 @@ const demographics_data = {
 
             // // Break ----------------------------------------------------------------
             timeline.push(fiction_phase1_break)
-            timeline.push(eyetracking_recalibration)
+            // timeline.push(eyetracking_recalibration)
 
             // Phase 1B -------------------------------------------------------------
             timeline.push({

@@ -19,6 +19,7 @@
     <script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.0"></script>
     <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.1.0"></script>
 
 
     <!-- Load task specific code -->
@@ -27,8 +28,8 @@
     <!-- <script src="Tapping.js"></script> change to new  -->
     <script src="HCT.js"></script>
     <script src="Questionnaires.js"></script>
-    <script src="TAP.js"></script>
-
+    <script src="Tap_Instructions.js"></script>
+    <script src="TAP_trials.js"></script>
 
     <!-- CSS -->
     <style>
@@ -99,16 +100,16 @@
     var jsPsych = initJsPsych({
         show_progress_bar: true,
         message_progress_bar: "Progress",
-        // on_finish: function () {
-        //     // Get participant ID
-        //     let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+        on_finish: function () {
+            // Get participant ID
+            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
 
-        //     // Save as JSON file locally
-        //     jsPsych.data.get().localSave(
-        //         "json",
-        //         `P${participantID}_int.json`
-        //     )
-        // }
+            // Save as JSON file locally
+            jsPsych.data.get().localSave(
+                "json",
+                `P${participantID}_int.json`
+            )
+        }
     })
 
 
@@ -122,21 +123,43 @@
         audio: beep,
     })
 
-
     // Demographics
-    // timeline.push(participant_ID)
-    // timeline.push(demographics_data2)
+    timeline.push(participant_ID)
 
-    // // Questionnaires ================== 
+    // Questionnaires ================== 
     // questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])  // randomise order of questionnaires
     // timeline.push(questionnaires)
 
     // TAP ===============================
-    timeline.push(TAP_instructions1) // Instructions to the participant
+    // Voluntary External
+    timeline.push(VoluntaryExternal_instructions) 
     timeline.push(TAP_countdown)      // Countdown before the trial starts
-    timeline.push(TAP_beep_sequence)
-    timeline.push(create_TAP_sequence("Tap_Synchrony", 10))
+    timeline.push({
+        timeline: [ctap_trial],
+        timeline_variables: ctap_maketrials(1, "external"),
+        save_timeline_variables: true,
+    })
+    // Voluntary Internal
+    timeline.push(VoluntaryInternal_instructions)
+    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push({
+        timeline: [ctap_trial],
+        timeline_variables: ctap_maketrials(1, "internal"),
+        save_timeline_variables: true,
+    })
+    // Rhytmic Tapping
+    timeline.push(RhytmicTapping_instructions); // instructions
+    timeline.push(TAP_countdown)      // countdown
+    timeline.push(TAP_beep_sequence); // beep with no response
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 10, 1429)); // Tapping with beeps
+    timeline.push(create_TAP_sequence("Tap_Continuation", 7, 1429)); // Tapping without beeps (~10s)
 
+    // Rhytmic Random
+    timeline.push(RhytmicRandom_instructions)
+    timeline.push(create_TAP_sequence("TAP_random", 90));
+    timeline.push(HeartTapping_Instructions);
+    timeline.push(TAP_countdown); 
+    timeline.push(create_TAP_sequence("TAP_heart", 60));
     // // HCT ===============================
     // // Instructions
 

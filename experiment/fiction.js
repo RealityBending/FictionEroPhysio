@@ -12,7 +12,7 @@ function assignCondition(stimuli_list) {
     let new_stimuli_list = []
 
     // Access demographic data
-    let demographic_data = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0]
+    let demographic_data = jsPsych.data.get().filter({ screen: "demographic_questions3" }).values()[0]
     let gender = demographic_data.response.Gender
     let sexuality = demographic_data.response.SexualOrientation
     let choice = demographic_data.response.StimuliChoice
@@ -86,7 +86,7 @@ const fiction_instructions1 = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
     stimulus:
-        "<h2>Part 1/2</h2>" +
+        "<h2>Part 2/</h2>" +
         "<p>This study stems out of an exciting new partnership between researchers from the <b>University of Sussex</b> and a young <b>AI startup</b> based in Brighton, UK, that specializes in making AI technology more ethical.</p>" +
         "<p>Our goal is to better understand how various people react to different images. For this, we will be using a new <b>image-generation algorithm</b> (based on a modified <i>Generative Adversarial Network</i>) trained on a carefully refined material to produce realistic high-quality erotic images. " +
         "This allows us to manipulate the generation parameters and understand how they impact perception." +
@@ -98,7 +98,6 @@ const fiction_instructions1 = {
         "'>AI-generated</b>'), intermixed with real photos (preceded by the word '<b style='color:" +
         color_cues["Reality"] +
         "'>Photograph</b>') taken from public picture databases, adjusted to be of similar dimension and aspect as the artificially-generated images.</p > " +
-        // REPHRASE!
         "<p >The images will be <b>briefly flashed on the screen</b>. Imagine that they belong to a real person or people. After each image, you will be asked a series of questions:</p>" +
         // Arousal: embodied
         "<li  style='text-align: left; margin-left: 10%; margin-right: 10%;'><b>Arousing</b>: How much do you find the image sexually arousing. This question is about your own <i>personal reaction</i> felt in your body when seeing the image.</li>" +
@@ -278,7 +277,7 @@ const fiction_ratings1 = {
                 "%"
             )
         },
-        description: "Think of the person that you just saw.",
+        description: "Think of the person or people that you just saw.",
         pages: [
             {
                 elements: [
@@ -295,7 +294,7 @@ const fiction_ratings1 = {
                     },
                     {
                         type: "rating",
-                        name: "Enticing",
+                        name: "Enticement",
                         title: "How enticing would you rate this image to be?",
                         isRequired: true,
                         rateMin: 0,
@@ -336,3 +335,211 @@ const fiction_ratings1 = {
         screen: "fiction_ratings1",
     },
 }
+
+
+var fiction_phase1_break = {
+    type: jsPsychHtmlButtonResponse,
+    css_classes: ["narrow-text"],
+    stimulus:
+        "<h1>Break Time</h1>" +
+        "<div style='text-align: left'>" +
+        "<p>We know these types of experiment can feel a bit repetitive and tedious, " +
+        "but it is important for us that you stay focus until the end. Please take this opportunity to <b>take a break and relax your neck and eyes</b>.</p>",
+    choices: ["Ready to continue!"],
+    data: { screen: "fiction_phase1_break" },
+}
+
+
+// Stage 2 loops and variables
+
+var fiction_fixation2 = {
+    type: jsPsychHtmlKeyboardResponse,
+    // on_start: function () {
+    //     document.body.style.cursor = "none"
+    // },
+    stimulus:
+        "<div  style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: ["s"],
+    trial_duration: 500,
+    save_trial_parameters: { trial_duration: true },
+    data: { screen: "fiction_fixation2" },
+}
+
+var fiction_showimage2 = {
+    type: jsPsychImageKeyboardResponse,
+    stimulus: function () {
+        return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")
+    },
+    stimulus_height: function () {
+        if (window.innerHeight < window.innerWidth) {
+            return Math.round(0.9 * window.innerHeight)
+        } else {
+            return null
+        }
+    },
+    stimulus_width: function () {
+        if (window.innerHeight > window.innerWidth) {
+            return Math.round(0.9 * window.innerWidth)
+        } else {
+            return null
+        }
+    },
+    trial_duration: 1000,
+    choices: ["s"],
+    save_trial_parameters: { trial_duration: true },
+    data: { screen: "fiction_image2", trial_number: fiction_trialnumber },
+    on_finish: function () {
+        fiction_trialnumber += 1
+    },
+}
+
+var fiction_ratings2 = {
+    type: jsPsychSurvey,
+    css_classes: ["colored-scale"],
+    survey_json: {
+        goNextPageAutomatic: true,
+        showQuestionNumbers: false,
+        showNavigationButtons: false,
+        title: function () {
+            return (
+                "Rating - " +
+                Math.round(((fiction_trialnumber - 1) / stimuli.length) * 100) +
+                "%"
+            )
+        },
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "rating",
+                        name: "Realness",
+                        title: "I think this face is...",
+                        description:
+                            "Indicate your confidence that the image is fake or real",
+                        isRequired: true,
+                        // rateValues: [
+                        //     {
+                        //         value: -1,
+                        //         text: "-4",
+                        //     },
+                        //     {
+                        //         value: -0.75,
+                        //         text: "-3",
+                        //     },
+                        //     {
+                        //         value: -0.5, // 1/2
+                        //         text: "-2",
+                        //     },
+                        //     {
+                        //         value: -0.25, // 1/4
+                        //         text: "-1",
+                        //     },
+                        //     // {
+                        //     //     value: 0,
+                        //     //     text: "0",
+                        //     // },
+                        //     {
+                        //         value: 0.25, // 1/4
+                        //         text: "1",
+                        //     },
+                        //     {
+                        //         value: 0.5, // 1/2
+                        //         text: "2",
+                        //     },
+                        //     {
+                        //         value: 0.75, // 3/4
+                        //         text: "3",
+                        //     },
+                        //     {
+                        //         value: 1,
+                        //         text: "4", // "4 (100% Certain)",
+                        //     },
+                        // ],
+                        rateMin: -3,
+                        rateMax: 3,
+                        minRateDescription: "AI-Generated",
+                        maxRateDescription: "Photograph",
+                        displayMode: "buttons",
+                    },
+                ],
+            },
+        ],
+    },
+    data: {
+        screen: "fiction_ratings2",
+    },
+}
+
+
+
+// Feedback ====================================================================
+
+var fiction_feedback1 = {
+    type: jsPsychSurvey,
+    survey_json: {
+        title: "Thank you!",
+        description:
+            "Before we start the second phase, we wanted to know your thoughts.",
+        showQuestionNumbers: false,
+        elements: [
+            {
+                type: "checkbox",
+                name: "Feedback_1",
+                title: "Image Arousal",
+                description: "Please select all that apply",
+                choices: [
+                    "Some images were really arousing",
+                    "No image was particularly arousing",
+                    "AI-generated images were more arousing than the photos",
+                    "AI-generated images were less arousing than the photos",
+                ],
+                showOtherItem: true,
+                showSelectAllItem: false,
+                showNoneItem: false,
+            },
+            {
+                type: "checkbox",
+                name: "Feedback_2",
+                title: "AI-Generation Algorithm",
+                description: "Please select all that apply",
+                choices: [
+                    "The difference between the photos and the AI-generated images was obvious",
+                    "The difference between the photos and the AI-generated images was subtle",
+                    "I didn't see any difference between photos and AI-generated images",
+                    "I felt like the labels ('Photograph' and 'AI-Generated') were not always correct",
+                    "I felt like the labels were reversed (e.g., 'Photograph' for AI-generated images and vice versa)",
+                    "I feel like all the images were photos",
+                    "I feel like all the images were AI-generated",
+                ],
+                showOtherItem: true,
+                showSelectAllItem: false,
+                showNoneItem: false,
+            },
+            {
+                visibleIf:
+                    "{Feedback_2} anyof ['I feel like all the images were photos']",
+                title: "How certain are you that all images were photos?",
+                name: "Feedback_2_ConfidenceReal",
+                type: "rating",
+                rateMin: 0,
+                rateMax: 5,
+                minRateDescription: "Not at all",
+                maxRateDescription: "Completely certain",
+            },
+            {
+                visibleIf:
+                    "{Feedback_2} anyof ['I feel like all the images were AI-generated']",
+                title: "How certain are you that all images were AI-generated?",
+                name: "Feedback_2_ConfidenceFake",
+                type: "rating",
+                rateMin: 0,
+                rateMax: 5,
+                minRateDescription: "Not at all",
+                maxRateDescription: "Completely certain",
+            },
+        ],
+    },
+    data: {
+        screen: "fiction_feedback1",
+    },
+} 
