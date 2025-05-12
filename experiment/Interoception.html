@@ -25,11 +25,9 @@
     <!-- Load task specific code -->
     <script src="demographics.js"></script>
     <script src="parameters.js"></script>
-    <!-- <script src="Tapping.js"></script> change to new  -->
     <script src="HCT.js"></script>
-    <script src="Questionnaires.js"></script>
-    <script src="Tap_Instructions.js"></script>
-    <script src="TAP_trials.js"></script>
+    <script src="questionnaires.js"></script>
+    <script src="TAP.js"></script>
 
     <!-- CSS -->
     <style>
@@ -92,9 +90,13 @@
                         }
                     ]
                 }
-            ]
+            ],
+        },
+        data: {
+            screen: "ppt_id",
+            },
         }
-    }
+
 
     // Initialize experiment ===============================================================
     var jsPsych = initJsPsych({
@@ -102,7 +104,7 @@
         message_progress_bar: "Progress",
         on_finish: function () {
             // Get participant ID
-            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
+            let participantID = jsPsych.data.get().filter({ screen: "ppt_id" }).values()[0].response["Participant_ID"]
 
             // Save as JSON file locally
             jsPsych.data.get().localSave(
@@ -127,58 +129,68 @@
     timeline.push(participant_ID)
 
     // Questionnaires ================== 
-    // questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])  // randomise order of questionnaires
-    // timeline.push(questionnaires)
+    questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint])  // randomise order of questionnaires
+    timeline.push(questionnaires)
 
     // TAP ===============================
     // Voluntary External
-    timeline.push(VoluntaryExternal_instructions) 
-    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push(VoluntaryExternal_instructions)
+    timeline.push(TAP_countdown) 
     timeline.push({
         timeline: [ctap_trial],
         timeline_variables: ctap_maketrials(1, "external"),
-        save_timeline_variables: true,
+        save_timeline_variables: true
     })
+    
     // Voluntary Internal
     timeline.push(VoluntaryInternal_instructions)
-    timeline.push(TAP_countdown)      // Countdown before the trial starts
+    timeline.push(TAP_countdown) 
     timeline.push({
         timeline: [ctap_trial],
         timeline_variables: ctap_maketrials(1, "internal"),
-        save_timeline_variables: true,
+        save_timeline_variables: true
     })
+
     // Rhytmic Tapping
-    timeline.push(RhytmicTapping_instructions); // instructions
-    timeline.push(TAP_countdown)      // countdown
+    timeline.push(RhytmicTapping_instructions);
     timeline.push(TAP_beep_sequence); // beep with no response
-    timeline.push(create_TAP_sequence("Tap_Synchrony", 10, 1429)); // Tapping with beeps
-    timeline.push(create_TAP_sequence("Tap_Continuation", 7, 1429)); // Tapping without beeps (~10s)
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 5)); // Tapping with beeps
+    timeline.push(create_TAP_sequence("Tap_Continuation", 5)); // Tapping without beeps 
 
     // Rhytmic Random
     timeline.push(RhytmicRandom_instructions)
-    timeline.push(create_TAP_sequence("TAP_random", 90));
-    timeline.push(HeartTapping_Instructions);
-    timeline.push(TAP_countdown); 
-    timeline.push(create_TAP_sequence("TAP_heart", 60));
-    // // HCT ===============================
-    // // Instructions
+    timeline.push(create_TAP_sequence("TAP_random", 5));
 
-    // timeline.push(HCT_instructions)
+    // Heart Tapping
+    timeline.push(HeartTapping_Instructions)
+    timeline.push(create_TAP_sequence("TAP_heart", 5));
+
+    // // HCT ===============================
+
+    timeline.push(HCT_instructions)
+    timeline.push({
+        timeline: [
+            HCT_countdown,
+            HCT_interval(),
+            HCT_beep,
+            HCT_items,
+        ],
+        // Loop comprehension for duration vector
+        timeline_variables: HCT_durations.map((i) => ({
+            duration: i * 1000,
+        })),
+        randomize_order: true,
+    })
 
     // timeline.push({
-    //     timeline: [
-    //         HCT_countdown,
-    //         HCT_interval(),
-    //         HCT_beep,
-    //         HCT_items,
-    //     ],
-    //     // Loop comprehension for duration vector
-    //     timeline_variables: HCT_durations.map((i) => ({
-    //         duration: i * 1000,
-    //     })),
-    //     randomize_order: true,
+    //     type: jsPsychHtmlButtonResponse,
+    //     stimulus: "You've reached the end of this part!",
+    //     choices: ["Exit Fullscreen"],
+    //     on_finish: function () {
+    //         document.exitFullscreen()
+    //     },
     // })
-
+    
     // Run the timeline -------------------------------------------------------
     jsPsych.run(timeline)
 </script>
