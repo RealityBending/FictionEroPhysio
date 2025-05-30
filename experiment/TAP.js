@@ -23,7 +23,7 @@ const VoluntaryInternal_instructions = {
 const RhytmicTapping_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus: 
-        "<p>Well done! In this task, you will need to tap the spacebar in <b>shcynrony</b> with the beeps." +
+        "<p>Well done! In this task, you will need to tap the spacebar in <b>synchrony</b> with the beeps." +
         "<p>Try to tap as closely as possible to the beeps." +
         "<p>After a certain ammount of time, the <b>beeps will stop</b> and you will have to <b>continue tapping in the same rhythm</b>." +
         "<p>Try to keep the same rhythm as before." +
@@ -238,6 +238,7 @@ function ctap_keyListener(e) {
     if (e.key === " ") {
         ctap_pressTime = performance.now() - ctap_startTime
         document.removeEventListener("keydown", ctap_keyListener)
+        document.querySelector("#marker1").remove() 
     }
 }
 
@@ -267,6 +268,11 @@ function ctap_maketrials(nTrials = 10, condition = "external") {
 // JsPsych ========================================
 const ctap_trial = {
     type: jsPsychCanvasKeyboardResponse,
+    on_start: function () {
+        document.body.style.backgroundColor = "white"
+        document.body.style.cursor = "none"
+        create_marker(marker1, (color = "#808080"))
+    },
     canvas_size: function () {
         return [Math.round(window.innerHeight * 0.8), Math.round(window.innerHeight * 0.8)]
     },
@@ -290,7 +296,7 @@ const ctap_trial = {
         data.response_angle = time2Rads(
             ctap_pressTime,
             jsPsych.evaluateTimelineVariable("duration"),
-            jsPsych.evaluateTimelineVariable("start_angle")
+            jsPsych.evaluateTimelineVariable("start_angle"),   
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
     },
 }

@@ -392,3 +392,74 @@ const questionnaire_maia = {
         screen: "questionnaire_maia",
     },
 }
+
+
+// IAS =================================================================================================
+const items_ias = {
+    IAS_1: "I can always accurately perceive when my heart is beating fast",
+    IAS_2: "I can always accurately perceive when I am hungry",
+    IAS_3: "I can always accurately perceive when I am breathing fast",
+    IAS_4: "I can always accurately perceive when I am thirsty",
+    IAS_5: "I can always accurately perceive when I need to urinate",
+    IAS_6: "I can always accurately perceive when I need to defecate",
+    IAS_7: "I can always accurately perceive when I encounter different tastes",
+    IAS_8: "I can always accurately perceive when I am going to vomit",
+    IAS_9: "I can always accurately perceive when I am going to sneeze",
+    IAS_10: "I can always accurately perceive when I am going to cough",
+    IAS_11: "I can always accurately perceive when I am hot/cold",
+    IAS_12: "I can always accurately perceive when I am sexually aroused",
+    IAS_13: "I can always accurately perceive when I am going to pass wind",
+    IAS_14: "I can always accurately perceive when I am going to burp",
+    IAS_15: "I can always accurately perceive when my muscles are tired/sore",
+    IAS_16: "I can always accurately perceive when I am going to get a bruise",
+    IAS_17: "I can always accurately perceive when I am in pain",
+    IAS_18: "I can always accurately perceive when my blood sugar is low",
+    IAS_19: "I can always accurately perceive when someone is touching me affectionately rather than non-affectionately",
+    IAS_20: "I can always accurately perceive when something is going to be ticklish",
+    IAS_21: "I can always accurately perceive when something is going to be itchy",
+    IAS_AttentionCheck_1: "I can always accurately choose the lowest option",
+}
+
+// This function formats each question into a jsPsych-survey question that contains information about the question format
+function make_ias(items, required = true, ticks = ["Disagree Strongly", "Strongly Agree"]) {
+    items = shuffleObject(items)
+
+    questions = []
+
+    // Make questions
+    for (const key of Object.keys(items)) {
+        q = {
+            title: items[key],
+            name: key,
+            type: "rating",
+            displayMode: "buttons",
+            // scaleColorMode: "colored",
+            isRequired: required,
+            minRateDescription: ticks[0],
+            maxRateDescription: ticks[1],
+            rateValues: [1, 2, 3, 4, 5],
+        }
+        questions.push(q)
+    }
+
+    return { elements: questions }
+}
+
+// Questionnaire ================================================
+const questionnaire_ias = {
+    type: jsPsychSurvey,
+    survey_json: function () {
+        return {
+            title: "Bodily sensations",
+            description:
+                "Please rate on the scale how accurately you believe you can perceive each specific signals without using external cues, e.g. measuring your pulse.",
+            showQuestionNumbers: false,
+            goNextPageAutomatic: true,
+            pages: make_ias(items_ias),
+        }
+    },
+    data: {
+        screen: "questionnaire_ias",
+    },
+}
+

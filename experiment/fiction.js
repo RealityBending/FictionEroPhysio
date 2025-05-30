@@ -150,6 +150,16 @@ const fiction_preloadstims = {
     },
 }
 
+// Blank screen
+var fiction_blankscreen = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus: "",
+    choices: ["s"],
+    trial_duration: 2000, // 2 seconds 
+    save_trial_parameters: { trial_duration: true },
+    data: { screen: "blank_screen" },
+}
+
 // fixation cross 1
 const fiction_fixation1a = {
     type: jsPsychHtmlKeyboardResponse,
