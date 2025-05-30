@@ -221,6 +221,11 @@ const fiction_fixation1b = {
 // image shown
 const fiction_showimage1 = {
     type: jsPsychImageKeyboardResponse,
+    on_start: function () {
+        document.body.style.backgroundColor = "white"
+        document.body.style.cursor = "none"
+        create_marker(marker1, (color = "#808080"))
+    },
     stimulus: function () {
         return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")
     },
@@ -251,6 +256,7 @@ const fiction_showimage1 = {
     },
     on_finish: function () {
         fiction_trialnumber += 1
+        document.querySelector("#marker1").remove()    
     },
     // Enable webgazer
     extensions: [
@@ -370,6 +376,11 @@ var fiction_showimage2 = {
     stimulus: function () {
         return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")
     },
+    on_start: function () {
+        document.body.style.backgroundColor = "white"
+        document.body.style.cursor = "none"
+        create_marker(marker1, (color = "#808080"))
+    },
     stimulus_height: function () {
         if (window.innerHeight < window.innerWidth) {
             return Math.round(0.9 * window.innerHeight)
@@ -390,6 +401,7 @@ var fiction_showimage2 = {
     data: { screen: "fiction_image2", trial_number: fiction_trialnumber },
     on_finish: function () {
         fiction_trialnumber += 1
+        document.querySelector("#marker1").remove()
     },
 }
 
