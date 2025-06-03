@@ -169,7 +169,9 @@ const fiction_fixation1a = {
     stimulus:
         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
-    trial_duration: 500,
+     trial_duration: function(){
+    return jsPsych.randomization.sampleWithoutReplacement([250, 300, 400, 500, 600, 650], 1)[0];
+    },
     save_trial_parameters: { trial_duration: true },
     data: function () {
         return {
