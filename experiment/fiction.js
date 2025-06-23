@@ -155,7 +155,7 @@ var fiction_blankscreen = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: "",
     choices: ["s"],
-    trial_duration: 2000, // 2 seconds 
+    trial_duration: 3000, // 3 seconds 
     save_trial_parameters: { trial_duration: true },
     data: { screen: "blank_screen" },
 }
@@ -169,8 +169,9 @@ const fiction_fixation1a = {
     stimulus:
         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
-     trial_duration: function(){
-    return jsPsych.randomization.sampleWithoutReplacement([250, 300, 400, 500, 600, 650], 1)[0];
+    trial_duration: function () {
+        // uniformly sample between 300 and 600 ms, rounded to the nearest integer
+        return Math.round(Math.random() * 300 + 300)
     },
     save_trial_parameters: { trial_duration: true },
     data: function () {
@@ -204,7 +205,7 @@ const fiction_cue = {
         }
     },
     choices: ["s"],
-    trial_duration: 1000,
+    trial_duration: 2000,
     save_trial_parameters: { trial_duration: true },
 }
 
@@ -214,7 +215,10 @@ const fiction_fixation1b = {
     stimulus:
         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
-    trial_duration: 500,
+    trial_duration: function () {
+        // uniformly sample between 4s and 6s, rounded to the nearest integer
+        return Math.round(Math.random() * 2000 + 4000)
+    },
     save_trial_parameters: { trial_duration: true },
     data: function () {
         return {
@@ -255,7 +259,7 @@ const fiction_showimage1 = {
             return null
         }
     },
-    trial_duration: 2000,
+    trial_duration: 4000,
     choices: ["s"],
     save_trial_parameters: { trial_duration: true },
     data: function () {
@@ -268,7 +272,7 @@ const fiction_showimage1 = {
     },
     on_finish: function () {
         fiction_trialnumber += 1
-        document.querySelector("#marker1").remove()    
+        document.querySelector("#marker1").remove()
     },
     // Enable webgazer
     extensions: [
