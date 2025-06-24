@@ -216,8 +216,8 @@ const fiction_fixation1b = {
         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
     trial_duration: function () {
-        // uniformly sample between 4s and 6s, rounded to the nearest integer
-        return Math.round(Math.random() * 2000 + 4000)
+        // uniformly sample between 3s and 5s, rounded to the nearest integer
+        return Math.round(Math.random() * 2000 + 3000)
     },
     save_trial_parameters: { trial_duration: true },
     data: function () {
@@ -382,7 +382,10 @@ var fiction_fixation2 = {
     stimulus:
         "<div  style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
     choices: ["s"],
-    trial_duration: 500,
+    trial_duration: function () {
+        // uniformly sample between 400ms and 600ms, rounded to the nearest integer
+        return Math.round(Math.random() * 200 + 400)
+    },
     save_trial_parameters: { trial_duration: true },
     data: { screen: "fiction_fixation2" },
 }
