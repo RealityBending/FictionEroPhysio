@@ -426,9 +426,8 @@ var fiction_showimage2 = {
 
 var fiction_ratings2 = {
     type: jsPsychSurvey,
-    css_classes: ["colored-scale"],
     survey_json: {
-        goNextPageAutomatic: true,
+        goNextPageAutomatic: false,
         showQuestionNumbers: false,
         showNavigationButtons: false,
         title: function () {
@@ -442,55 +441,30 @@ var fiction_ratings2 = {
             {
                 elements: [
                     {
-                        type: "rating",
+                        type: "html",
+                        html: "The labels we showed you in the previous phase have been mixed up! Can you tell to what category each image belongs?",
+                    },
+                    {
+                        type: "slider",
                         name: "Realness",
                         title: "I think this face is...",
                         description:
                             "Indicate your confidence that the image is fake or real",
                         isRequired: true,
-                        // rateValues: [
-                        //     {
-                        //         value: -1,
-                        //         text: "-4",
-                        //     },
-                        //     {
-                        //         value: -0.75,
-                        //         text: "-3",
-                        //     },
-                        //     {
-                        //         value: -0.5, // 1/2
-                        //         text: "-2",
-                        //     },
-                        //     {
-                        //         value: -0.25, // 1/4
-                        //         text: "-1",
-                        //     },
-                        //     // {
-                        //     //     value: 0,
-                        //     //     text: "0",
-                        //     // },
-                        //     {
-                        //         value: 0.25, // 1/4
-                        //         text: "1",
-                        //     },
-                        //     {
-                        //         value: 0.5, // 1/2
-                        //         text: "2",
-                        //     },
-                        //     {
-                        //         value: 0.75, // 3/4
-                        //         text: "3",
-                        //     },
-                        //     {
-                        //         value: 1,
-                        //         text: "4", // "4 (100% Certain)",
-                        //     },
-                        // ],
-                        rateMin: -3,
-                        rateMax: 3,
-                        minRateDescription: "AI-Generated",
-                        maxRateDescription: "Photograph",
-                        displayMode: "buttons",
+                        min: -100,
+                        max: 100,
+                        step: 1,
+                        customLabels: [
+                            {
+                                value: -100,
+                                text: "AI-Generated",
+                            },
+                            {
+                                value: 100,
+                                text: "Photograph",
+                            },
+                        ],
+                        defaultValue: 0,
                     },
                 ],
             },
@@ -500,7 +474,6 @@ var fiction_ratings2 = {
         screen: "fiction_ratings2",
     },
 }
-
 
 
 // Feedback ====================================================================
