@@ -1,15 +1,15 @@
-// Full screen
-const fullscreen_on = {
-    type: jsPsychFullscreen,
-    fullscreen_mode: true,
-    delay_after: 0,
-}
+// // Full screen
+// const fullscreen_on = {
+//     type: jsPsychFullscreen,
+//     fullscreen_mode: true,
+//     delay_after: 0,
+// }
 
-const fullscreen_off = {
-    type: jsPsychFullscreen,
-    fullscreen_mode: false,
-    delay_after: 0,
-}
+// const fullscreen_off = {
+//     type: jsPsychFullscreen,
+//     fullscreen_mode: false,
+//     delay_after: 0,
+// }
 
 
 // Consent form

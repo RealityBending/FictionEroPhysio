@@ -273,6 +273,7 @@ const fiction_showimage1 = {
     on_finish: function () {
         fiction_trialnumber += 1
         document.querySelector("#marker1").remove()
+        document.body.style.cursor = "auto"
     },
     // Enable webgazer
     extensions: [
@@ -336,19 +337,19 @@ const fiction_ratings1 = {
                         maxRateDescription: "Pleasant",
                         displayMode: "buttons",
                     },
-                    {
-                        type: "rating",
-                        name: "Physiological Arousal",
-                        title: "How did this image made you feel in your body?",
-                        isRequired: true,
-                        rateMin: 0,
-                        rateMax: 5,
-                        // add negative for sexually turned off?
-                        // change wording
-                        minRateDescription: "No arousal",
-                        maxRateDescription: "Highest arousal",
-                        displayMode: "buttons",
-                    }
+                    // {
+                    //     type: "rating",
+                    //     name: "Physiological Arousal",
+                    //     title: "How did this image made you feel in your body?",
+                    //     isRequired: true,
+                    //     rateMin: 0,
+                    //     rateMax: 6,
+                    //     // add negative for sexually turned off?
+                    //     // change wording
+                    //     minRateDescription: "No arousal",
+                    //     maxRateDescription: "Highest arousal",
+                    //     displayMode: "buttons",
+                    // }
                 ]
             }
         ],
@@ -421,6 +422,7 @@ var fiction_showimage2 = {
     on_finish: function () {
         fiction_trialnumber += 1
         document.querySelector("#marker1").remove()
+        document.body.style.cursor = "auto"
     },
 }
 

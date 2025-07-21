@@ -20,9 +20,9 @@
     <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
     <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css" />
 
-     <!-- To save data via DataPipe (for online experiments) -->
+    <!-- To save data via DataPipe (for online experiments) -->
     <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.5.0"></script>
- 
+
     <!-- Eye Tracking -->
     <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@8.1.0/examples/js/webgazer/webgazer.js"></script>
     <script src="https://unpkg.com/@jspsych/extension-webgazer@1.1.0"></script>
@@ -39,37 +39,37 @@
     <script src="fiction.js"></script>
 
 
-           <!-- CSS -->
+    <!-- CSS -->
 
-        <style>
-            .colored-scale .sd-rating__item:nth-child(3) {
-                background-color: #b0bec5;
-            }
+    <style>
+        .colored-scale .sd-rating__item:nth-child(3) {
+            background-color: #b0bec5;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(4) {
-                background-color: #cfd8dc;
-            }
+        .colored-scale .sd-rating__item:nth-child(4) {
+            background-color: #cfd8dc;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(5) {
-                background-color: #eceff1;
-            }
+        .colored-scale .sd-rating__item:nth-child(5) {
+            background-color: #eceff1;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(6) {
-                background-color: #f1f6f6;
-            }
+        .colored-scale .sd-rating__item:nth-child(6) {
+            background-color: #f1f6f6;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(7) {
-                background-color: #eceff1;
-            }
+        .colored-scale .sd-rating__item:nth-child(7) {
+            background-color: #eceff1;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(8) {
-                background-color: #cfd8dc;
-            }
+        .colored-scale .sd-rating__item:nth-child(8) {
+            background-color: #cfd8dc;
+        }
 
-            .colored-scale .sd-rating__item:nth-child(9) {
-                background-color: #b0bec5;
-            }
-        </style>
+        .colored-scale .sd-rating__item:nth-child(9) {
+            background-color: #b0bec5;
+        }
+    </style>
 </head>
 
 
@@ -99,11 +99,11 @@
                     ]
                 }
 
-            ] 
-        }          
-    }     
+            ]
+        }
+    }
 
-// Gender, sexuality and stimulus choice 
+    // Gender, sexuality and stimulus choice 
 
     const demographics_data = {
         type: jsPsychSurvey,
@@ -121,7 +121,7 @@
                             title: "What is your gender?",
                             name: "Gender",
                             type: "radiogroup",
-                            choices: ["Male", "Female", "Other"],
+                            choices: ["Male", "Female"],
                             showOtherItem: true,
                             otherText: "Other",
                             otherPlaceholder: "Please specify",
@@ -164,8 +164,8 @@
         },
         data: {
             screen: "demographic_questions3",
-            }
         }
+    }
 
 
     // Initialize experiment ===============================================================
@@ -194,7 +194,7 @@
     timeline.push(demographics_data)
 
     // Eye-tracking ==================================================
-    // timeline.push(eyetracking_consent)
+    timeline.push(eyetracking_consent)
     // timeline.push(eyetracking_calibration) // include full-screen #
     timeline.push(fiction_preloadstims)
 
@@ -205,44 +205,44 @@
         on_finish() {
 
             //Phase 1A -------------------------------------------------------------
-            // timeline.push({
-            //     timeline_variables: stimuli.slice(
-            //         0,
-            //         Math.ceil(stimuli.length / 2)
-            //     ),
-            //     timeline: [
-            //         fiction_fixation1a,
-            //         fiction_cue,
-            //         fiction_fixation1b,
-            //         // fiction_showimage1,
-            //         fiction_blankscreen,
-            //         fiction_ratings1,
-            //     ],
-            // })
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    0,
+                    Math.ceil(stimuli.length / 2)
+                ).slice(0, 3),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_blankscreen,
+                    fiction_ratings1,
+                ],
+            })
 
-            // // // Break ----------------------------------------------------------------
-            // timeline.push(fiction_phase1_break)
-            // // timeline.push(eyetracking_recalibration)
+            // // Break ----------------------------------------------------------------
+            timeline.push(fiction_phase1_break)
+            timeline.push(eyetracking_recalibration)
 
-            // // Phase 1B -------------------------------------------------------------
-            // timeline.push({
-            //     timeline_variables: stimuli.slice(
-            //         Math.ceil(stimuli.length / 2),
-            //         stimuli.length
-            //     ),
-            //     timeline: [
-            //         fiction_fixation1a,
-            //         fiction_cue,
-            //         fiction_fixation1b,
-            //         fiction_showimage1,
-            //         fiction_blankscreen,
-            //         fiction_ratings1,
-            //     ],
-            // })
+            // Phase 1B -------------------------------------------------------------
+            timeline.push({
+                timeline_variables: stimuli.slice(
+                    Math.ceil(stimuli.length / 2),
+                    stimuli.length
+                ).slice(0, 3),
+                timeline: [
+                    fiction_fixation1a,
+                    fiction_cue,
+                    fiction_fixation1b,
+                    fiction_showimage1,
+                    fiction_blankscreen,
+                    fiction_ratings1,
+                ],
+            })
 
             /*---------------------- Questionnaires----------- */
-            // timeline.push(questionnaire_bait)
-            // timeline.push(questionnaire_cops)
+            timeline.push(questionnaire_bait)
+            timeline.push(questionnaire_cops)
 
             // Stage 2 ==============================================================
             timeline.push(fiction_instructions2)
