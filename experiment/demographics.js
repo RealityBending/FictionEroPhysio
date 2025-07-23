@@ -88,6 +88,29 @@ const demographics_questions1 = {
             {
                 elements: [
                     {
+                        title: "What is your gender?",
+                        name: "Gender",
+                        type: "radiogroup",
+                        // Should change other to prefer to self-describe ? (for ethical approval)
+                        choices: ["Male", "Female", "Other"],
+                        isRequired: true,
+                        colCount: 0,
+                    },
+                    {
+                        type: "text",
+                        title: "Please enter your age (in years)",
+                        name: "Age",
+                        isRequired: true,
+                        inputType: "number",
+                        min: 0,
+                        max: 100,
+                        placeholder: "e.g., 21",
+                    },
+                ],
+            },
+            {
+                elements: [
+                    {
                         title: "What is your highest completed education level?",
                         name: "Education",
                         type: "radiogroup",

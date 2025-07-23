@@ -431,7 +431,8 @@ var fiction_ratings2 = {
     survey_json: {
         goNextPageAutomatic: false,
         showQuestionNumbers: false,
-        showNavigationButtons: false,
+        showNavigationButtons: true,
+        completeText: "Continue",
         title: function () {
             return (
                 "Rating - " +
@@ -449,7 +450,7 @@ var fiction_ratings2 = {
                     {
                         type: "slider",
                         name: "Realness",
-                        title: "I think this face is...",
+                        title: "I think this image is...",
                         description:
                             "Indicate your confidence that the image is fake or real",
                         isRequired: true,

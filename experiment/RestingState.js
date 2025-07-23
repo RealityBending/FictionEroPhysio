@@ -1,7 +1,7 @@
 const RS_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
-        "<h1>Part 2/</h1>" +
+        "<h1>Part 1/4</h1>" +
         "<p><b>Instructions</b></p>" +
         // Don't give exact time so that participants don't count
         "<p>A rest period of about 8 minutes is about to start.</p>" +
@@ -144,3 +144,6 @@ const RS_questionnaire = {
         screen: "questionnaire_RS",
     },
 }
+
+
+
