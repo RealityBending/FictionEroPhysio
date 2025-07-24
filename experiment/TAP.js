@@ -264,7 +264,7 @@ function ctap_maketrials(nTrials = 10, condition = "external") {
             target_angle: start_angle + target_angle * TWO_PI,
             condition: condition,
             difficulty: Math.random() * (0.9 - 0.4) + 0.4, // The size of the clock arms relative to the radius
-            duration: (Math.random() * 2 + 4) * 1000, // random between 4 and 6 seconds
+            duration: (Math.random() * 3 + 3) * 1000, // random between 3 and 6 seconds
         }
         trials.push(trial_info)
     }
@@ -314,6 +314,12 @@ const ctap_trial = {
 
 var beep = ["utils/beep.mp3"] // Audio file for the beep
 
+var TAP_preload = {
+    type: jsPsychPreload,
+    audio: beep,
+    message: "Loading",
+}
+
 // Beep trial (for synchrony phase)
 const TAP_beep = {
     type: jsPsychAudioKeyboardResponse,
@@ -321,6 +327,7 @@ const TAP_beep = {
     choices: [" "], // space bar
     trial_duration: 1429, // Duration of each beat (42 BPM ≈ 1429ms)
     response_ends_trial: false,
+    save_trial_parameters: { trial_duration: true },
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"

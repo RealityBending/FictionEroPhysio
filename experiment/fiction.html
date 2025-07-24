@@ -204,27 +204,27 @@
         timeline: [fiction_instructions1],
         on_finish() {
 
-            //Phase 1A -------------------------------------------------------------
-            timeline.push({
-                timeline_variables: stimuli.slice(
-                    0,
-                    Math.ceil(stimuli.length / 2)
-                ).slice(0, 1),
-                timeline: [
-                    fiction_fixation1a,
-                    fiction_cue,
-                    fiction_fixation1b,
-                    fiction_showimage1,
-                    fiction_blankscreen,
-                    fiction_ratings1,
-                ],
-            })
+            // //Phase 1A -------------------------------------------------------------
+            // timeline.push({
+            //     timeline_variables: stimuli.slice(
+            //         0,
+            //         Math.ceil(stimuli.length / 2)
+            //     ).slice(0, 1),
+            //     timeline: [
+            //         fiction_fixation1a,
+            //         fiction_cue,
+            //         fiction_fixation1b,
+            //         fiction_showimage1,
+            //         fiction_blankscreen,
+            //         fiction_ratings1,
+            //     ],
+            // })
 
             // // Break ----------------------------------------------------------------
             // timeline.push(fiction_phase1_break)
             // timeline.push(eyetracking_recalibration)
 
-            // Phase 1B -------------------------------------------------------------
+            // // Phase 1B -------------------------------------------------------------
             // timeline.push({
             //     timeline_variables: stimuli.slice(
             //         Math.ceil(stimuli.length / 2),
@@ -240,22 +240,22 @@
             //     ],
             // })
 
-            timeline.push(fiction_feedback1)
+            // timeline.push(fiction_feedback1)
 
             /*---------------------- Questionnaires----------- */
             // timeline.push(questionnaire_bait)
             // timeline.push(questionnaire_cops)
 
             // Stage 2 ==============================================================
-            // timeline.push(fiction_instructions2)
-            // timeline.push({
-            //     timeline_variables: jsPsych.randomization.shuffleNoRepeats(stimuli),
-            //     timeline: [
-            //         fiction_fixation2,
-            //         fiction_showimage2,
-            //         fiction_ratings2,
-            //     ],
-            // })
+            timeline.push(fiction_instructions2)
+            timeline.push({
+                timeline_variables: jsPsych.randomization.shuffleNoRepeats(stimuli),
+                timeline: [
+                    fiction_fixation2,
+                    fiction_showimage2,
+                    fiction_ratings2,
+                ],
+            })
 
             // Feedback
             timeline.push(experiment_feedback)

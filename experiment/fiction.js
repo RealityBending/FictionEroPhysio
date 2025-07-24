@@ -86,7 +86,7 @@ const fiction_instructions1 = {
     type: jsPsychHtmlButtonResponse,
     css_classes: ["narrow-text"],
     stimulus:
-        "<h2>Part 2/</h2>" +
+        "<h2>Part 2/3</h2>" +
         "<p>This study stems out of an exciting new partnership between researchers from the <b>University of Sussex</b> and a young <b>AI startup</b> based in Brighton, UK, that specializes in making AI technology more ethical.</p>" +
         "<p>Our goal is to better understand how various people react to different images. For this, we will be using a new <b>image-generation algorithm</b> (based on a modified <i>Generative Adversarial Network</i>) trained on a carefully refined material to produce realistic high-quality erotic images. " +
         "This allows us to manipulate the generation parameters and understand how they impact perception." +
@@ -467,7 +467,7 @@ var fiction_ratings2 = {
                                 text: "Photograph",
                             },
                         ],
-                        defaultValue: 0,
+                        // defaultValue: 0,
                     },
                 ],
             },
