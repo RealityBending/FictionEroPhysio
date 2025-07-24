@@ -2,6 +2,7 @@
 const questionnaires_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
+        "<h1>Part 3/3</h1>" +
         "<h2>Questionnaires</h2>" +
         // rephrase if needed
         "<p>We will continue with a series of questionnaires.<br>It is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",

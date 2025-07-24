@@ -6,12 +6,12 @@
     <title>FictionEroPhysio</title>
 
     <!--Load JsPsych -->
-    <script src="https://unpkg.com/jspsych@8.1.0"></script>
-    <link href="https://unpkg.com/jspsych@8.1.0/css/jspsych.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/jspsych@8.2.2"></script>
+    <link href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" rel="stylesheet" type="text/css" />
 
     <!--Load all necessary plugins stored in utils-->
-    <script src="https://unpkg.com/@jspsych/plugin-survey@2.1.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@2.1.0/css/survey.css">
+    <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
+    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css" />
     <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
     <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
@@ -94,8 +94,8 @@
         },
         data: {
             screen: "ppt_id",
-            },
-        }
+        },
+    }
 
 
     // Initialize experiment ===============================================================
@@ -128,44 +128,53 @@
     // Demographics
     timeline.push(participant_ID)
 
+    // Enter fullscreen mode
+    timeline.push({
+        type: jsPsychFullscreen,
+        fullscreen_mode: true,
+        delay_after: 0,
+    })
+
     // Questionnaires ================== 
     questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint, questionnaire_ias])  // randomise order of questionnaires
-    // timeline.push(questionnaires)
+
+    timeline.push(questionnaires_instructions)
+    timeline.push(questionnaires)
 
     // TAP ===============================
     // Voluntary External
     timeline.push(VoluntaryExternal_instructions)
-    timeline.push(TAP_countdown) 
+    timeline.push(TAP_countdown)
     timeline.push({
         timeline: [ctap_trial],
         timeline_variables: ctap_maketrials(1, "external"),
         save_timeline_variables: true
     })
-    
+
     // Voluntary Internal
     timeline.push(VoluntaryInternal_instructions)
-    timeline.push(TAP_countdown) 
+    timeline.push(TAP_countdown)
     timeline.push({
         timeline: [ctap_trial],
         timeline_variables: ctap_maketrials(1, "internal"),
         save_timeline_variables: true
     })
 
-    // Rhytmic Tapping
-    timeline.push(RhytmicTapping_instructions);
-    timeline.push(TAP_beep_sequence); // beep with no response
-    timeline.push(create_TAP_sequence("Tap_Synchrony", 5)); // Tapping with beeps
-    timeline.push(create_TAP_sequence("Tap_Continuation", 5)); // Tapping without beeps 
+    // // Rhytmic Tapping
+    timeline.push(RhytmicTapping_instructions)
+    timeline.push(TAP_beep_sequence) // beep with no response
+    timeline.push(create_TAP_sequence("Tap_Synchrony", 5)) // Tapping with beeps
+    timeline.push(create_TAP_sequence("Tap_Continuation", 5)) // Tapping without beeps 
 
     // Rhytmic Random
     timeline.push(RhytmicRandom_instructions)
-    timeline.push(create_TAP_sequence("TAP_random", 5));
+    timeline.push(create_TAP_sequence("TAP_random", 5))
 
-    // Heart Tapping
+    // // Heart Tapping
     timeline.push(HeartTapping_Instructions)
-    timeline.push(create_TAP_sequence("TAP_heart", 5));
+    timeline.push(create_TAP_sequence("TAP_heart", 5))
 
-    // // HCT ===============================
+    // // // HCT ===============================
 
     timeline.push(HCT_instructions)
     timeline.push({
@@ -182,15 +191,15 @@
         randomize_order: true,
     })
 
-    // timeline.push({
-    //     type: jsPsychHtmlButtonResponse,
-    //     stimulus: "You've reached the end of this part!",
-    //     choices: ["Exit Fullscreen"],
-    //     on_finish: function () {
-    //         document.exitFullscreen()
-    //     },
-    // })
-    
+    timeline.push({
+        type: jsPsychHtmlButtonResponse,
+        stimulus: "You've reached the end of this part!",
+        choices: ["Exit Fullscreen"],
+        on_finish: function () {
+            document.exitFullscreen()
+        },
+    })
+
     // Run the timeline -------------------------------------------------------
     jsPsych.run(timeline)
 </script>

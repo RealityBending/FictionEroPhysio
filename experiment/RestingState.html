@@ -103,7 +103,15 @@
     timeline.push(RS_beep)// Play beep
     timeline.push(RS_questionnaire)// Add debriefing questionnaire
 
-    timeline.push(RS_endscreen)// Add debriefing screen
+    timeline.push({
+        type: jsPsychHtmlButtonResponse,
+        stimulus: "You've reached the end of this part!",
+        choices: ["Exit Fullscreen"],
+        on_finish: function () {
+            document.exitFullscreen()
+        },
+    })
+
 
     // Run the timeline =================================================================
     jsPsych.run(timeline)

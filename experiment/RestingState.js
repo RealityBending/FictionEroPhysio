@@ -1,7 +1,7 @@
 const RS_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
-        "<h1>Part 1/4</h1>" +
+        "<h1>Part 1/3</h1>" +
         "<p><b>Instructions</b></p>" +
         // Don't give exact time so that participants don't count
         "<p>A rest period of about 8 minutes is about to start.</p>" +
@@ -142,25 +142,5 @@ const RS_questionnaire = {
     },
     data: {
         screen: "questionnaire_RS",
-    },
-}
-
-
-const RS_endscreen = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1>Thank you for completing this task.</h1>" +
-        "<p>You can now let the experimenter know that you are ready to proceed.</p>" +
-        "<p>Press continue to finish the experiment.</p>",
-    choices: ["Continue"],
-    on_start: function () {
-        document.body.style.backgroundColor = "#FFFFFF"
-        document.body.style.cursor = "auto"
-    },
-    on_finish: function () {
-        document.exitFullscreen()
-    },
-    data: {
-        screen: "RS_debriefing",
     },
 }

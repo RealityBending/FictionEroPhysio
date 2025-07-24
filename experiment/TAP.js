@@ -2,30 +2,32 @@
 
 const VoluntaryExternal_instructions = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: 
+    stimulus:
+        "<h1><b>Instructions</b></h1>" +
         "<p>In this task, you will see a circle with a rotating arm moving around it.</p>" +
         "<p>Your task is to <b>tap</b> on the circle whenever the rotating arm reaches the <b>designated target point</b> (shown as an arrow in red).</p>" +
         "<p>Try to sync your tapping as closely as possible with the rotating arm passing through the target.</p>" +
-        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>" ,
+        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>",
     choices: ["I'm ready"],
 }
 
 const VoluntaryInternal_instructions = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: 
-        "<p> Well done! In this task, you will see a circle with a rotating arm moving around it.</p>" +
+    stimulus:
+        "<h1>Well done!</h1>" +
+        "<p>In this next task, you will see a circle with a rotating arm moving around it.</p>" +
         "<p>Your task is to <b>tap</b> at a moment of your <b>own choosing</b>, but before the rotating arm reaches the end of its path.</p>" +
         "<p>There is no correct moment to tap — just make sure you tap <b>before the arm reaches the end</b>.</p>" +
-        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>" ,
+        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>",
     choices: ["I'm ready"],
 }
 
 const RhytmicTapping_instructions = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: 
-        "<p>Well done! In this task, you will need to tap the spacebar in <b>synchrony</b> with the beeps." +
-        "<p>Try to tap as closely as possible to the beeps." +
-        "<p>After a certain ammount of time, the <b>beeps will stop</b> and you will have to <b>continue tapping in the same rhythm</b>." +
+    stimulus:
+        "<h1>Well done!</h1>" +
+        "<p>In this next task, you will need to tap the spacebar in <b>synchrony with the beeps</b>. Try to tap as closely as possible to the beeps." +
+        "<p>After a certain amount of time, the <b>beeps will stop</b> and you will have to <b>continue tapping in the same rhythm</b>." +
         "<p>Try to keep the same rhythm as before." +
         "<p>Press the button below when you're ready to begin.</p>",
     choices: ["I'm ready"],
@@ -33,9 +35,11 @@ const RhytmicTapping_instructions = {
 
 const RhytmicRandom_instructions = {
     type: jsPsychHtmlButtonResponse,
-    stimulus: 
-        "<p>Well done! In this task, you will need to tap the spacebar as <b>randomly</b> as possible, by changing the timing between the presses and making it as much 'unpredictable' and 'random' as you can." +
-        "<p><b>Avoid consequetive taps.</b></p>" +
+    stimulus:
+        "<h1>Well done!</h1>" +
+        "<p>In this next task, you will need to tap the spacebar as <b>randomly</b> as possible, " +
+        "<p>by changing the timing between the presses and making it as much 'unpredictable' and 'random' as you can.</p>" +
+        "<p><b>Avoid consecutive taps.</b></p>" +
         "<p>Press the button below when you're ready to begin.",
     choices: ["I'm ready"],
 }
@@ -43,7 +47,8 @@ const RhytmicRandom_instructions = {
 const HeartTapping_Instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
-        "<p>Well done! For the final trial, please try to tap <b>every time you feel a heart beat</b>.</p>" +
+        "<h1>Well done!</h1>" +
+        "<p>For the final trial, please try to tap <b>every time you feel a heart beat</b>.</p>" +
         "<p>Do continue making new presses until the trial is over.</p>" +
         "<p>Press the button below when you're ready to begin.</p>",
     choices: ["I'm ready"],
@@ -66,7 +71,7 @@ const TAP_countdown = {
         let count = 3
         let countdownInterval = setInterval(() => {
             count--
-            if (count > 0) {  
+            if (count > 0) {
                 document.getElementById("countdown").innerText = count
             } else {
                 clearInterval(countdownInterval)
@@ -74,7 +79,8 @@ const TAP_countdown = {
         }, 1000)
     },
     on_finish: function () {
-        document.body.style.backgroundColor = "white"}
+        document.body.style.backgroundColor = "white"
+    }
 }
 
 // ############################ Voluntary Tapping Task
@@ -238,7 +244,7 @@ function ctap_keyListener(e) {
     if (e.key === " ") {
         ctap_pressTime = performance.now() - ctap_startTime
         document.removeEventListener("keydown", ctap_keyListener)
-        document.querySelector("#marker1").remove() 
+        document.querySelector("#marker1").remove()
     }
 }
 
@@ -291,18 +297,22 @@ const ctap_trial = {
     choices: [" "],
     prompt: "",
     on_finish: function (data) {
+        // Clean up markers
+        document.querySelector("#marker1")?.remove()
+        document.querySelector("#marker2")?.remove()
+
         document.body.style.cursor = "auto",
-        data.response_time = ctap_pressTime // Time user pressed spacebar - same as RT
+            data.response_time = ctap_pressTime // Time user pressed spacebar - same as RT
         data.response_angle = time2Rads(
             ctap_pressTime,
             jsPsych.evaluateTimelineVariable("duration"),
-            jsPsych.evaluateTimelineVariable("start_angle"),   
+            jsPsych.evaluateTimelineVariable("start_angle"),
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
     },
 }
 // ================================ Rhythmic Tapping Task ======================================================
 
-var beep = ["utils/beep.mp3"]; // Audio file for the beep
+var beep = ["utils/beep.mp3"] // Audio file for the beep
 
 // Beep trial (for synchrony phase)
 const TAP_beep = {
@@ -310,31 +320,31 @@ const TAP_beep = {
     stimulus: beep,
     choices: [" "], // space bar
     trial_duration: 1429, // Duration of each beat (42 BPM ≈ 1429ms)
-    response_ends_trial: false, 
+    response_ends_trial: false,
     on_start: function () {
-        document.body.style.backgroundColor = "#FFFFFF";
-        document.body.style.cursor = "auto";
+        document.body.style.backgroundColor = "#FFFFFF"
+        document.body.style.cursor = "auto"
     },
     data: { screen: "tap_beep" }
-};
+}
 
 // Beep sequence (5 beeps) // change after
 const TAP_beep_sequence = {
     timeline: [TAP_beep],
     repetitions: 5, // 5 beeps total
     on_start: function () {
-        document.body.style.backgroundColor = "#FFFFFF";
-        document.body.style.cursor = "auto";
+        document.body.style.backgroundColor = "#FFFFFF"
+        document.body.style.cursor = "auto"
     }
-};
+}
 
 // Function to create individual tapping trials
 function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "white") {
     return {
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
-            create_marker(marker1, markerColor); // Show color marker
-            create_marker_2(marker2);            // Show position marker
+            create_marker(marker1, markerColor) // Show color marker
+            create_marker_2(marker2)            // Show position marker
         },
         stimulus: "<b>Please continue tapping...</b>", // Displayed instruction
         choices: [" "], // Space bar only
@@ -344,17 +354,17 @@ function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "
             screen: screen
         },
         on_start: function (trial) {
-            trial.start_time = performance.now(); // Record start time for duration
+            trial.start_time = performance.now() // Record start time for duration
         },
         on_finish: function (data) {
             // Clean up markers
-            document.querySelector("#marker1")?.remove();
-            document.querySelector("#marker2")?.remove();
+            document.querySelector("#marker1")?.remove()
+            document.querySelector("#marker2")?.remove()
 
             // Calculate and store trial duration
-            data.duration = (performance.now() - data.start_time) / 1000; // in seconds
+            data.duration = (performance.now() - data.start_time) / 1000 // in seconds
         }
-    };
+    }
 }
 
 // Function to create a tapping phase (sequence of trials)
@@ -362,8 +372,8 @@ function create_TAP_sequence(screen = "TAP1", repetitions = 90) {
     return {
         timeline: [
             create_TAP_trial(screen + "_waiting", null, "white"), // Untimed trial (starts with keypress)
-            create_TAP_trial(screen + "_tap", 60 , "black")  // Timed tapping trials
+            create_TAP_trial(screen + "_tap", 60, "black")  // Timed tapping trials
         ],
         repetitions: repetitions
-    };
+    }
 }
