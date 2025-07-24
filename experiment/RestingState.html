@@ -82,19 +82,28 @@
         }
     })
 
+
     // Initialize timeline
     var timeline = []
 
     // Demographics ===========================================================
-    // timeline.push(demographics_consent)
-    // timeline.push(demographics_questions1)
+    timeline.push(demographics_consent)
+    timeline.push({
+        type: jsPsychFullscreen,
+        fullscreen_mode: true,
+        delay_after: 0,
+    })
+    timeline.push(demographics_questions1)
 
     //Resting State ================================================
     timeline.push(RS_instructions)// Instructions
+
     timeline.push(RS_buffer) // Create blank grey screen just before rest period
     timeline.push(RS_task)// Create blank grey screen for resting state
     timeline.push(RS_beep)// Play beep
     timeline.push(RS_questionnaire)// Add debriefing questionnaire
+
+    timeline.push(RS_endscreen)// Add debriefing screen
 
     // Run the timeline =================================================================
     jsPsych.run(timeline)

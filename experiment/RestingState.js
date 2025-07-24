@@ -146,4 +146,21 @@ const RS_questionnaire = {
 }
 
 
-
+const RS_endscreen = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+        "<h1>Thank you for completing this task.</h1>" +
+        "<p>You can now let the experimenter know that you are ready to proceed.</p>" +
+        "<p>Press continue to finish the experiment.</p>",
+    choices: ["Continue"],
+    on_start: function () {
+        document.body.style.backgroundColor = "#FFFFFF"
+        document.body.style.cursor = "auto"
+    },
+    on_finish: function () {
+        document.exitFullscreen()
+    },
+    data: {
+        screen: "RS_debriefing",
+    },
+}
