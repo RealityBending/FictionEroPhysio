@@ -1,269 +1,240 @@
 <!DOCTYPE HTM>
 <html>
+    <head>
+        <!-- Title shown in tab -->
+        <title>Experiment</title>
 
-<head>
-    <!-- Title shown in tab -->
-    <title>Experiment</title>
+        <!--Load JsPsych -->
+        <script src="https://unpkg.com/jspsych@8.2.2"></script>
+        <link
+            href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css"
+            rel="stylesheet"
+            type="text/css"
+        />
 
-    <!--Load JsPsych -->
-    <script src="https://unpkg.com/jspsych@8.2.2"></script>
-    <link href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <!--Load plugins-->
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css"
+        />
 
-    <!--Load plugins-->
-    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-slider-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-image-keyboard-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css" />
+        <!-- To save data via DataPipe (for online experiments) -->
+        <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.5.0"></script>
 
-    <!-- To save data via DataPipe (for online experiments) -->
-    <script src="https://unpkg.com/@jspsych-contrib/plugin-pipe@0.5.0"></script>
+        <!-- Eye Tracking -->
+        <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@8.1.0/examples/js/webgazer/webgazer.js"></script>
+        <script src="https://unpkg.com/@jspsych/extension-webgazer@1.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
 
-    <!-- Eye Tracking -->
-    <script src="https://cdn.jsdelivr.net/gh/jspsych/jspsych@jspsych@8.1.0/examples/js/webgazer/webgazer.js"></script>
-    <script src="https://unpkg.com/@jspsych/extension-webgazer@1.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-init-camera@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-calibrate@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-webgazer-validate@2.1.0"></script>
+        <!-- Custom scripts -->
+        <script src="demographics.js"></script>
+        <script src="eye_tracking.js"></script>
+        <script src="stimuli_selection/stimuli_list.js"></script>
+        <script src="parameters.js"></script>
+        <script src="questionnaires.js"></script>
+        <script src="fiction.js"></script>
+    </head>
 
-    <!-- Custom scripts -->
-    <script src="demographics.js"></script>
-    <script src="eye_tracking.js"></script>
-    <script src="stimuli_selection/stimuli_list.js"></script>
-    <script src="parameters.js"></script>
-    <script src="questionnaires.js"></script>
-    <script src="fiction.js"></script>
+    <body></body>
 
-
-    <!-- CSS -->
-
-    <style>
-        .colored-scale .sd-rating__item:nth-child(3) {
-            background-color: #b0bec5;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(4) {
-            background-color: #cfd8dc;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(5) {
-            background-color: #eceff1;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(6) {
-            background-color: #f1f6f6;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(7) {
-            background-color: #eceff1;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(8) {
-            background-color: #cfd8dc;
-        }
-
-        .colored-scale .sd-rating__item:nth-child(9) {
-            background-color: #b0bec5;
-        }
-    </style>
-</head>
-
-
-<body></body>
-
-<script>
-
-    const participant_ID = {
-        type: jsPsychSurvey,
-        survey_json: {
-            title: "About yourself",
-            completeText: "Continue",
-            pageNextText: "Next",
-            pagePrevText: "Previous",
-            goNextPageAutomatic: false,
-            showQuestionNumbers: false,
-            pages: [
-                {
-                    elements: [
-                        {
-                            title: "Enter the participant's ID:",
-                            type: "text",
-                            placeholder: "000",
-                            name: "Participant_ID",
-                            isRequired: true
-                        }
-                    ]
-                }
-
-            ]
-        }
-    }
-
-    // Gender, sexuality and stimulus choice 
-
-    const demographics_data = {
-        type: jsPsychSurvey,
-        survey_json: {
-            title: "About yourself",
-            completeText: "Continue",
-            pageNextText: "Next",
-            pagePrevText: "Previous",
-            goNextPageAutomatic: false,
-            showQuestionNumbers: false,
-            pages: [
-                {
-                    elements: [
-                        {
-                            title: "What is your gender?",
-                            name: "Gender",
-                            type: "radiogroup",
-                            choices: ["Male", "Female"],
-                            showOtherItem: true,
-                            otherText: "Other",
-                            otherPlaceholder: "Please specify",
-                            isRequired: true,
-                            colCount: 0,
-                        },
-                        {
-                            title: "What sexual orientation do you identify with?",
-                            description:
-                                "These questions are important to understand the results in the latter part of the experiment.",
-                            name: "SexualOrientation",
-                            type: "radiogroup",
-                            choices: ["Heterosexual", "Homosexual", "Bisexual"],
-                            showOtherItem: true,
-                            otherText: "Other",
-                            otherPlaceholder: "Please specify",
-                            isRequired: true,
-                            colCount: 1,
-                        },
-                        {
-                            visibleIf:
-                                "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
-                            title: "Which types of images do you find the most arousing?",
-                            description:
-                                "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
-                            name: "StimuliChoice",
-                            type: "radiogroup",
-                            choices: [
-                                "Women (and heterosexual couples)",
-                                "Men (and heterosexual couples)",
-                                "Only women (and lesbian couples)",
-                                "Only men (and gay couples)",
-                            ],
-                            isRequired: true,
-                            colCount: 1,
-                        },
-                    ],
-                },
-            ]
-        },
-        data: {
-            screen: "demographic_questions3",
-        }
-    }
-
-
-    // Initialize experiment ===============================================================
-
-    var jsPsych = initJsPsych({
-        show_progress_bar: true,
-        message_progress_bar: "Progress",
-        extensions: [{ type: jsPsychExtensionWebgazer }],
-        on_finish: function () {
-            // Get participant ID
-            let participantID = jsPsych.data.get().filter({ screen: "demographic_questions" }).values()[0].response["Participant_ID"]
-
-            // Save as JSON file locally
-            jsPsych.data.get().localSave(
-                "json",
-                `P${participantID}_fic.json`
-            )
-        }
-    })
-
-    // Initialize timeline
-    var timeline = []
-
-    // Demographics
-    // timeline.push(participant_ID)
-    // timeline.push(demographics_data)
-
-    // Eye-tracking ==================================================
-    timeline.push(eyetracking_consent)
-    timeline.push(eyetracking_calibration) // include full-screen #
-    timeline.push(fiction_preloadstims)
-
-
-    // Fiction ========================================================
-    timeline.push({
-        timeline: [fiction_instructions1],
-        on_finish() {
-
-            //Phase 1A -------------------------------------------------------------
-            timeline.push({
-                timeline_variables: stimuli.slice(
-                    0,
-                    Math.ceil(stimuli.length / 2)
-                ).slice(0, 1),
-                timeline: [
-                    fiction_fixation1a,
-                    fiction_cue,
-                    fiction_fixation1b,
-                    fiction_showimage1,
-                    fiction_blankscreen,
-                    fiction_ratings1,
+    <script>
+        const participant_ID = {
+            type: jsPsychSurvey,
+            survey_json: {
+                title: "About yourself",
+                completeText: "Continue",
+                pageNextText: "Next",
+                pagePrevText: "Previous",
+                goNextPageAutomatic: false,
+                showQuestionNumbers: false,
+                pages: [
+                    {
+                        elements: [
+                            {
+                                title: "Enter the participant's ID:",
+                                type: "text",
+                                placeholder: "000",
+                                name: "Participant_ID",
+                                isRequired: true,
+                            },
+                        ],
+                    },
                 ],
-            })
+            },
+        }
 
-            // Break ----------------------------------------------------------------
-            timeline.push(fiction_phase1_break)
-            timeline.push(eyetracking_recalibration)
+        // Gender, sexuality and stimulus choice
 
-            // Phase 1B -------------------------------------------------------------
-            timeline.push({
-                timeline_variables: stimuli.slice(
-                    Math.ceil(stimuli.length / 2),
-                    stimuli.length
-                ).slice(0, 1),
-                timeline: [
+        const demographics_data = {
+            type: jsPsychSurvey,
+            survey_json: {
+                title: "About yourself",
+                completeText: "Continue",
+                pageNextText: "Next",
+                pagePrevText: "Previous",
+                goNextPageAutomatic: false,
+                showQuestionNumbers: false,
+                pages: [
+                    {
+                        elements: [
+                            {
+                                title: "What is your gender?",
+                                name: "Gender",
+                                type: "radiogroup",
+                                choices: ["Male", "Female"],
+                                showOtherItem: true,
+                                otherText: "Other",
+                                otherPlaceholder: "Please specify",
+                                isRequired: true,
+                                colCount: 0,
+                            },
+                            {
+                                title: "What sexual orientation do you identify with?",
+                                description:
+                                    "These questions are important to understand the results in the latter part of the experiment.",
+                                name: "SexualOrientation",
+                                type: "radiogroup",
+                                choices: [
+                                    "Heterosexual",
+                                    "Homosexual",
+                                    "Bisexual",
+                                ],
+                                showOtherItem: true,
+                                otherText: "Other",
+                                otherPlaceholder: "Please specify",
+                                isRequired: true,
+                                colCount: 1,
+                            },
+                            {
+                                visibleIf:
+                                    "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
+                                title: "Which types of images do you find the most arousing?",
+                                description:
+                                    "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
+                                name: "StimuliChoice",
+                                type: "radiogroup",
+                                choices: [
+                                    "Women (and heterosexual couples)",
+                                    "Men (and heterosexual couples)",
+                                    "Only women (and lesbian couples)",
+                                    "Only men (and gay couples)",
+                                ],
+                                isRequired: true,
+                                colCount: 1,
+                            },
+                        ],
+                    },
+                ],
+            },
+            data: {
+                screen: "demographic_questions3",
+            },
+        }
+
+        // Initialize experiment ===============================================================
+
+        var jsPsych = initJsPsych({
+            // show_progress_bar: true,
+            // message_progress_bar: "Progress",
+            extensions: [{ type: jsPsychExtensionWebgazer }],
+            on_finish: function () {
+                // Get participant ID
+                let participantID = jsPsych.data
+                    .get()
+                    .filter({ screen: "demographic_questions" })
+                    .values()[0].response["Participant_ID"]
+
+                // Save as JSON file locally
+                jsPsych.data
+                    .get()
+                    .localSave("json", `P${participantID}_fic.json`)
+            },
+        })
+
+        // Initialize timeline
+        var timeline = []
+
+        // Demographics
+        // timeline.push(participant_ID)
+        // timeline.push(demographics_data)
+
+        // Eye-tracking ==================================================
+        timeline.push(eyetracking_consent)
+        timeline.push(eyetracking_calibration) // include full-screen #
+        timeline.push(fiction_preloadstims)
+
+        // Fiction ========================================================
+        timeline.push({
+            timeline: [fiction_instructions1],
+            on_finish() {
+                //Phase 1A -------------------------------------------------------------
+                timeline.push({
+                    timeline_variables: stimuli
+                        .slice(0, Math.ceil(stimuli.length / 2))
+                        .slice(0, 1),
+                    timeline: [
                         fiction_fixation1a,
                         fiction_cue,
                         fiction_fixation1b,
                         fiction_showimage1,
                         fiction_blankscreen,
                         fiction_ratings1,
-                ],
-            })
+                    ],
+                })
 
-            timeline.push(fiction_feedback1)
+                // Break ----------------------------------------------------------------
+                timeline.push(fiction_phase1_break)
+                timeline.push(eyetracking_recalibration)
 
-            /*---------------------- Questionnaires----------- */
-            timeline.push(questionnaire_bait)
-            timeline.push(questionnaire_cops)
+                // Phase 1B -------------------------------------------------------------
+                timeline.push({
+                    timeline_variables: stimuli
+                        .slice(Math.ceil(stimuli.length / 2), stimuli.length)
+                        .slice(0, 1),
+                    timeline: [
+                        fiction_fixation1a,
+                        fiction_cue,
+                        fiction_fixation1b,
+                        fiction_showimage1,
+                        fiction_blankscreen,
+                        fiction_ratings1,
+                    ],
+                })
 
-            // Stage 2 ==============================================================
-            timeline.push(fiction_instructions2)
-            timeline.push({
-                timeline_variables: jsPsych.randomization.shuffleNoRepeats(stimuli),
-                timeline: [
-                    fiction_fixation2,
-                    fiction_showimage2,
-                    fiction_ratings2,
-                ],
-            })
+                timeline.push(fiction_feedback1)
 
-            // Feedback
-            timeline.push(experiment_feedback)
-        },
-    })
+                /*---------------------- Questionnaires----------- */
+                timeline.push(questionnaire_bait)
+                timeline.push(questionnaire_cops)
 
-    // Run the timeline -------------------------------------------------------
-    jsPsych.run(timeline)
-</script>
+                // Stage 2 ==============================================================
+                timeline.push(fiction_instructions2)
+                timeline.push({
+                    timeline_variables:
+                        jsPsych.randomization.shuffleNoRepeats(stimuli),
+                    timeline: [
+                        fiction_fixation2,
+                        fiction_showimage2,
+                        fiction_ratings2,
+                    ],
+                })
 
+                // Feedback
+                timeline.push(experiment_feedback)
+            },
+        })
+
+        // Run the timeline -------------------------------------------------------
+        jsPsych.run(timeline)
+    </script>
 </html>
