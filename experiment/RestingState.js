@@ -1,14 +1,36 @@
+
 const RS_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<p><b>Instructions</b></p>" +
-        // Don't give exact time so that participants don't count
-        "<p>A rest period of about 8 minutes is about to start.</p>" +
-        "<p>Simply <b>relax</b> and remain seated quietly with your eyes closed. Please try <b>not to fall asleep</b>.</p> " +
-        "<p>Once the resting period is over, you will hear a beep. You can then open your eyes and proceed.</p>" +
-        "<p>Once you are ready, close your eyes. The rest period will shortly begin.</p>",
-    choices: ["Continue"],
-}
+  type: jsPsychSurvey,
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "instructions_RS",
+            html: `
+              <div style="text-align: center;"> 
+                <h2>Resting State</h2>
+                <h3><b>Instructions</h3></p>
+              </div>
+              <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                <div style="flex: 2; text-align: center;">
+                  <p>A rest period of about 8 minutes is about to start.</p>
+                  <p>Please <b>relax</b> and remain seated quietly with your eyes closed. Try <b style="color: #E91E63;">not to fall asleep</b>.</p>
+                  <p>Once the resting period is over, you will hear a beep. You can then open your eyes and continue with the experiment.</p>
+                  <p>When you are ready, close your eyes. The rest period will begin shortly.</p>
+                </div>
+              </div>
+            `
+          }
+        ]
+      }
+    ]
+  },
+    data: { screen: "RS" },
+};
 
 
 // Resting state questionnaire

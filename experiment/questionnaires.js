@@ -1,13 +1,30 @@
 // Questionnaires
 const questionnaires_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h2>Questionnaires</h2>" +
-        // rephrase if needed
-        "<p>We will continue with a series of questionnaires.<br>It is important that you answer truthfully. Please read the statements carefully and answer according to what describe you the best.</p>",
-    choices: ["Continue"],
-    data: { screen: "part2_instructions" },
+  type: jsPsychSurvey,
+  data: { screen: "part2_instructions" },
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "questionnaires_intro_text",
+            html: `
+              <div class="narrow-text" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                <h2>Questionnaires</h2>
+                <p>We will continue with a series of questionnaires.</p>
+                <p>It is important that you answer truthfully. Please read the statements carefully and answer according to what describes you the best.</p>
+              </div>
+            `
+          }
+        ]
+      }
+    ]
+  }
 }
+
 
 // Convernience function to shuffle an object (used internally)
 function shuffleObject(obj) {

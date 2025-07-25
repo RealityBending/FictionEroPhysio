@@ -1,7 +1,7 @@
 // experiment version
 version = "1.0"
 // [x, y, width, height] in pixels. Set to [0, 0, 0, 0] to disable.
-marker1 = [0, 37, 100, 100]
+marker1 = [0, 0, 100, 100]
 // [x, y, width, height] in pixels. Set to [0, 0, 0, 0] to disable.
 marker2 = [0, 0, 1920, 37]
 

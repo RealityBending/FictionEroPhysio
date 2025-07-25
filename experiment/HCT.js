@@ -2,17 +2,37 @@
 var HCT_durations = [20, 25, 30, 35, 40, 45]
 
 // Instructions
-var HCT_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h2>Heartbeat Counting Task</h2>" +
-        "<p><b>Instructions</b></p>" +
-        // Don't give exact time so that participants don't count
-        "<p>In the following task, you will need to count and report the number of heartbeats during several intervals.</p>" +
-        "<p>Simply <b>relax</b> and remain seated quietly while <b>counting your heartbeat without physically measuring it</b>.</p> " +
-        "<p>The interval will start with a '3-2-1' signal, after which you need to count your heartbeats until you hear a beep.</p> " +
-        "<p>Questions will then be displayed for you to answer.</p>",
-    choices: ["I am ready"],
+const HCT_instructions = {
+    type: jsPsychSurvey,
+    data: { screen: "HCT" },
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_HCT",
+                        html: `
+    <div style="text-align: center;"> 
+      <h2>Heartbeat Counting Task</h2>
+    <p><b>Instructions</b></p>
+    </div>
+    <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+      <div style="flex: 2; text-align: center;">
+        <p>In the following task, you will need to count and report the number of heartbeats during several intervals.</p>
+        <p>Simply <b>relax</b> and remain seated quietly while <b style="color: #E91E63;">counting your heartbeat without physically measuring it</b>.</p>
+        <p>The interval will start with a <b>'3-2-1'</b> signal, after which you need to count your heartbeats until you hear a beep.</p>
+        <p>Press the button below when you're ready to begin.</p>
+      </div>
+    </div>
+  `,
+                    }
+                ]
+            }
+        ]
+    }
 }
 
 // Trial Parts -----------------------------------------------------------------

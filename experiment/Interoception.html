@@ -88,72 +88,75 @@
 
 
     // Demographics
-    timeline.push(participant_ID)
+    // timeline.push(participant_ID)
 
     // Enter fullscreen mode
-    timeline.push({
-        type: jsPsychFullscreen,
-        fullscreen_mode: true,
-        delay_after: 0,
-    })
+    // timeline.push({
+    //     type: jsPsychFullscreen,
+    //     fullscreen_mode: true,
+    //     delay_after: 0,
+    // })
 
     // Questionnaires ================== 
     questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint, questionnaire_ias])  // randomise order of questionnaires
 
-    // timeline.push(questionnaires_instructions)
-    // timeline.push(questionnaires)
+    timeline.push(questionnaires_instructions)
+    timeline.push(questionnaires)
 
     // TAP ===============================
     // Voluntary External
-    // timeline.push(VoluntaryExternal_instructions)
-    // timeline.push(TAP_countdown)
-    // timeline.push({
-    //     timeline: [ctap_trial],
-    //     timeline_variables: ctap_maketrials(1, "external"),
-    //     save_timeline_variables: true
-    // })
+    timeline.push(VoluntaryExternal_instructions)
+    timeline.push(TAP_countdown)
+    timeline.push({
+        timeline: [ctap_trial],
+        timeline_variables: ctap_maketrials(1, "external"),
+        save_timeline_variables: true
+    })
 
-    // // Voluntary Internal
-    // timeline.push(VoluntaryInternal_instructions)
-    // timeline.push(TAP_countdown)
-    // timeline.push({
-    //     timeline: [ctap_trial],
-    //     timeline_variables: ctap_maketrials(1, "internal"),
-    //     save_timeline_variables: true
-    // })
+    // Voluntary Internal
+    timeline.push(VoluntaryInternal_instructions)
+    timeline.push(TAP_countdown)
+    timeline.push({
+        timeline: [ctap_trial],
+        timeline_variables: ctap_maketrials(1, "internal"),
+        save_timeline_variables: true
+    })
 
-    // // Rhytmic Tapping
+    // Rhytmic Tapping
     timeline.push(TAP_preload)
     timeline.push(RhytmicTapping_instructions)
+    timeline.push(TAP_countdown)
     timeline.push(TAP_beep_sequence) // beep with no response
     timeline.push(create_TAP_sequence("Tap_Synchrony", 5)) // Tapping with beeps
     timeline.push(create_TAP_sequence("Tap_Continuation", 5)) // Tapping without beeps 
 
     // Rhytmic Random
-
     timeline.push(RhytmicRandom_instructions)
+    timeline.push(TAP_countdown)
     timeline.push(create_TAP_sequence("TAP_random", 5))
 
-    // // Heart Tapping
+    // Heart Tapping
     timeline.push(HeartTapping_Instructions)
     timeline.push(create_TAP_sequence("TAP_heart", 5))
 
-    // // // HCT ===============================
+    //HCT ===============================
 
-    // timeline.push(HCT_instructions)
-    // timeline.push({
-    //     timeline: [
-    //         HCT_countdown,
-    //         HCT_interval(),
-    //         HCT_beep,
-    //         HCT_items,
-    //     ],
-    //     // Loop comprehension for duration vector
-    //     timeline_variables: HCT_durations.map((i) => ({
-    //         duration: i * 1000,
-    //     })),
-    //     randomize_order: true,
-    // })
+    timeline.push(HCT_instructions)
+    timeline.push({
+        timeline: [
+            HCT_countdown,
+            HCT_interval(),
+            HCT_beep,
+            HCT_items,
+        ],
+        // Loop comprehension for duration vector
+        timeline_variables: HCT_durations.map((i) => ({
+            duration: i * 1000,
+        })),
+        randomize_order: true,
+    })
+
+    timeline.push(demographics_debriefing)
 
     timeline.push({
         type: jsPsychHtmlButtonResponse,

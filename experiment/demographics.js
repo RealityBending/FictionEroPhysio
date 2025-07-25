@@ -1,68 +1,67 @@
-// // Full screen
-// const fullscreen_on = {
-//     type: jsPsychFullscreen,
-//     fullscreen_mode: true,
-//     delay_after: 0,
-// }
-
-// const fullscreen_off = {
-//     type: jsPsychFullscreen,
-//     fullscreen_mode: false,
-//     delay_after: 0,
-// }
-
-
 // Consent form
 
 const demographics_consent = {
-    type: jsPsychHtmlButtonResponse,
-    css_classes: ["narrow-text"],
-    stimulus: function () {
-        // Logo and title
-        let text =
-            "<img src='https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png' width='150px' align='right'/><br><br><br><br><br>" +
-            "<h1>Informed Consent</h1>"
-        // Consent Form
-        text +=
-            // Overview
-            "<p align='left'><b>Invitation to Take Part</b><br>" +
-            "Thank you for considering to take part in this study that aims at deepening our understanding of human perception. " +
-            "This study is being conducted by Dr Dominique Makowski, and his team, from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>" +
-            // Description
-            "<p align='left'><b>Why have I been invited and what will I do?</b><br>" +
-            "The goal is to study how new technology can impact <b>human perception</b>." +
-            " In this study, you will be shown <b>erotic images</b> and asked to complete a few questionnaires and perform some tasks. " +
-            "We will also measure your physiological processes to assess the relationship between how you experience your body and how you perceive the world." +
-            //Physiological signals
-            "<p align='left'><b>Physiological Signals</b><br>" +
-            "We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences. " +
-            "Since this study is being undertaken for research purposes only, we will not be able to provide any feedback or information on clinical aspects of the data obtained. " +
-            "For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse 2 headset which contains electrodes that will be placed in your forehead and behind the ears. " +
-            "We kindly ask that you refrain from participating if you are aware of having skin reactions or allergies to adhesives or the materials used in the electrodes -\ primarily composed of silver and silver chloride." +
-            // Results and personal information
-            "<p align='left'><b>What will happen to the results and my personal information?</b><br>" +
-            "The results of this research may be written into a scientific publication. Your anonymity will be ensured in the way described in the consent information below. <b>Please read this information carefully</b> and then, if you wish to take part, please acknowledge that you have fully understood this sheet, and that you consent to take part in the study as it is described here.</p>" +
-            "<p align='left'><b>Consent</b><br></p>" +
-            // Bullet points
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that by signing below I am agreeing to take part in the University of Sussex research described here, and that I have read and understood this information sheet</li>" +
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalized in any way. </li>" +
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that since the study is anonymous, it will be impossible to withdraw my data once I have completed it.</li>" +
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'> I understand that my personal data will be used for the purposes of this research study and will be handled in accordance with Data Protection legislation." +
-            "I understand that the University's Privacy Notice provides further information on how the University uses personal data in its research.</li>" +
-            "<li style = 'text-align: justify;padding-left: 20px; list-style-position: inside'> I understand that my collected data will be stored in a de-identified way. De-identified data may be made publicly available through secured scientific online data repositories.</li>" +
-            "<li style = 'text-align: justify;padding-left: 20px; list-style-position: inside'> I understand that due to the explicit nature of the images, <b>I confirm that I am 18 years of age or older</b>.</li>" +
-            // Incentive
-            "<li style = 'text-align: justify; padding-left: 20px; list-style-position: inside'>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, ...).</li>" +
-            "</p>" +
-            "<p align='left'><br><sub><sup>For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>), Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>) or Maisie Bennett (<i style='color:DodgerBlue;'>mb2021@sussex.ac.uk</i>). " +
-            "This research has been approved (xx/xxx/xx) by the ethics board of the School of Psychology. The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.</sup></sub></p>"
-        return text
-    },
-    choices: ["I read, understood, and I consent"],
+    type: jsPsychSurvey,
     data: { screen: "consent" },
+    survey_json: {
+        showQuestionNumbers: false,
+        completeText: "I read, understood, and I consent",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "html",
+                        name: "consent_form",
+                        html: `
+                <div class="narrow-text" style="text-align: left; max-width: 800px; margin: 0 auto;">
+                <img src="https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png" width="150px" align="right" style="margin-bottom: 30px ;" />
+                <h1>Informed Consent</h1>
+
+                <p><b>Invitation to Take Part</b><br>
+                Thank you for considering to take part in this study that aims at deepening our understanding of human perception. 
+                This study is being conducted by Dr Dominique Makowski, and his team, from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>
+
+                <p><b>Why have I been invited and what will I do?</b><br>
+                The goal is to study how new technology can impact <b>human perception</b>.
+                In this study, you will be shown <b>erotic images</b> and asked to complete a few questionnaires and perform some tasks. 
+                We will also measure your physiological processes to assess the relationship between how you experience your body and how you perceive the world.</p>
+
+                <p><b>Physiological Signals</b><br>
+                We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences. 
+                Since this study is being undertaken for research purposes only, we will not be able to provide any feedback or information on clinical aspects of the data obtained. 
+                For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse 2 headset which contains electrodes that will be placed on your forehead and behind the ears. 
+                We kindly ask that you refrain from participating if you are aware of having skin reactions or allergies to adhesives or the materials used in the electrodes — primarily composed of silver and silver chloride.</p>
+
+                <p><b>What will happen to the results and my personal information?</b><br>
+                The results of this research may be written into a scientific publication. Your anonymity will be ensured in the way described in the consent information below. 
+                <b>Please read this information carefully</b> and then, if you wish to take part, please acknowledge that you have fully understood this sheet, and that you consent to take part in the study as it is described here.</p>
+
+                <p><b>Consent</b></p>
+                <ul style="padding-left: 20px;">
+                  <li>I understand that by clicking below I am agreeing to take part in the University of Sussex research described here, and that I have read and understood this information sheet.</li>
+                  <li>I understand that my participation is entirely voluntary, that I can choose not to participate in part or all of the study, and that I can withdraw at any stage without having to give a reason and without being penalized in any way.</li>
+                  <li>I understand that since the study is anonymous, it will be impossible to withdraw my data once I have completed it.</li>
+                  <li>I understand that my personal data will be used for the purposes of this research study and will be handled in accordance with Data Protection legislation. I understand that the University's Privacy Notice provides further information on how the University uses personal data in its research.</li>
+                  <li>I understand that my collected data will be stored in a de-identified way. De-identified data may be made publicly available through secured scientific online data repositories.</li>
+                  <li>I understand that due to the explicit nature of the images, <b>I confirm that I am 18 years of age or older</b>.</li>
+                  <li>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, etc.).</li>
+                </ul>
+
+                <p><sub>
+                For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski 
+                (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>), Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>).
+                This research has been approved (xx/xxx/xx) by the ethics board of the School of Psychology. 
+                The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.
+                </sub></p>
+                </div>`,
+                    },
+                ],
+            },
+        ],
+    },
 }
 
-// Demographics info 
+// Demographics info
 
 const demographics_questions1 = {
     type: jsPsychSurvey,
@@ -81,9 +80,9 @@ const demographics_questions1 = {
                         type: "text",
                         placeholder: "000",
                         name: "Participant_ID",
-                        isRequired: true
-                    }
-                ]
+                        isRequired: true,
+                    },
+                ],
             },
             {
                 elements: [
@@ -289,13 +288,12 @@ const demographics_data2 = {
                     },
                 ],
             },
-        ]
+        ],
     },
     data: {
         screen: "demographic_questions2",
-    }
+    },
 }
-
 
 // Thank you ========================================================================
 
@@ -336,20 +334,39 @@ const experiment_feedback = {
 }
 
 const demographics_debriefing = {
-    type: jsPsychHtmlButtonResponse,
-    css_classes: ["narrow-text"],
-    stimulus:
-        "<h2>Debriefing</h2>" +
-        "<p align='left'>The purpose of this study was actually to study the effect on sexual arousal of <i>believing</i> that the content is AI-generated. " +
-        "Indeed, we want to test the hypothesis that believing that erotic images are fake would lead to a lower sexual arousal. " +
-        "We are also assessing the role of interoception in this process. Interoception involves being aware of changes happening inside our bodies, both physiological (e.g., our heart rate) and emotional, and it plays a crucial role in how we perceive and experience the world around us. " +
-        "As we are primarily interested in your <i>beliefs</i> about reality, all images were in fact taken from an existing database of real images used in psychology research to study emotions. " +
-        "We apologize for the necessary deception used in the instructions, and we hope that you understand its role in ensuring the validity of our experiment.</p>" +
-        "<p align='left'><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the project, please contact <i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i> and/or <i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>" +
-        "<p>To complete your participation in this study, click on 'Continue' and <b>wait until your responses have been successfully saved</b> before closing the tab.</p> ",
-    choices: ["Continue"],
-    data: {
-        screen: "debriefing",
+    type: jsPsychSurvey,
+    data: { screen: "debriefing" },
+    survey_json: {
+        showQuestionNumbers: false,
+        completeText: "Continue",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "html",
+                        name: "debriefing_page",
+                        html: `
+                <div class="narrow-text" style="text-align: left; max-width: 800px; margin: 0 auto;">
+                <h2>Debriefing</h2>
+                <p>The purpose of this study was actually to study the effect on sexual arousal of <b style="color: #347decff;">believing</b> that the content is AI-generated. 
+                We are testing the hypothesis that believing erotic images are fake leads to lower sexual arousal.</p>
+                <p>We are also assessing the role of <b style="color: #e228b1ff;">interoception</b> in this process. Interoception refers to the awareness of internal bodily states — both physiological (e.g., heart rate) and emotional — and it plays a crucial role in how we perceive and interpret the world around us.</p>
+                <p>Because we are interested in your <i>beliefs</i> about reality, <b>all the images you saw were actually real</b>. They were selected from a validated psychological database used in research on emotion.</p>
+                <p>We apologize for the necessary deception used in the task instructions. Deception was essential to maintain the validity of our experimental manipulation. We hope you understand the rationale behind this decision.</p>
+
+                <p><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the study, feel free to contact us:</p>
+
+                <ul>
+                  <li><i style="color:DodgerBlue;">D.Makowski@sussex.ac.uk</i></li>
+                  <li><i style="color:DodgerBlue;">A.Neves@sussex.ac.uk</i></li>
+                </ul>
+
+                <p>To complete your participation, click on <b>'Continue'</b> and please <b>wait until your responses have been successfully saved</b> before closing the tab.</p>
+              </div>`,
+                    },
+                ],
+            },
+        ],
     },
 }
 

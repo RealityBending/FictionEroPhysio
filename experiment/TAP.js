@@ -1,58 +1,172 @@
 // // ============================ TAP Instructions ==================================
 
 const VoluntaryExternal_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1><b>Instructions</b></h1>" +
-        "<p>In this task, you will see a circle with a rotating arm moving around it.</p>" +
-        "<p>Your task is to <b>tap</b> on the circle whenever the rotating arm reaches the <b>designated target point</b> (shown as an arrow in red).</p>" +
-        "<p>Try to sync your tapping as closely as possible with the rotating arm passing through the target.</p>" +
-        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>",
-    choices: ["I'm ready"],
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_ve",
+                        html: `
+                        <div style="text-align: center;"> 
+                        <h3>Instructions</h3>
+                        </div>
+
+                        <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                        <div style="flex: 2; text-align: left;">
+                            <p>In this task, you will see a circle with a rotating arm moving around it.</p>
+                            <p>Your job is to <b>tap</b> on the circle whenever the rotating arm reaches the 
+                            <b style="color: #E91E63">designated target point</b> (shown as a red arrow).</p>
+                            <p>Try to time your tap as closely as possible with the arm passing through the target.</p>
+                            <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
+                            <p>Press the button below when you're ready to begin!</p>
+                        </div>
+                        <div style="flex: 1; min-width: 200px; margin-right: -150px;">
+                            <img src="media/voluntaryE.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
+                        </div>
+                        </div>`,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_External_instructions"},
 }
 
 const VoluntaryInternal_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1>Well done!</h1>" +
-        "<p>In this next task, you will see a circle with a rotating arm moving around it.</p>" +
-        "<p>Your task is to <b>tap</b> at a moment of your <b>own choosing</b>, but before the rotating arm reaches the end of its path.</p>" +
-        "<p>There is no correct moment to tap — just make sure you tap <b>before the arm reaches the end</b>.</p>" +
-        "<p>The trial will start with a '3-2-1' signal. Press the button below when you're ready to begin.</p>",
-    choices: ["I'm ready"],
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_vi",
+                        html: `
+                    <div style="text-align: center;"> 
+                    <h3>Well done!</h3>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                    <div style="flex: 2; text-align: left;">
+                        <p>In this next task, you will see a circle with a rotating arm moving around it.</p>
+                        <p>Your task is to <b>tap</b> at a moment of your <b>own choosing</b>, but
+                        <b style="color: #E91E63">before the rotating arm reaches the end of its path.</b></p>
+                        <p>There is no correct moment to tap - just make sure you tap <b>before the arm reaches the end</b>.</p>
+                        <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
+                        <p>Press the button below when you're ready to begin!</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px; margin-right: -150px;">
+                        <img src="media/voluntaryI.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
+                    </div>
+                    </div> `,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_Internal_instructions"},
 }
 
 const RhytmicTapping_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1>Well done!</h1>" +
-        "<p>In this next task, you will need to tap the spacebar in <b>synchrony with the beeps</b>. Try to tap as closely as possible to the beeps." +
-        "<p>After a certain amount of time, the <b>beeps will stop</b> and you will have to <b>continue tapping in the same rhythm</b>." +
-        "<p>Try to keep the same rhythm as before." +
-        "<p>Press the button below when you're ready to begin.</p>",
-    choices: ["I'm ready"],
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_rhythmic",
+                        html: `
+                    <div style="text-align: center;"> 
+                    <h3>Well done!</h3>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start;max-width: 1000px; margin: 0 auto;">
+                    <div style="flex: 2; text-align: center;">
+                        <p>In the next task, you will hear a series of beeps. Your goal is to tap the spacebar <b>in synchrony</b> with the beeps, <b style="color: #E91E63;">matching their rhythm as closely as possible.</b></p>
+                        <p>After a while, the <b>beeps will stop</b>, but you should <b>keep tapping at the same pace</b>, maintaining the rhythm in your mind.</p>
+                        <p>Do your best to stay in time, even without the sound.</p>
+                        <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
+                        <p>Press the button below when you're ready to begin.</p>
+                    </div>
+                    </div>`,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_Rhythmic_instructions"},
 }
 
 const RhytmicRandom_instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1>Well done!</h1>" +
-        "<p>In this next task, you will need to tap the spacebar as <b>randomly</b> as possible, " +
-        "<p>by changing the timing between the presses and making it as much 'unpredictable' and 'random' as you can.</p>" +
-        "<p><b>Avoid consecutive taps.</b></p>" +
-        "<p>Press the button below when you're ready to begin.",
-    choices: ["I'm ready"],
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_random",
+                        html: `
+                    <div style="text-align: center;"> 
+                    <h3>Well done!</h3>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                    <div style="flex: 2; text-align: center;">
+                        <p>In this next task, you will need to tap the spacebar as <b style="color: #E91E63;">randomly</b> as possible, by changing the timing between the presses and making it as much 'unpredictable' and 'random' as you can.</p>
+                        <p><b>Avoid consecutive taps.</b></p>
+                        <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
+                        <p>Press the button below when you're ready to begin.</p>
+                    </div>
+                    </div>`,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_Random_instructions"},
 }
 
 const HeartTapping_Instructions = {
-    type: jsPsychHtmlButtonResponse,
-    stimulus:
-        "<h1>Well done!</h1>" +
-        "<p>For the final trial, please try to tap <b>every time you feel a heart beat</b>.</p>" +
-        "<p>Do continue making new presses until the trial is over.</p>" +
-        "<p>Press the button below when you're ready to begin.</p>",
-    choices: ["I'm ready"],
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements:[
+                    {
+                        type: "html",
+                        name: "instructions_heart",
+                        html: `
+                    <div style="text-align: center;"> 
+                    <h3>Well done!</h3>
+                    </div>
+                    <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                    <div style="flex: 2; text-align: center;">
+                        <p>For the final trial, please try to tap <b style="color: #E91E63;">every time you feel a heart beat</b>.</p></p>
+                        <p>Do continue making new presses until the trial is over.</p>
+                        <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
+                        <p>Press the button below when you're ready to begin.</p>
+                    </div>
+                    </div>`,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_Heart_instructions"},
 }
+
 
 // ============================ TAP TRIALS ==================================
 
@@ -68,6 +182,7 @@ const TAP_countdown = {
     on_start: function () {
         document.body.style.backgroundColor = "#808080"
         document.body.style.cursor = "none"
+        create_marker(marker1, (color = "white"))
         let count = 3
         let countdownInterval = setInterval(() => {
             count--
@@ -80,6 +195,9 @@ const TAP_countdown = {
     },
     on_finish: function () {
         document.body.style.backgroundColor = "white"
+        // Clean up markers
+        document.querySelector("#marker1")?.remove()
+        document.querySelector("#marker2")?.remove()
     }
 }
 
@@ -277,7 +395,7 @@ const ctap_trial = {
     on_start: function () {
         document.body.style.backgroundColor = "white"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "#808080"))
+        create_marker(marker1, (color = "black"))
     },
     canvas_size: function () {
         return [Math.round(window.innerHeight * 0.8), Math.round(window.innerHeight * 0.8)]
@@ -312,7 +430,9 @@ const ctap_trial = {
 }
 // ================================ Rhythmic Tapping Task ======================================================
 
-var beep = ["utils/beep.mp3"] // Audio file for the beep
+var beep = ["utils/beep_new.mp4"] // Audio file for the beep
+// var beep = ["utils/beep.mp3"] // Audio file for the beep
+
 
 var TAP_preload = {
     type: jsPsychPreload,
@@ -324,6 +444,7 @@ var TAP_preload = {
 const TAP_beep = {
     type: jsPsychAudioKeyboardResponse,
     stimulus: beep,
+    prompt: "<b>Tap when you hear the beep!</b>",
     choices: [" "], // space bar
     trial_duration: 1429, // Duration of each beat (42 BPM ≈ 1429ms)
     response_ends_trial: false,
@@ -351,7 +472,7 @@ function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
             create_marker(marker1, markerColor) // Show color marker
-            create_marker_2(marker2)            // Show position marker
+            // create_marker_2(marker2)            // Show position marker
         },
         stimulus: "<b>Please continue tapping...</b>", // Displayed instruction
         choices: [" "], // Space bar only

@@ -68,8 +68,8 @@
 <script>
     // Initialize experiment ===============================================================
     var jsPsych = initJsPsych({
-        show_progress_bar: true,
-        message_progress_bar: "Progress",
+        // show_progress_bar: true,
+        // message_progress_bar: "Progress",
         on_finish: function () {
             // Get participant ID
             let participantID = jsPsych.data.get().filter({ screen: "demographic_questions1" }).values()[0].response["Participant_ID"]
@@ -88,12 +88,12 @@
 
     // Demographics ===========================================================
     timeline.push(demographics_consent)
-    timeline.push({
-        type: jsPsychFullscreen,
-        fullscreen_mode: true,
-        delay_after: 0,
-    })
-    timeline.push(demographics_questions1)
+    // timeline.push({
+    //     type: jsPsychFullscreen,
+    //     fullscreen_mode: true,
+    //     delay_after: 0,
+    // })
+    // timeline.push(demographics_questions1)
 
     //Resting State ================================================
     timeline.push(RS_instructions)// Instructions
