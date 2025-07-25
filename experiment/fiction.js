@@ -125,7 +125,6 @@ const fiction_instructions2 = {
     css_classes: ["narrow-text"],
     stimulus:
         "<div style='text-align: center;'><img src='media/phase2_img.png' height='350' align='right'></img></div>" +
-        "<h2>Part 2/2</h2>" +
         "<p>Thank you! In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>" +
         "<p>But there is <b>something important</b> we need to tell you... In the previous phase, some images were <b style='color: orange'>intentionally mislabelled</b> (we told you it was a photograph when it was actually AI-generated and vice versa).</p>" +
         "<p>In this phase, we want you to tell us for each image <b>what you think is the true category</b>! " +
