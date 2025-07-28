@@ -1,16 +1,15 @@
-
 const RS_instructions = {
-  type: jsPsychSurvey,
-  survey_json: {
-    showQuestionNumbers: false,
-    completeText: "Continue",
-    pages: [
-      {
-        elements: [
-          {
-            type: "html",
-            name: "instructions_RS",
-            html: `
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionNumbers: false,
+        completeText: "Continue",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "html",
+                        name: "instructions_RS",
+                        html: `
               <div style="text-align: center;"> 
                 <h2>Resting State</h2>
                 <h3><b>Instructions</h3></p>
@@ -23,15 +22,14 @@ const RS_instructions = {
                   <p>When you are ready, close your eyes. The rest period will begin shortly.</p>
                 </div>
               </div>
-            `
-          }
-        ]
-      }
-    ]
-  },
-    data: { screen: "RS" },
-};
-
+            `,
+                    },
+                ],
+            },
+        ],
+    },
+    data: { screen: "RS_Instructions" },
+}
 
 // Resting state questionnaire
 const rs_items = {
@@ -63,7 +61,7 @@ function shuffleObject(obj) {
     const entries = Object.entries(obj)
     for (let i = entries.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1))
-            ;[entries[i], entries[j]] = [entries[j], entries[i]]
+        ;[entries[i], entries[j]] = [entries[j], entries[i]]
     }
     return Object.fromEntries(entries)
 }
@@ -75,7 +73,7 @@ var RS_buffer = {
     on_start: function () {
         document.body.style.backgroundColor = "#808080"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "white")) // create black screen 
+        create_marker(marker1, (color = "white")) // create black screen
     },
     on_finish: function () {
         document.querySelector("#marker1").remove()
@@ -124,7 +122,11 @@ var RS_beep = {
 
 // Debriefing Questionnaire ========================================================================
 
-function rs_questions(items, required = true, ticks = ["Completely Disagree", "Completely Agree"]) {
+function rs_questions(
+    items,
+    required = true,
+    ticks = ["Completely Disagree", "Completely Agree"]
+) {
     items = shuffleObject(items)
 
     questions = []

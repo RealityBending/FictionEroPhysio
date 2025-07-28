@@ -7,7 +7,7 @@ const VoluntaryExternal_instructions = {
         completeText: "I'm ready",
         pages: [
             {
-                elements:[
+                elements: [
                     {
                         type: "html",
                         name: "instructions_ve",
@@ -29,12 +29,12 @@ const VoluntaryExternal_instructions = {
                             <img src="media/voluntaryE.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                         </div>
                         </div>`,
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
-    data: { screen: "TAP_External_instructions"},
+    data: { screen: "TAP_External_instructions" },
 }
 
 const VoluntaryInternal_instructions = {
@@ -44,7 +44,7 @@ const VoluntaryInternal_instructions = {
         completeText: "I'm ready",
         pages: [
             {
-                elements:[
+                elements: [
                     {
                         type: "html",
                         name: "instructions_vi",
@@ -65,12 +65,12 @@ const VoluntaryInternal_instructions = {
                         <img src="media/voluntaryI.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                     </div>
                     </div> `,
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
-    data: { screen: "TAP_Internal_instructions"},
+    data: { screen: "TAP_Internal_instructions" },
 }
 
 const RhytmicTapping_instructions = {
@@ -80,7 +80,7 @@ const RhytmicTapping_instructions = {
         completeText: "I'm ready",
         pages: [
             {
-                elements:[
+                elements: [
                     {
                         type: "html",
                         name: "instructions_rhythmic",
@@ -89,7 +89,7 @@ const RhytmicTapping_instructions = {
                     <h3>Well done!</h3>
                     </div>
                     <div style="display: flex; gap: 20px; align-items: flex-start;max-width: 1000px; margin: 0 auto;">
-                    <div style="flex: 2; text-align: center;">
+                    <div style="flex: 2; text-align: left;">
                         <p>In the next task, you will hear a series of beeps. Your goal is to tap the spacebar <b>in synchrony</b> with the beeps, <b style="color: #E91E63;">matching their rhythm as closely as possible.</b></p>
                         <p>After a while, the <b>beeps will stop</b>, but you should <b>keep tapping at the same pace</b>, maintaining the rhythm in your mind.</p>
                         <p>Do your best to stay in time, even without the sound.</p>
@@ -97,12 +97,12 @@ const RhytmicTapping_instructions = {
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
                     </div>`,
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
-    data: { screen: "TAP_Rhythmic_instructions"},
+    data: { screen: "TAP_Rhythmic_instructions" },
 }
 
 const RhytmicRandom_instructions = {
@@ -112,7 +112,7 @@ const RhytmicRandom_instructions = {
         completeText: "I'm ready",
         pages: [
             {
-                elements:[
+                elements: [
                     {
                         type: "html",
                         name: "instructions_random",
@@ -121,19 +121,19 @@ const RhytmicRandom_instructions = {
                     <h3>Well done!</h3>
                     </div>
                     <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
-                    <div style="flex: 2; text-align: center;">
+                    <div style="flex: 2; text-align: left;">
                         <p>In this next task, you will need to tap the spacebar as <b style="color: #E91E63;">randomly</b> as possible, by changing the timing between the presses and making it as much 'unpredictable' and 'random' as you can.</p>
                         <p><b>Avoid consecutive taps.</b></p>
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
                     </div>`,
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
-    data: { screen: "TAP_Random_instructions"},
+    data: { screen: "TAP_Random_instructions" },
 }
 
 const HeartTapping_Instructions = {
@@ -143,7 +143,7 @@ const HeartTapping_Instructions = {
         completeText: "I'm ready",
         pages: [
             {
-                elements:[
+                elements: [
                     {
                         type: "html",
                         name: "instructions_heart",
@@ -152,21 +152,19 @@ const HeartTapping_Instructions = {
                     <h3>Well done!</h3>
                     </div>
                     <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
-                    <div style="flex: 2; text-align: center;">
-                        <p>For the final trial, please try to tap <b style="color: #E91E63;">every time you feel a heart beat</b>.</p></p>
-                        <p>Do continue making new presses until the trial is over.</p>
+                    <div style="flex: 2; text-align: left;">
+                        <p>For the final trial, please try to tap <b style="color: #E91E63;">every time you feel a heart beat</b>. Do continue making new presses until the trial is over.</p>
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
                     </div>`,
-                    }
-                ]
-            }
-        ]
+                    },
+                ],
+            },
+        ],
     },
-    data: { screen: "TAP_Heart_instructions"},
+    data: { screen: "TAP_Heart_instructions" },
 }
-
 
 // ============================ TAP TRIALS ==================================
 
@@ -198,7 +196,7 @@ const TAP_countdown = {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
-    }
+    },
 }
 
 // ############################ Voluntary Tapping Task
@@ -228,7 +226,13 @@ function drawArc(angle, lineLength = 120, start_angle = 0, fill = "green") {
     ctx.beginPath()
     ctx.fillStyle = fill
     ctx.moveTo(center, center)
-    ctx.arc(center, center, lineLength, start_angle - Math.PI / 2, angle - Math.PI / 2)
+    ctx.arc(
+        center,
+        center,
+        lineLength,
+        start_angle - Math.PI / 2,
+        angle - Math.PI / 2
+    )
     ctx.lineTo(center, center)
     ctx.fill()
 }
@@ -267,8 +271,12 @@ function drawArrowhead(headLength, angle, distance, colour, outwards = true) {
     const tipY = center - Math.cos(angle) * distance
 
     // Line end location
-    const lineX = center + Math.sin(angle) * (distance - (outwards ? headLength : -headLength))
-    const lineY = center - Math.cos(angle) * (distance - (outwards ? headLength : -headLength))
+    const lineX =
+        center +
+        Math.sin(angle) * (distance - (outwards ? headLength : -headLength))
+    const lineY =
+        center -
+        Math.cos(angle) * (distance - (outwards ? headLength : -headLength))
 
     // Draw
     ctx.beginPath()
@@ -276,16 +284,29 @@ function drawArrowhead(headLength, angle, distance, colour, outwards = true) {
     ctx.moveTo(tipX, tipY)
 
     // Left side of arrowhead
-    ctx.lineTo(lineX + Math.sin(angle - Math.PI / 2) * headLength, lineY - Math.cos(angle - Math.PI / 2) * headLength)
+    ctx.lineTo(
+        lineX + Math.sin(angle - Math.PI / 2) * headLength,
+        lineY - Math.cos(angle - Math.PI / 2) * headLength
+    )
 
     // Right side of arrowhead
-    ctx.lineTo(lineX + Math.sin(angle + Math.PI / 2) * headLength, lineY - Math.cos(angle + Math.PI / 2) * headLength)
+    ctx.lineTo(
+        lineX + Math.sin(angle + Math.PI / 2) * headLength,
+        lineY - Math.cos(angle + Math.PI / 2) * headLength
+    )
 
     ctx.lineTo(tipX, tipY)
     ctx.fill()
 }
 
-function drawArrow(angle, colour, outwards = true, start = 0, length = 120, headLength = 12) {
+function drawArrow(
+    angle,
+    colour,
+    outwards = true,
+    start = 0,
+    length = 120,
+    headLength = 12
+) {
     if (outwards) {
         drawHand(angle, colour, 0, length - headLength)
         drawArrowhead(headLength, angle, length, colour, outwards)
@@ -301,7 +322,13 @@ function time2Rads(time, duration, start_angle) {
 }
 
 // Clock Animation =========================================
-function drawClock(condition = "external", start_angle = 0, target_angle = 0, duration = 3000, difficulty = 0.5) {
+function drawClock(
+    condition = "external",
+    start_angle = 0,
+    target_angle = 0,
+    duration = 3000,
+    difficulty = 0.5
+) {
     let radius = Math.round(window.innerHeight * 0.15)
     let handlength = Math.round(radius * difficulty)
     let color_arrow = condition === "external" ? "#9C27B0" : "#FF9800"
@@ -318,8 +345,24 @@ function drawClock(condition = "external", start_angle = 0, target_angle = 0, du
     drawArc(angle, handlength, start_angle, color_fill)
 
     // Arrows
-    if (ctap_pressTime) drawArrow(time2Rads(ctap_pressTime, duration, start_angle), color_arrow, true, 0, handlength, radius * 0.05)
-    if (condition === "external") drawArrow(target_angle, "red", false, radius, radius * 0.4, radius * 0.05)
+    if (ctap_pressTime)
+        drawArrow(
+            time2Rads(ctap_pressTime, duration, start_angle),
+            color_arrow,
+            true,
+            0,
+            handlength,
+            radius * 0.05
+        )
+    if (condition === "external")
+        drawArrow(
+            target_angle,
+            "red",
+            false,
+            radius,
+            radius * 0.4,
+            radius * 0.05
+        )
 
     drawCenterDot() // Draw the center dot
     if (currentTime >= duration) stopClock()
@@ -332,11 +375,23 @@ function stopClock() {
     }
 }
 
-function animateClock(condition, start_angle, target_angle, duration, difficulty) {
+function animateClock(
+    condition,
+    start_angle,
+    target_angle,
+    duration,
+    difficulty
+) {
     drawClock(condition, start_angle, target_angle, duration, difficulty)
     if (performance.now() - ctap_startTime < duration) {
         ctap_animationID = requestAnimationFrame(function () {
-            animateClock(condition, start_angle, target_angle, duration, difficulty)
+            animateClock(
+                condition,
+                start_angle,
+                target_angle,
+                duration,
+                difficulty
+            )
         })
     } else {
         stopClock()
@@ -344,7 +399,14 @@ function animateClock(condition, start_angle, target_angle, duration, difficulty
 }
 
 // Trial Functions ========================================
-function ctap_stimulus(c, condition = "external", start_angle = 0, target_angle = 0, duration = 3000, difficulty = 0.5) {
+function ctap_stimulus(
+    c,
+    condition = "external",
+    start_angle = 0,
+    target_angle = 0,
+    duration = 3000,
+    difficulty = 0.5
+) {
     // START
     clock = c
     ctx = c.getContext("2d")
@@ -398,7 +460,10 @@ const ctap_trial = {
         create_marker(marker1, (color = "black"))
     },
     canvas_size: function () {
-        return [Math.round(window.innerHeight * 0.8), Math.round(window.innerHeight * 0.8)]
+        return [
+            Math.round(window.innerHeight * 0.8),
+            Math.round(window.innerHeight * 0.8),
+        ]
     },
     trial_duration: function () {
         return jsPsych.evaluateTimelineVariable("duration")
@@ -410,7 +475,14 @@ const ctap_trial = {
         const condition = jsPsych.evaluateTimelineVariable("condition")
         const difficulty = jsPsych.evaluateTimelineVariable("difficulty")
         const duration = jsPsych.evaluateTimelineVariable("duration")
-        ctap_stimulus(canvas, condition, start_angle, target_angle, duration, difficulty)
+        ctap_stimulus(
+            canvas,
+            condition,
+            start_angle,
+            target_angle,
+            duration,
+            difficulty
+        )
     },
     choices: [" "],
     prompt: "",
@@ -418,13 +490,12 @@ const ctap_trial = {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
-
-        document.body.style.cursor = "auto",
-            data.response_time = ctap_pressTime // Time user pressed spacebar - same as RT
+        ;(document.body.style.cursor = "auto"),
+            (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
         data.response_angle = time2Rads(
             ctap_pressTime,
             jsPsych.evaluateTimelineVariable("duration"),
-            jsPsych.evaluateTimelineVariable("start_angle"),
+            jsPsych.evaluateTimelineVariable("start_angle")
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
     },
 }
@@ -432,7 +503,6 @@ const ctap_trial = {
 
 var beep = ["utils/beep_new.mp4"] // Audio file for the beep
 // var beep = ["utils/beep.mp3"] // Audio file for the beep
-
 
 var TAP_preload = {
     type: jsPsychPreload,
@@ -453,7 +523,7 @@ const TAP_beep = {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     },
-    data: { screen: "tap_beep" }
+    data: { screen: "tap_beep" },
 }
 
 // Beep sequence (5 beeps) // change after
@@ -463,11 +533,15 @@ const TAP_beep_sequence = {
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
-    }
+    },
 }
 
 // Function to create individual tapping trials
-function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "white") {
+function create_TAP_trial(
+    screen = "tap",
+    trial_duration = null,
+    markerColor = "white"
+) {
     return {
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
@@ -479,7 +553,7 @@ function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "
         trial_duration: trial_duration, // Null means indefinite (until keypress)
         css_classes: ["fixation"], // Optional CSS styling
         data: {
-            screen: screen
+            screen: screen,
         },
         on_start: function (trial) {
             trial.start_time = performance.now() // Record start time for duration
@@ -488,10 +562,11 @@ function create_TAP_trial(screen = "tap", trial_duration = null, markerColor = "
             // Clean up markers
             document.querySelector("#marker1")?.remove()
             document.querySelector("#marker2")?.remove()
+            document.body.style.cursor = "auto" // Reset cursor style
 
             // Calculate and store trial duration
             data.duration = (performance.now() - data.start_time) / 1000 // in seconds
-        }
+        },
     }
 }
 
@@ -500,8 +575,8 @@ function create_TAP_sequence(screen = "TAP1", repetitions = 90) {
     return {
         timeline: [
             create_TAP_trial(screen + "_waiting", null, "white"), // Untimed trial (starts with keypress)
-            create_TAP_trial(screen + "_tap", 60, "black")  // Timed tapping trials
+            create_TAP_trial(screen + "_tap", 60, "black"), // Timed tapping trials
         ],
-        repetitions: repetitions
+        repetitions: repetitions,
     }
 }

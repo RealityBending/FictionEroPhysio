@@ -1,174 +1,173 @@
 <!DOCTYPE HTM>
 <html>
+    <head>
+        <!--create title shown in tab; not the same as header on webpage-->
+        <title>FictionEroPhysio</title>
 
-<head>
-    <!--create title shown in tab; not the same as header on webpage-->
-    <title>FictionEroPhysio</title>
+        <!--Load JsPsych -->
+        <script src="https://unpkg.com/jspsych@8.2.2"></script>
+        <link
+            href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css"
+            rel="stylesheet"
+            type="text/css"
+        />
 
-    <!--Load JsPsych -->
-    <script src="https://unpkg.com/jspsych@8.2.2"></script>
-    <link href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css" rel="stylesheet" type="text/css" />
+        <!--Load all necessary plugins stored in utils-->
+        <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css"
+        />
+        <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.0"></script>
+        <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.1.0"></script>
 
-    <!--Load all necessary plugins stored in utils-->
-    <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
-    <link rel="stylesheet" href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css" />
-    <script src="https://unpkg.com/@jspsych/plugin-html-keyboard-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-html-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.0.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-audio-button-response@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-audio-keyboard-response@2.1.0"></script>
-    <script src="utils/jspsych/plugin-canvas-button-response.js"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-preload@2.1.0"></script>
-    <script src="https://unpkg.com/@jspsych/plugin-canvas-keyboard-response@2.1.0"></script>
+        <!-- Load task specific code -->
+        <script src="demographics.js"></script>
+        <script src="parameters.js"></script>
+        <script src="HCT.js"></script>
+        <script src="questionnaires.js"></script>
+        <script src="TAP.js"></script>
+    </head>
 
+    <body></body>
 
-    <!-- Load task specific code -->
-    <script src="demographics.js"></script>
-    <script src="parameters.js"></script>
-    <script src="HCT.js"></script>
-    <script src="questionnaires.js"></script>
-    <script src="TAP.js"></script>
-
-
-</head>
-
-<body></body>
-
-
-<script>
-    var participant_ID = {
-        type: jsPsychSurvey,
-        survey_json: {
-            title: "About yourself",
-            completeText: "Continue",
-            pageNextText: "Next",
-            pagePrevText: "Previous",
-            goNextPageAutomatic: false,
-            showQuestionNumbers: false,
-            pages: [
-                {
-                    elements: [
-                        {
-                            title: "Enter the participant's ID:",
-                            type: "text",
-                            placeholder: "000",
-                            name: "Participant_ID",
-                            isRequired: true
-                        }
-                    ]
-                }
-            ],
-        },
-        data: {
-            screen: "ppt_id",
-        },
-    }
-
-
-    // Initialize experiment ===============================================================
-    var jsPsych = initJsPsych({
-        // show_progress_bar: true,
-        // message_progress_bar: "Progress",
-        on_finish: function () {
-            // Get participant ID
-            jsPsych.data.displayData("json")
-            let participantID = jsPsych.data.get().filter({ screen: "ppt_id" }).values()[0].response["Participant_ID"]
-
-            // Save as JSON file locally
-            jsPsych.data.get().localSave(
-                "json",
-                `P${participantID}_int.json`
-            )
+    <script>
+        var participant_ID = {
+            type: jsPsychSurvey,
+            survey_json: {
+                title: "About yourself",
+                completeText: "Continue",
+                pageNextText: "Next",
+                pagePrevText: "Previous",
+                goNextPageAutomatic: false,
+                showQuestionNumbers: false,
+                pages: [
+                    {
+                        elements: [
+                            {
+                                title: "Enter the participant's ID:",
+                                type: "text",
+                                placeholder: "000",
+                                name: "Participant_ID",
+                                isRequired: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            data: {
+                screen: "ppt_id",
+            },
         }
-    })
 
+        // Initialize experiment ===============================================================
+        var jsPsych = initJsPsych({
+            // show_progress_bar: true,
+            // message_progress_bar: "Progress",
+            on_finish: function () {
+                // Get participant ID
+                jsPsych.data.displayData("json")
+                let participantID = jsPsych.data
+                    .get()
+                    .filter({ screen: "ppt_id" })
+                    .values()[0].response["Participant_ID"]
 
-    // Initialize timeline
-    var timeline = []
+                // Save as JSON file locally
+                jsPsych.data
+                    .get()
+                    .localSave("json", `P${participantID}_int.json`)
+            },
+        })
 
+        // Initialize timeline
+        var timeline = []
 
-    // Demographics
-    // timeline.push(participant_ID)
+        // Demographics
+        // timeline.push(participant_ID)
 
-    // Enter fullscreen mode
-    // timeline.push({
-    //     type: jsPsychFullscreen,
-    //     fullscreen_mode: true,
-    //     delay_after: 0,
-    // })
+        // Enter fullscreen mode
+        // timeline.push({
+        //     type: jsPsychFullscreen,
+        //     fullscreen_mode: true,
+        //     delay_after: 0,
+        // })
 
-    // Questionnaires ================== 
-    questionnaires = jsPsych.randomization.shuffleNoRepeats([questionnaire_maia, questionnaire_mint, questionnaire_ias])  // randomise order of questionnaires
+        // Questionnaires ==================
+        questionnaires = jsPsych.randomization.shuffleNoRepeats([
+            questionnaire_maia,
+            questionnaire_mint,
+            questionnaire_ias,
+        ]) // randomise order of questionnaires
 
-    timeline.push(questionnaires_instructions)
-    timeline.push(questionnaires)
+        // timeline.push(questionnaires_instructions)
+        // timeline.push(questionnaires)
 
-    // TAP ===============================
-    // Voluntary External
-    timeline.push(VoluntaryExternal_instructions)
-    timeline.push(TAP_countdown)
-    timeline.push({
-        timeline: [ctap_trial],
-        timeline_variables: ctap_maketrials(1, "external"),
-        save_timeline_variables: true
-    })
+        // TAP ===============================
+        // Voluntary External
+        timeline.push(VoluntaryExternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push({
+            timeline: [ctap_trial],
+            timeline_variables: ctap_maketrials(1, "external"),
+            save_timeline_variables: true,
+        })
 
-    // Voluntary Internal
-    timeline.push(VoluntaryInternal_instructions)
-    timeline.push(TAP_countdown)
-    timeline.push({
-        timeline: [ctap_trial],
-        timeline_variables: ctap_maketrials(1, "internal"),
-        save_timeline_variables: true
-    })
+        // Voluntary Internal
+        timeline.push(VoluntaryInternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push({
+            timeline: [ctap_trial],
+            timeline_variables: ctap_maketrials(1, "internal"),
+            save_timeline_variables: true,
+        })
 
-    // Rhytmic Tapping
-    timeline.push(TAP_preload)
-    timeline.push(RhytmicTapping_instructions)
-    timeline.push(TAP_countdown)
-    timeline.push(TAP_beep_sequence) // beep with no response
-    timeline.push(create_TAP_sequence("Tap_Synchrony", 5)) // Tapping with beeps
-    timeline.push(create_TAP_sequence("Tap_Continuation", 5)) // Tapping without beeps 
+        // Rhytmic Tapping
+        timeline.push(TAP_preload)
+        timeline.push(RhytmicTapping_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(TAP_beep_sequence) // beep with no response
+        timeline.push(create_TAP_sequence("Tap_Synchrony", 5)) // Tapping with beeps
+        timeline.push(create_TAP_sequence("Tap_Continuation", 5)) // Tapping without beeps
 
-    // Rhytmic Random
-    timeline.push(RhytmicRandom_instructions)
-    timeline.push(TAP_countdown)
-    timeline.push(create_TAP_sequence("TAP_random", 5))
+        // Rhytmic Random
+        timeline.push(RhytmicRandom_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(create_TAP_sequence("TAP_random", 5))
 
-    // Heart Tapping
-    timeline.push(HeartTapping_Instructions)
-    timeline.push(create_TAP_sequence("TAP_heart", 5))
+        // Heart Tapping
+        timeline.push(HeartTapping_Instructions)
+        timeline.push(create_TAP_sequence("TAP_heart", 5))
 
-    //HCT ===============================
+        //HCT ===============================
 
-    timeline.push(HCT_instructions)
-    timeline.push({
-        timeline: [
-            HCT_countdown,
-            HCT_interval(),
-            HCT_beep,
-            HCT_items,
-        ],
-        // Loop comprehension for duration vector
-        timeline_variables: HCT_durations.map((i) => ({
-            duration: i * 1000,
-        })),
-        randomize_order: true,
-    })
+        timeline.push(HCT_instructions)
+        timeline.push({
+            timeline: [HCT_countdown, HCT_interval(), HCT_beep, HCT_items],
+            // Loop comprehension for duration vector
+            timeline_variables: HCT_durations.map((i) => ({
+                duration: i * 1000,
+            })),
+            randomize_order: true,
+        })
 
-    timeline.push(demographics_debriefing)
+        timeline.push(demographics_debriefing)
 
-    timeline.push({
-        type: jsPsychHtmlButtonResponse,
-        stimulus: "You've reached the end of this part!",
-        choices: ["Exit Fullscreen"],
-        on_finish: function () {
-            document.exitFullscreen()
-        },
-    })
+        timeline.push({
+            type: jsPsychHtmlButtonResponse,
+            stimulus: "You've reached the end of this part!",
+            choices: ["Exit Fullscreen"],
+            on_finish: function () {
+                document.exitFullscreen()
+            },
+        })
 
-    // Run the timeline -------------------------------------------------------
-    jsPsych.run(timeline)
-</script>
-
+        // Run the timeline -------------------------------------------------------
+        jsPsych.run(timeline)
+    </script>
 </html>
