@@ -2,7 +2,6 @@
 
 const demographics_consent = {
     type: jsPsychSurvey,
-    data: { screen: "consent" },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "I read, understood, and I consent",
@@ -13,10 +12,11 @@ const demographics_consent = {
                         type: "html",
                         name: "consent_form",
                         html: `
-                <div class="narrow-text" style="text-align: left; max-width: 800px; margin: 0 auto;">
-                <img src="https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png" width="150px" align="right" style="margin-bottom: 30px ;" />
+                
+                <img src='https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png' width='150px' align='right'/><br><br><br><br><br>
                 <h1>Informed Consent</h1>
-
+                
+                <div class="narrow-text" style="text-align: left; max-width: 800px; margin: 0 auto;">
                 <p><b>Invitation to Take Part</b><br>
                 Thank you for considering to take part in this study that aims at deepening our understanding of human perception. 
                 This study is being conducted by Dr Dominique Makowski, and his team, from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>
@@ -59,6 +59,7 @@ const demographics_consent = {
             },
         ],
     },
+    data: { screen: "consent" },
 }
 
 // Demographics info
