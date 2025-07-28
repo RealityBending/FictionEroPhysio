@@ -73,6 +73,42 @@ const VoluntaryInternal_instructions = {
     data: { screen: "TAP_Internal_instructions" },
 }
 
+const Mixedtrials_instructions = {
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "html",
+                        name: "instructions_mixed",
+                        html: ` 
+                        <div style="text-align: center;"> 
+                        <h3>Instructions</h3>
+                        </div>
+                        <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                                <div style="flex: 2; text-align: left;">
+                                    <p>In the next task, you will perform <b style="color: #E91E63">a mix of the last two tasks </b>.</p>
+                                    <p>If the circle is green with a red arrow, you should <b>tap</b> whenever the arm reaches the target point.</p>
+                                    <p>If the circle is blue, you should <b>tap</b> at a moment of your own choosing, but before the arm reaches the end of its path.</p>
+                                    <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
+                                    <p>Press the button below when you're ready to begin!</p>
+                                    </div>
+                                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+                                        <img src="media/voluntaryE.jpg" alt="Task illustration 1" style="max-width: 75%; height: auto; display: block;">
+                                        <img src="media/voluntaryI.jpg" alt="Task illustration 2" style="max-width: 75%; height: auto; display: block;">
+                                        </div>
+                                    </div>`,
+                    }
+                ]
+            }
+        ]
+    },
+    data: { screen: "TAP_Mixed_instructions" },
+}
+
 const RhytmicTapping_instructions = {
     type: jsPsychSurvey,
     survey_json: {
@@ -490,15 +526,21 @@ const ctap_trial = {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
-        ;(document.body.style.cursor = "auto"),
-            (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
+            ; (document.body.style.cursor = "auto"),
+                (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
         data.response_angle = time2Rads(
             ctap_pressTime,
             jsPsych.evaluateTimelineVariable("duration"),
             jsPsych.evaluateTimelineVariable("start_angle")
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
+        data.space_pressed = ctap_pressTime !== undefined // Save whether the space bar was pressed
     },
 }
+
+// Mixed trials 
+
+
+
 // ================================ Rhythmic Tapping Task ======================================================
 
 var beep = ["utils/beep_new.mp4"] // Audio file for the beep
@@ -578,5 +620,43 @@ function create_TAP_sequence(screen = "TAP1", repetitions = 90) {
             create_TAP_trial(screen + "_tap", 60, "black"), // Timed tapping trials
         ],
         repetitions: repetitions,
+    }
+}
+
+// warning screen
+const TAP_warning = {
+    type: jsPsychSurvey,
+    survey_json: {
+        showQuestionsNumbers: false,
+        completeText: "I'm ready",
+        pages: [
+            {
+                elements: [
+                    {
+                        type: "html",
+                        name: "warning",
+                        html: `
+                    <div style="text-align: center;"> 
+                    <h2 style="color: #E91E63">WARNING!</h2>
+                    </div>
+                    <p>You did <b>not press</b> the space bar.</p>
+                    <p>Press the button below to start again.</p>`,
+                    },
+                ],
+            },
+        ],
+    },
+}
+
+
+const fiction_fixation = {
+    type: jsPsychHtmlKeyboardResponse,
+    stimulus:
+        "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
+    choices: [],
+    trial_duration: 500, // 500 ms fixation
+    save_trial_parameters: { trial_duration: true },
+    data: {
+        screen: "fiction_fixation1a"
     }
 }
