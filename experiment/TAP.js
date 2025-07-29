@@ -89,22 +89,25 @@ const Mixedtrials_instructions = {
                         <h3>Instructions</h3>
                         </div>
                         <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
-                                <div style="flex: 2; text-align: left;">
-                                    <p>In the next task, you will perform <b style="color: #E91E63">a mix of the last two tasks </b>.</p>
-                                    <p>If the circle is green with a red arrow, you should <b>tap</b> whenever the arm reaches the target point.</p>
-                                    <p>If the circle is blue, you should <b>tap</b> at a moment of your own choosing, but before the arm reaches the end of its path.</p>
-                                    <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
-                                    <p>Press the button below when you're ready to begin!</p>
-                                    </div>
-                                    <div style="flex: 1; display: flex; flex-direction: column; align-items: center; gap: 10px;">
-                                        <img src="media/voluntaryE.jpg" alt="Task illustration 1" style="max-width: 75%; height: auto; display: block;">
-                                        <img src="media/voluntaryI.jpg" alt="Task illustration 2" style="max-width: 75%; height: auto; display: block;">
-                                        </div>
-                                    </div>`,
-                    }
-                ]
-            }
-        ]
+                    
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <img src="media/voluntaryE.jpg" alt="Task illustration left" style="max-width: 100%; height: auto;">
+                        </div>
+                        <div style="flex: 2; text-align: left;">
+                            <p>In the next task, you will perform <b style="color: #E91E63">a mix of the last two tasks </b>.</p>
+                            <p>If  <b style="color: #14a333ff">the circle is green</b> with a red arrow, you should <b>tap</b> whenever the arm reaches the target point.</p>
+                            <p>If <b style="color: #325be0ff">the circle is blue</b>, you should <b>tap</b> at a moment of your own choosing, but before the arm reaches the end of its path.</p>
+                            <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
+                            <p>Press the button below when you're ready to begin!</p>
+                        </div>
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <img src="media/voluntaryI.jpg" alt="Task illustration right" style="max-width: 100%; height: auto;">
+                        </div>
+                        </div>`,
+                    },
+                ],
+            },
+        ],
     },
     data: { screen: "TAP_Mixed_instructions" },
 }
@@ -526,8 +529,8 @@ const ctap_trial = {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
-            ; (document.body.style.cursor = "auto"),
-                (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
+        ;(document.body.style.cursor = "auto"),
+            (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
         data.response_angle = time2Rads(
             ctap_pressTime,
             jsPsych.evaluateTimelineVariable("duration"),
@@ -536,10 +539,6 @@ const ctap_trial = {
         data.space_pressed = ctap_pressTime !== undefined // Save whether the space bar was pressed
     },
 }
-
-// Mixed trials 
-
-
 
 // ================================ Rhythmic Tapping Task ======================================================
 
@@ -588,26 +587,31 @@ function create_TAP_trial(
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
             create_marker(marker1, markerColor) // Show color marker
-            // create_marker_2(marker2)            // Show position marker
         },
-        stimulus: "<b>Please continue tapping...</b>", // Displayed instruction
+        stimulus: "", // Placeholder, will be updated in on_start
         choices: [" "], // Space bar only
-        trial_duration: trial_duration, // Null means indefinite (until keypress)
-        css_classes: ["fixation"], // Optional CSS styling
+        trial_duration: trial_duration,
+        css_classes: ["fixation"],
         data: {
             screen: screen,
         },
         on_start: function (trial) {
-            trial.start_time = performance.now() // Record start time for duration
+            // Set the appropriate stimulus message
+            if (screen === "TAP_heart") {
+                trial.stimulus =
+                    "<b>Please continue tapping when you feel a heartbeat...</b>"
+            } else {
+                trial.stimulus = "<b>Please continue tapping...</b>"
+            }
         },
         on_finish: function (data) {
             // Clean up markers
             document.querySelector("#marker1")?.remove()
             document.querySelector("#marker2")?.remove()
-            document.body.style.cursor = "auto" // Reset cursor style
+            document.body.style.cursor = "auto"
 
-            // Calculate and store trial duration
-            data.duration = (performance.now() - data.start_time) / 1000 // in seconds
+            // Store trial duration
+            data.duration = (performance.now() - data.start_time) / 1000
         },
     }
 }
@@ -648,8 +652,7 @@ const TAP_warning = {
     },
 }
 
-
-const fiction_fixation = {
+const TAP_fixation = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus:
         "<div style='font-size:500%; position:fixed; text-align: center; top:50%; bottom:50%; right:20%; left:20%'>+</div>",
@@ -657,6 +660,38 @@ const fiction_fixation = {
     trial_duration: 500, // 500 ms fixation
     save_trial_parameters: { trial_duration: true },
     data: {
-        screen: "fiction_fixation1a"
+        screen: "fiction_fixation1a",
+    },
+}
+
+//========================================  TAP Procedure
+
+function makeTAPblock(trials, condition) {
+    let timelineVars
+
+    if (condition === "mixed") {
+        const half = Math.floor(trials / 2)
+        timelineVars = jsPsych.randomization.shuffle([
+            ...ctap_maketrials(half, "external"),
+            ...ctap_maketrials(trials - half, "internal"), // handles odd numbers
+        ])
+    } else {
+        timelineVars = ctap_maketrials(trials, condition)
+    }
+
+    return {
+        timeline: [
+            {
+                timeline: [TAP_warning, TAP_fixation],
+                conditional_function: function () {
+                    const last_data = jsPsych.data.get().last(1).values()[0]
+                    return last_data.space_pressed === false
+                },
+            },
+            ctap_trial,
+        ],
+        timeline_variables: timelineVars,
+        randomize_order: true,
+        save_timeline_variables: true,
     }
 }

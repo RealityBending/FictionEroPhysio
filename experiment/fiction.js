@@ -2,7 +2,7 @@
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1))
-            ;[array[i], array[j]] = [array[j], array[i]]
+        ;[array[i], array[j]] = [array[j], array[i]]
     }
     assignCondition
     return array
@@ -12,7 +12,10 @@ function assignCondition(stimuli_list) {
     let new_stimuli_list = []
 
     // Access demographic data
-    let demographic_data = jsPsych.data.get().filter({ screen: "demographic_questions3" }).values()[0]
+    let demographic_data = jsPsych.data
+        .get()
+        .filter({ screen: "demographic_questions3" })
+        .values()[0]
     let gender = demographic_data.response.Gender
     let sexuality = demographic_data.response.SexualOrientation
     let choice = demographic_data.response.StimuliChoice
@@ -102,9 +105,9 @@ const fiction_instructions1 = {
                 <p>If you are interested, more technical details will be available at the end of the experiment.</p>
                 <div style='text-align: center;'><img src='media/gan.gif' height='200'></img></div>
               </div>
-            `
-                    }
-                ]
+            `,
+                    },
+                ],
             },
             {
                 elements: [
@@ -129,11 +132,11 @@ const fiction_instructions1 = {
                 <div style='text-align: center;'><img src='media/scales_phase1.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
                 <p style='text-align: center;'>Press <b>Start</b> when you are ready.</p>
               </div>
-            `
-                    }
-                ]
-            }
-        ]
+            `,
+                    },
+                ],
+            },
+        ],
     },
     data: { screen: "fiction_instructions1" },
 }
@@ -158,16 +161,16 @@ const fiction_instructions2 = {
                 We will briefly present all the images once more, and your task is to tell us if you think the image is AI-generated or a photograph. Indicate your degree of <b>confidence</b> and certainty by selecting larger numbers.</p>
                 <p style='text-align: left';>Press start once you are ready.</p>
                 <div style='text-align: center;'><img src='media/scales_phase2.png' height='170' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
-                </div>`
-                    }
-                ]
-            }
-        ]
+                </div>`,
+                    },
+                ],
+            },
+        ],
     },
     data: { screen: "fiction_instructions2" },
 }
 
-// preload stimuli 
+// preload stimuli
 const fiction_preloadstims = {
     type: jsPsychPreload,
     message:
@@ -183,7 +186,7 @@ const fiction_preloadstims = {
 //     type: jsPsychHtmlKeyboardResponse,
 //     stimulus: "",
 //     choices: ["s"],
-//     trial_duration: 3000, // 3 seconds 
+//     trial_duration: 3000, // 3 seconds
 //     save_trial_parameters: { trial_duration: true },
 //     data: { screen: "blank_screen" },
 // }
@@ -211,7 +214,7 @@ const fiction_fixation1a = {
     },
 }
 
-// stimuli cue 
+// stimuli cue
 const fiction_cue = {
     type: jsPsychHtmlKeyboardResponse,
     stimulus: function () {
@@ -360,6 +363,8 @@ const fiction_ratings1 = {
                         type: "rating",
                         name: "Valence",
                         title: "The feeling evoked by the image was...",
+                        rateType: "smileys",
+                        scaleColorMode: "colored",
                         isRequired: true,
                         rateMin: 0,
                         rateMax: 6,
@@ -386,9 +391,9 @@ const fiction_ratings1 = {
                                 text: "Highest arousal",
                             },
                         ],
-                    }
-                ]
-            }
+                    },
+                ],
+            },
         ],
     },
     data: {
@@ -413,15 +418,14 @@ const fiction_phase1_break = {
                 <p>We know that experiments like this can feel a bit repetitive or tedious, but it is important for us that you stay focused until the end.</p>
                 <p>Please take this opportunity to <b>take a short break and relax your neck and eyes</b> before continuing.</p>
               </div>
-            `
-                    }
-                ]
-            }
-        ]
+            `,
+                    },
+                ],
+            },
+        ],
     },
     data: { screen: "fiction_phase1_break" },
 }
-
 
 // Stage 2 loops and variables
 
@@ -528,7 +532,6 @@ var fiction_ratings2 = {
     },
 }
 
-
 // Feedback ====================================================================
 
 var fiction_feedback1 = {
@@ -599,4 +602,4 @@ var fiction_feedback1 = {
     data: {
         screen: "fiction_feedback1",
     },
-} 
+}
