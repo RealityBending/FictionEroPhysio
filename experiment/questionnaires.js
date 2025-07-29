@@ -112,12 +112,10 @@ function make_bait(items, required = true, ticks = ["Disagree", "Agree"]) {
             isRequired: required,
             choices: [
                 "Never",
-                "Rarely (a few times a year)",
-                "Occasionally (once a month or less)",
-                "Sometimes (a few times a month)",
-                "Regularly (once a week)",
-                "Frequently (a few times a week)",
-                "Daily",
+                "A few times a month",
+                "A few times per week",
+                "Once a day",
+                "A few times daily",
             ],
         },
     ]
