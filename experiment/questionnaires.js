@@ -105,17 +105,17 @@ function make_bait(items, required = true, ticks = ["Disagree", "Agree"]) {
         {
             title: "How frequently do you use Artificial Intelligence (AI) tools or technologies in your daily life? ",
             description:
-                "This includes tools like ChatGPT, DALL·E, AI writing assistants, image generators, recommendation systems, or other AI-powered applications.",
-            name: "BAIT_AI_USE",
+                "This includes tools like ChatGPT, image or art generators, and AI assistants.",
+            name: "BAIT_AI_Use",
             type: "radiogroup",
             // displayMode: "buttons",
             isRequired: required,
             choices: [
                 "Never",
-                "A few times a month",
+                "A few times per month",
                 "A few times per week",
                 "Once a day",
-                "A few times daily",
+                "A few times per day",
             ],
         },
     ]
