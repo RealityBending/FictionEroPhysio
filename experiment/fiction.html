@@ -163,16 +163,15 @@
 
         // Initialize timeline
         var timeline = []
-
         // Demographics
-        // timeline.push(participant_ID)
+        timeline.push(participant_ID)
         timeline.push(questionnaire_bait)
 
         timeline.push(demographics_data)
 
         // Eye-tracking ==================================================
-        // timeline.push(eyetracking_consent)
-        // timeline.push(eyetracking_calibration) // include full-screen #
+        timeline.push(eyetracking_consent)
+        timeline.push(eyetracking_calibration) // include full-screen #
         timeline.push(fiction_preloadstims)
 
         // Fiction ========================================================
@@ -189,7 +188,6 @@
                         fiction_cue,
                         fiction_fixation1b,
                         fiction_showimage1,
-                        // fiction_blankscreen,
                         fiction_ratings1,
                     ],
                 })

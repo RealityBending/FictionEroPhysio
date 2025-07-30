@@ -121,10 +121,12 @@ const fiction_instructions1 = {
                 <p>Each image will be <b>briefly flashed</b>. Imagine the people in the image are real. After each image, you will answer a few questions:</p>
                 
                 <ul style='margin-left: 5%; margin-right: 5%;'>
-                  <li><b>Arousing</b>: How much did the image evoke sexual arousal? Focus on your <i>personal bodily response</i>.</li>
-                  <li><b>Enticing</b>: How sexually appealing is this image to people like you in general?</li>
-                  <li><b>Valence</b>: Did the image feel emotionally pleasant or unpleasant to look at?</li>
+                <ul>
+                <li><b>Body Reaction</b>: How much did you feel your body physically respond to the image? Think about sensations like tension, warmth, or changes in heart rate.</li>
+                <li><b>Valence</b>: How did you feel overall when viewing the image, ranging from negative or not arousing to positive or arousing?</li>
+                <li><b>Enticement</b>: How sexually appealing do you think this image would be for people similar to you in terms of gender and sexual orientation?</li>
                 </ul>
+                </div>
 
                 <p>While these questions might seem similar, they capture different reactions. For example, an image can feel arousing but not necessarily attractive or pleasant, or vice versa.</p>
                 <p><b>Please pay attention to how the images make you feel in your mind and body. Respond according to your <i>gut reactions</i>.</b></p>
@@ -338,59 +340,47 @@ const fiction_ratings1 = {
             {
                 elements: [
                     {
-                        type: "rating",
-                        name: "Mind Arousal",
-                        title: "How much did you feel sexually aroused?",
-                        isRequired: true,
-                        rateMin: 0,
-                        rateMax: 6,
-                        minRateDescription: "Not at all",
-                        maxRateDescription: "Very much",
-                        displayMode: "buttons",
-                    },
-                    {
-                        type: "rating",
-                        name: "Enticement",
-                        title: "How enticing would you rate this image to be?",
-                        isRequired: true,
-                        rateMin: 0,
-                        rateMax: 6,
-                        minRateDescription: "Not at all",
-                        maxRateDescription: "Very much",
-                        displayMode: "buttons",
-                    },
-                    {
-                        type: "rating",
-                        name: "Valence",
-                        title: "The feeling evoked by the image was...",
-                        rateType: "smileys",
-                        scaleColorMode: "colored",
-                        isRequired: true,
-                        rateMin: 0,
-                        rateMax: 6,
-                        minRateDescription: "Unpleasant",
-                        maxRateDescription: "Pleasant",
-                        displayMode: "buttons",
-                    },
-                    {
                         type: "slider",
-                        name: "Physiological Arousal",
-                        title: "How did this image made you feel in your body?",
+                        name: "Body_Reaction",
+                        title: "How much did you feel your body react when looking at this image?",
                         isRequired: true,
                         min: 0,
                         max: 100,
                         step: 1,
-                        // defaultValue: 0,
                         customLabels: [
                             {
                                 value: 0,
-                                text: "No arousal",
+                                text: "No reaction",
                             },
                             {
                                 value: 100,
-                                text: "Highest arousal",
+                                text: "Very strong reaction",
                             },
                         ],
+                    },
+                    {
+                        type: "rating",
+                        name: "Valence",
+                        title: "How did you feel while viewing this image?",
+                        isRequired: true,
+                        rateMin: 0,
+                        rateMax: 6,
+                        minRateDescription: "Negative / Not arousing",
+                        maxRateDescription: "Positive / Arousing",
+                        displayMode: "buttons",
+                        rateType: "smileys",
+                        scaleColorMode: "colored",
+                    },
+                    {
+                        type: "rating",
+                        name: "Enticement",
+                        title: "How sexually appealing do you think this image is for people like you?",
+                        isRequired: true,
+                        rateMin: 0,
+                        rateMax: 6,
+                        minRateDescription: "Not at all",
+                        maxRateDescription: "Very much",
+                        displayMode: "buttons",
                     },
                 ],
             },
