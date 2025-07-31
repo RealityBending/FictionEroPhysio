@@ -89,14 +89,14 @@
         var timeline = []
 
         // Demographics
-        timeline.push(participant_ID)
+        // timeline.push(participant_ID)
 
         // Enter fullscreen mode
-        timeline.push({
-            type: jsPsychFullscreen,
-            fullscreen_mode: true,
-            delay_after: 0,
-        })
+        // timeline.push({
+        //     type: jsPsychFullscreen,
+        //     fullscreen_mode: true,
+        //     delay_after: 0,
+        // })
 
         // Questionnaires ==================
         const questionnaire_block = {
@@ -116,29 +116,28 @@
                 // Voluntary External Tapping
                 VoluntaryExternal_instructions,
                 TAP_countdown,
-                makeTAPblock(25, "external"),
+                makeTAPblock(40, "external"),
                 // Volunatry Internal Tapping
                 VoluntaryInternal_instructions,
                 TAP_countdown,
-                makeTAPblock(25, "internal"),
+                makeTAPblock(40, "internal"),
                 // Mixed Trials
                 Mixedtrials_instructions,
                 TAP_countdown,
-                makeTAPblock(50, "mixed"),
+                makeTAPblock(80, "mixed"),
                 // Rhythmic Tapping
                 TAP_preload,
                 RhytmicTapping_instructions,
                 TAP_countdown,
                 TAP_beep_sequence, // Synchrony phase
-                create_TAP_sequence("Tap_Synchrony", 25),
-                create_TAP_sequence("Tap_Continuation", 25),
+                create_TAP_sequence("Tap_Synchrony", 120),
                 // Random Tapping
                 RhytmicRandom_instructions,
                 TAP_countdown,
-                create_TAP_sequence("TAP_random", 25),
+                create_TAP_sequence("TAP_random", 120),
                 // Heart Tapping
                 HeartTapping_Instructions,
-                create_TAP_sequence("TAP_heart", 25),
+                create_TAP_sequence("TAP_heart", 120),
             ],
         }
 

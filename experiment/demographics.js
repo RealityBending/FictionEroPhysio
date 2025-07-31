@@ -351,7 +351,7 @@ const demographics_debriefing = {
                 <h2>Debriefing</h2>
                 <p>The purpose of this study was actually to study the effect on sexual arousal of <b style="color: #347decff;">believing</b> that the content is AI-generated. 
                 We are testing the hypothesis that believing erotic images are fake leads to lower sexual arousal.</p>
-                <p>We are also assessing the role of <b style="color: #e228b1ff;">interoception</b> in this process. Interoception refers to the awareness of internal bodily states — both physiological (e.g., heart rate) and emotional — and it plays a crucial role in how we perceive and interpret the world around us.</p>
+                <p>We are also assessing the role of <b style="color: #e228b1ff;">interoception</b> in this process. Interoception refers to the awareness of internal bodily states - both physiological (e.g., heart rate) and emotional - and it plays a crucial role in how we perceive and interpret the world around us.</p>
                 <p>Because we are interested in your <i>beliefs</i> about reality, <b>all the images you saw were actually real</b>. They were selected from a validated psychological database used in research on emotion.</p>
                 <p>We apologize for the necessary deception used in the task instructions. Deception was essential to maintain the validity of our experimental manipulation. We hope you understand the rationale behind this decision.</p>
 

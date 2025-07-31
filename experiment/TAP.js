@@ -570,7 +570,7 @@ const TAP_beep = {
 // Beep sequence (5 beeps) // change after
 const TAP_beep_sequence = {
     timeline: [TAP_beep],
-    repetitions: 25, // 5 beeps total
+    repetitions: 10, // 5 beeps total
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
