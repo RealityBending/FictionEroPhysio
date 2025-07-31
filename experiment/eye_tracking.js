@@ -1,28 +1,14 @@
-const eyetracking_consent = {
-    type: jsPsychSurvey,
-    data: { screen: "eyetracking_consent" },
-    survey_json: {
-        showQuestionNumbers: false,
-        completeText: "I understand",
-        pages: [
-            {
-                elements: [
-                    {
-                        type: "html",
-                        name: "eyetracking_consent_info",
-                        html: `
-              <div class="narrow-text" style="max-width: 800px; margin: 0 auto; text-align: left;">
-                <h2>Eye Movements</h2>
-                <p>As the next phase of the experiment involves the presentation of visual stimuli, we are interested in which parts of the image people look at. To do this, we would like to use your webcam to record your gaze.</p>
-                <p><b style="color: red;">Important:</b> The experiment does <i>not</i> record your face or any images from the camera. It only estimates your gaze position on the screen. <b>Your participation remains completely anonymous.</b></p>
-                <div style="text-align: center;"><img src="media/eyetracker.gif" height="300" style="margin: 10px auto;"></div>
-                <p>After you press <b>"I understand"</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>
-              </div>
-            `,
-                    },
-                ],
-            },
-        ],
+var eyetracking_consent = {
+    type: jsPsychHtmlButtonResponse,
+    stimulus:
+        "<h2>Eye movements</h2>" +
+        "<p>As the next phase of the experiment involves the presentation of visual stimuli, we are interested in what parts of the image people look at, and we would like to use your webcam to record your gaze.</p>" +
+        "<p><b style='color: red'>The experiment does <i>not</i> record your face or any images from the camera.</b> It only extracts the estimated gaze pattern on the screen. <b>Your participation remains completely anonymous</b>.</p>" +
+        "<img src='media/eyetracker.gif' height='300' align='center'></img>" +
+        "<p>After you have pressed <b>'I agree'</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>",
+    choices: ["I agree", "I don't have a webcam"],
+    data: {
+        screen: "eyetracking_consent",
     },
 }
 

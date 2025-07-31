@@ -89,7 +89,7 @@ var RS_task = {
     type: jsPsychHtmlKeyboardResponse,
     on_load: function () {
         create_marker(marker1)
-        create_marker_2(marker2)
+        // create_marker_2(marker2)
     },
     stimulus: "<p style='font-size:150px;'>+</p>",
     choices: ["s"],
@@ -103,7 +103,7 @@ var RS_task = {
     },
     on_finish: function (data) {
         document.querySelector("#marker1").remove()
-        document.querySelector("#marker2").remove()
+        // document.querySelector("#marker2").remove()
         data.duration = (performance.now() - data.time_start) / 1000 / 60
     },
 }

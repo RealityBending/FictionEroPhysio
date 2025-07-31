@@ -92,11 +92,11 @@
         timeline.push(participant_ID)
 
         // Enter fullscreen mode
-        // timeline.push({
-        //     type: jsPsychFullscreen,
-        //     fullscreen_mode: true,
-        //     delay_after: 0,
-        // })
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: true,
+            delay_after: 0,
+        })
 
         // Questionnaires ==================
         const questionnaire_block = {
@@ -116,29 +116,29 @@
                 // Voluntary External Tapping
                 VoluntaryExternal_instructions,
                 TAP_countdown,
-                makeTAPblock(3, "external"),
+                makeTAPblock(25, "external"),
                 // Volunatry Internal Tapping
                 VoluntaryInternal_instructions,
                 TAP_countdown,
-                makeTAPblock(3, "internal"),
+                makeTAPblock(25, "internal"),
                 // Mixed Trials
                 Mixedtrials_instructions,
                 TAP_countdown,
-                makeTAPblock(6, "mixed"),
+                makeTAPblock(50, "mixed"),
                 // Rhythmic Tapping
                 TAP_preload,
                 RhytmicTapping_instructions,
                 TAP_countdown,
                 TAP_beep_sequence, // Synchrony phase
-                create_TAP_sequence("Tap_Synchrony", 5),
-                create_TAP_sequence("Tap_Continuation", 5),
+                create_TAP_sequence("Tap_Synchrony", 25),
+                create_TAP_sequence("Tap_Continuation", 25),
                 // Random Tapping
                 RhytmicRandom_instructions,
                 TAP_countdown,
-                create_TAP_sequence("TAP_random", 5),
+                create_TAP_sequence("TAP_random", 25),
                 // Heart Tapping
                 HeartTapping_Instructions,
-                create_TAP_sequence("TAP_heart", 5),
+                create_TAP_sequence("TAP_heart", 25),
             ],
         }
 

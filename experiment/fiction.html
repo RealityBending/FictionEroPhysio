@@ -164,9 +164,8 @@
         // Initialize timeline
         var timeline = []
         // Demographics
+        timeline.push(fiction_instructions1)
         timeline.push(participant_ID)
-        timeline.push(questionnaire_bait)
-
         timeline.push(demographics_data)
 
         // Eye-tracking ==================================================
@@ -182,7 +181,7 @@
                 timeline.push({
                     timeline_variables: stimuli
                         .slice(0, Math.ceil(stimuli.length / 2))
-                        .slice(0, 1),
+                        .slice(0, 6),
                     timeline: [
                         fiction_fixation1a,
                         fiction_cue,
@@ -200,7 +199,7 @@
                 timeline.push({
                     timeline_variables: stimuli
                         .slice(Math.ceil(stimuli.length / 2), stimuli.length)
-                        .slice(0, 1),
+                        .slice(0, 6),
                     timeline: [
                         fiction_fixation1a,
                         fiction_cue,
@@ -230,6 +229,15 @@
 
                 // Feedback
                 timeline.push(experiment_feedback)
+
+                timeline.push({
+                    type: jsPsychHtmlButtonResponse,
+                    stimulus: "You've reached the end of this part!",
+                    choices: ["Exit Fullscreen"],
+                    on_finish: function () {
+                        document.exitFullscreen()
+                    },
+                })
             },
         })
 

@@ -19,7 +19,7 @@ const VoluntaryExternal_instructions = {
                         <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
                         <div style="flex: 2; text-align: left;">
                             <p>In this task, you will see a circle with a rotating arm moving around it.</p>
-                            <p>Your job is to <b>tap</b> on the circle whenever the rotating arm reaches the 
+                            <p>Your job is to <b>tap the spacebar</b> on the circle whenever the rotating arm reaches the 
                             <b style="color: #E91E63">designated target point</b> (shown as a red arrow).</p>
                             <p>Try to time your tap as closely as possible with the arm passing through the target.</p>
                             <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
@@ -55,7 +55,7 @@ const VoluntaryInternal_instructions = {
                     <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
                     <div style="flex: 2; text-align: left;">
                         <p>In this next task, you will see a circle with a rotating arm moving around it.</p>
-                        <p>Your task is to <b>tap</b> at a moment of your <b>own choosing</b>, but
+                        <p>Your task is to <b>tap the spacebar</b> at a moment of your <b>own choosing</b>, but
                         <b style="color: #E91E63">before the rotating arm reaches the end of its path.</b></p>
                         <p>There is no correct moment to tap - just make sure you tap <b>before the arm reaches the end</b>.</p>
                         <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
@@ -95,8 +95,8 @@ const Mixedtrials_instructions = {
                         </div>
                         <div style="flex: 2; text-align: left;">
                             <p>In the next task, you will perform <b style="color: #E91E63">a mix of the last two tasks </b>.</p>
-                            <p>If  <b style="color: #14a333ff">the circle is green</b> with a red arrow, you should <b>tap</b> whenever the arm reaches the target point.</p>
-                            <p>If <b style="color: #325be0ff">the circle is blue</b>, you should <b>tap</b> at a moment of your own choosing, but before the arm reaches the end of its path.</p>
+                            <p>If  <b style="color: #14a333ff">the circle is green</b> with a red arrow, you should <b>tap the spacebar</b> whenever the arm reaches the target point.</p>
+                            <p>If <b style="color: #325be0ff">the circle is blue</b>, you should <b>tap the spacebar</b> at a moment of your own choosing, but before the arm reaches the end of its path.</p>
                             <p>The trial will begin with a countdown: <b>3 - 2 - 1</b>.</p>
                             <p>Press the button below when you're ready to begin!</p>
                         </div>
@@ -570,7 +570,7 @@ const TAP_beep = {
 // Beep sequence (5 beeps) // change after
 const TAP_beep_sequence = {
     timeline: [TAP_beep],
-    repetitions: 5, // 5 beeps total
+    repetitions: 25, // 5 beeps total
     on_start: function () {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
@@ -691,7 +691,5 @@ function makeTAPblock(trials, condition) {
             ctap_trial,
         ],
         timeline_variables: timelineVars,
-        randomize_order: true,
-        save_timeline_variables: true,
     }
 }

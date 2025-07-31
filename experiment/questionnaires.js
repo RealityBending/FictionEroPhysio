@@ -306,7 +306,7 @@ const questionnaire_mint = {
                 "Please answer the following questions based on how accurately each statement describes you in general.",
             showQuestionNumbers: false,
             goNextPageAutomatic: true,
-            pages: make_mint(items_mint),
+            pages: make_mint(mint_items),
         }
     },
     data: {
