@@ -251,6 +251,7 @@ let ctap_pressTime
 let ctap_animationID
 const TWO_PI = Math.PI * 2
 
+let trial_number = 0
 // Drawing ========================================
 function drawClockOutline(clockRadius = 140) {
     const center = clock.width / 2
@@ -422,7 +423,8 @@ function animateClock(
     difficulty
 ) {
     drawClock(condition, start_angle, target_angle, duration, difficulty)
-    if (performance.now() - ctap_startTime < duration) {
+    if (ctap_animationID && performance.now() - ctap_startTime < duration) {
+        // Check if we still want another frame first, allows StopClock to cancel the animation
         ctap_animationID = requestAnimationFrame(function () {
             animateClock(
                 condition,
@@ -432,8 +434,6 @@ function animateClock(
                 difficulty
             )
         })
-    } else {
-        stopClock()
     }
 }
 
@@ -452,7 +452,6 @@ function ctap_stimulus(
     ctx.lineWidth = 5
     ctap_pressTime = undefined
     ctap_startTime = performance.now()
-    drawClock(condition, start_angle, target_angle, duration, difficulty)
     ctap_animationID = requestAnimationFrame(function () {
         animateClock(condition, start_angle, target_angle, duration, difficulty)
     })
@@ -468,8 +467,10 @@ function ctap_keyListener(e) {
 }
 
 function ctap_maketrials(nTrials = 10, condition = "external") {
-    var trials = []
-    var min_distance = 0.5 // buffer on end angle in percentage
+    const trials = [] // Stop using var ffs
+    const min_distance = 0.5 // buffer on end angle in percentage
+    const min_trial_duration = 4 * 1000
+    const max_trial_duration = 6 * 1000
     for (let i = 0; i < nTrials; i++) {
         // Generate random angles in radians
         let start_angle = Math.random() * TWO_PI
@@ -483,7 +484,11 @@ function ctap_maketrials(nTrials = 10, condition = "external") {
             target_angle: start_angle + target_angle * TWO_PI,
             condition: condition,
             difficulty: Math.random() * (0.9 - 0.4) + 0.4, // The size of the clock arms relative to the radius
-            duration: (Math.random() * 3 + 3) * 1000, // random between 3 and 6 seconds
+            // random between min and max duration, +1 means max duration is included, floor means it is an integer so no more unneeded decimals
+            duration: Math.floor(
+                Math.random() * (max_trial_duration - min_trial_duration + 1) +
+                    min_trial_duration
+            ),
         }
         trials.push(trial_info)
     }
@@ -525,10 +530,15 @@ const ctap_trial = {
     },
     choices: [" "],
     prompt: "",
+    on_load: function () {
+        //or on_start?? on_load used here: https://github.com/jspsych/jsPsych/discussions/1690
+        ctap_startTime = performance.now()
+    },
     on_finish: function (data) {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
+        stopClock() // Stop the clock animation, should be called at the right time if our clock is correctly set up
         ;(document.body.style.cursor = "auto"),
             (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
         data.response_angle = time2Rads(
