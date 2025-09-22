@@ -159,10 +159,11 @@ const fiction_instructions2 = {
                         html: `
                 <div style='text-align: center;'><img src='media/phase2_img.png' height='350' align='right'></img></div>
                 <h2> Instructions</h2>
-                <p>Thank you! In this final phase, we would like to see if you found our <b>image generation algorithm convincing</b> and error-free.</p>
-                <p>But there is <b>something important</b> we need to tell you...In the previous phase, some images were <b style='color: orange'>intentionally mislabelled</b> (we told you it was a photograph when it was actually AI-generated and vice versa).</p>
-                <p>In this phase, we want you to tell us for each image <b>what you think is the true category</b>!
-                We will briefly present all the images once more, and your task is to tell us if you think the image is AI-generated or a photograph. Indicate your degree of <b>confidence</b> and certainty by selecting larger numbers.</p>
+                <p><b>Thank you for staying with us so far!</b></p>
+                <p>There is <b>something important</b> we need to reveal... In the previous phase, the labels ('<b style="color: ${color_cues["Fiction"]}">AI-generated</b>' or '<b style="color: ${color_cues["Reality"]}">Photograph</b>') were actually <b>mixed-up</b>! As a result, they were correct for some images but wrong for others (e.g., the label said "AI" but the image was actually a photo, or vice versa).</p>
+                <p>In this final phase, we want you to try to identify <b>the correct category</b> of each image. We will briefly present all the images once more, followed by one question about whether you think the image is a real photograph from the original picture database or an AI-generated image</p>
+                <p>Sometimes, it is hard to tell, but don't overthink it and <b>go with your gut feeling</b>. At the end, we will tell you if you were correct or wrong!</p>
+                </div>
                 <p style='text-align: left';>Press start once you are ready.</p>
                 <div style='text-align: center;'><img src='media/scales_phase2.png' height='170' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
                 </div>`,
@@ -276,7 +277,7 @@ const fiction_showimage1 = {
     on_start: function () {
         document.body.style.backgroundColor = "white"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "#808080"))
+        create_marker(marker1, (color = "#010000ff"))
     },
     stimulus: function () {
         return "stimuli/" + jsPsych.evaluateTimelineVariable("stimulus")

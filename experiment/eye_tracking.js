@@ -6,7 +6,7 @@ var eyetracking_consent = {
         "<p><b style='color: red'>The experiment does <i>not</i> record your face or any images from the camera.</b> It only extracts the estimated gaze pattern on the screen. <b>Your participation remains completely anonymous</b>.</p>" +
         "<img src='media/eyetracker.gif' height='300' align='center'></img>" +
         "<p>After you have pressed <b>'I agree'</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>",
-    choices: ["I agree", "I don't have a webcam"],
+    choices: ["I agree", "I don't agree"],
     data: {
         screen: "eyetracking_consent",
     },
