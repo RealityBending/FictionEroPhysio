@@ -24,7 +24,7 @@ const demographics_consent = {
                 <p><b>Why have I been invited and what will I do?</b><br>
                 The goal is to study how new technology can impact <b>human perception</b>.
                 In this study, you will be shown <b>erotic images</b> and asked to complete a few questionnaires and perform some tasks. 
-                We will also measure your physiological processes to assess the relationship between how you experience your body and how you perceive the world.</p>
+                We will also measure your physiological processes to assess the relationship between how you experience your body and how you perceive these images.</p>
 
                 <p><b>Physiological Signals</b><br>
                 We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences. 
@@ -44,7 +44,6 @@ const demographics_consent = {
                   <li>I understand that my personal data will be used for the purposes of this research study and will be handled in accordance with Data Protection legislation. I understand that the University's Privacy Notice provides further information on how the University uses personal data in its research.</li>
                   <li>I understand that my collected data will be stored in a de-identified way. De-identified data may be made publicly available through secured scientific online data repositories.</li>
                   <li>I understand that due to the explicit nature of the images, <b>I confirm that I am 18 years of age or older</b>.</li>
-                  <li>Please note that various checks will be performed to ensure the validity of the data. We reserve the right to withhold credit awards or reimbursement should we detect non-valid responses (e.g., random patterns of answers, instructions not read, etc.).</li>
                 </ul>
 
                 <p><sub>
