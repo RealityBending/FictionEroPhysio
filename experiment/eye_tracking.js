@@ -181,9 +181,9 @@ var eyetracking_calibration = {
 var eyetracking_recalibration = {
     timeline: [
         eyetracking_calibration_instructions,
-        eyetracking_calibration_run,
+        // eyetracking_calibration_run,
         eyetracking_validation_instructions,
-        eyetracking_validation_run,
+        // eyetracking_validation_run,
         calibration_done,
     ],
     conditional_function: function () {

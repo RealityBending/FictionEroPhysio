@@ -165,13 +165,12 @@
         var timeline = []
         // Demographics
 
-        timeline.push(fiction_feedback1)
         timeline.push(participant_ID)
         timeline.push(demographics_data)
 
         // Eye-tracking ==================================================
-        // timeline.push(eyetracking_consent)
-        // timeline.push(eyetracking_calibration) // include full-screen #
+        timeline.push(eyetracking_consent)
+        timeline.push(eyetracking_calibration) // include full-screen #
         timeline.push(fiction_preloadstims)
 
         // Fiction ========================================================
@@ -180,9 +179,11 @@
             on_finish() {
                 //Phase 1A -------------------------------------------------------------
                 timeline.push({
-                    timeline_variables: stimuli
-                        .slice(0, Math.ceil(stimuli.length / 2))
-                        .slice(0, 6),
+                    timeline_variables: stimuli.slice(
+                        0,
+                        Math.ceil(stimuli.length / 2)
+                    ),
+                    // .slice(0, 2),
                     timeline: [
                         fiction_fixation1a,
                         fiction_cue,
@@ -198,9 +199,11 @@
 
                 // Phase 1B -------------------------------------------------------------
                 timeline.push({
-                    timeline_variables: stimuli
-                        .slice(Math.ceil(stimuli.length / 2), stimuli.length)
-                        .slice(0, 6),
+                    timeline_variables: stimuli.slice(
+                        Math.ceil(stimuli.length / 2),
+                        stimuli.length
+                    ),
+                    // .slice(0, 2),
                     timeline: [
                         fiction_fixation1a,
                         fiction_cue,
@@ -212,9 +215,8 @@
 
                 timeline.push(fiction_feedback1)
 
-                /*---------------------- Questionnaires----------- */
+                /*---------------------- Questionnaire----------- */
                 timeline.push(questionnaire_bait)
-                // timeline.push(questionnaire_cops)
 
                 // Stage 2 ==============================================================
                 timeline.push(fiction_instructions2)
