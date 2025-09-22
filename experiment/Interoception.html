@@ -110,57 +110,68 @@
             ],
         } // randomise order of questionnaires
 
-        // TAP procedure
-        const TAP_procedure = {
-            timeline: [
-                // Voluntary External Tapping
-                // VoluntaryExternal_instructions,
-                // TAP_countdown,
-                // makeTAPblock(40, "external"),
-                // Volunatry Internal Tapping
-                // VoluntaryInternal_instructions,
-                // TAP_countdown,
-                // makeTAPblock(40, "internal"),
-                // Mixed Trials
-                // Mixedtrials_instructions,
-                // TAP_countdown,
-                // makeTAPblock(80, "mixed"),
-                // Rhythmic Tapping
-                TAP_preload,
-                RhytmicTapping_instructions,
-                TAP_countdown,
-                TAP_beep_sequence, // Synchrony phase
-                create_TAP_sequence("Tap_Synchrony", 120),
-                // Random Tapping
-                RhytmicRandom_instructions,
-                TAP_countdown,
-                create_TAP_sequence("TAP_random", 120),
-                // Heart Tapping
-                HeartTapping_Instructions,
-                create_TAP_sequence("TAP_heart", 120),
-            ],
-        }
+        timeline.push(demographics_debriefing)
 
-        // COunterbalance TAP and Questionnaires
+        // TAP procedure ===========================
+        // Voluntary External Tapping
+        timeline.push(VoluntaryExternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(2, "external"))
 
-        count_tasks = jsPsych.randomization.shuffleNoRepeats([
-            // questionnaire_block,
-            TAP_procedure,
-        ])
+        // Voluntary Internal Tapping
+        timeline.push(VoluntaryInternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(2, "internal"))
 
-        timeline.push(count_tasks)
+        // Mixed Trials
+        timeline.push(Mixedtrials_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(2, "mixed"))
+
+        // Rhythmic Tapping
+        timeline.push(TAP_preload)
+        timeline.push(RhytmicTapping_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(TAP_beep_sequence) // Synchrony phase
+        timeline.push(create_TAP_sequence("Tap_Synchrony", 2))
+
+        // Random Tapping
+        timeline.push(RhytmicRandom_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(create_TAP_sequence("TAP_random", 2))
+
+        // Heart Tapping
+        timeline.push(HeartTapping_Instructions)
+        timeline.push(create_TAP_sequence("TAP_heart", 2))
 
         //HCT ===============================
 
-        timeline.push(HCT_instructions)
-        timeline.push({
-            timeline: [HCT_countdown, HCT_interval(), HCT_beep, HCT_items],
-            // Loop comprehension for duration vector
-            timeline_variables: HCT_durations.map((i) => ({
-                duration: i * 1000,
-            })),
-            randomize_order: true,
-        })
+        const HCT_procedure = {
+            timeline: [
+                HCT_instructions,
+                {
+                    timeline: [
+                        HCT_countdown,
+                        HCT_interval(),
+                        HCT_beep,
+                        HCT_items,
+                    ],
+                    timeline_variables: HCT_durations.map((i) => ({
+                        duration: i * 1000,
+                    })),
+                    randomize_order: true,
+                },
+            ],
+        }
+
+        // Counterbalance HTC and Questionnaires
+
+        count_tasks = jsPsych.randomization.shuffleNoRepeats([
+            questionnaire_block,
+            HCT_procedure,
+        ])
+
+        timeline.push(count_tasks)
 
         timeline.push(demographics_debriefing)
 
