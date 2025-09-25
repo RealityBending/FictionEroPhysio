@@ -5,8 +5,8 @@ var eyetracking_consent = {
         "<p>As the next phase of the experiment involves the presentation of visual stimuli, we are interested in what parts of the image people look at, and we would like to use your webcam to record your gaze.</p>" +
         "<p><b style='color: red'>The experiment does <i>not</i> record your face or any images from the camera.</b> It only extracts the estimated gaze pattern on the screen. <b>Your participation remains completely anonymous</b>.</p>" +
         "<img src='media/eyetracker.gif' height='300' align='center'></img>" +
-        "<p>After you have pressed <b>'I agree'</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>",
-    choices: ["I agree", "I don't agree"],
+        "<p>After you pressed <b>'I understand'</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>",
+    choices: ["I understand"],
     data: {
         screen: "eyetracking_consent",
     },
@@ -148,7 +148,7 @@ var eyetracking_recalibrate_process = {
         })
     },
     data: {
-        phase: "recalibration",
+        phase: "eyetracking_recalibration",
     },
 }
 
@@ -181,9 +181,9 @@ var eyetracking_calibration = {
 var eyetracking_recalibration = {
     timeline: [
         eyetracking_calibration_instructions,
-        // eyetracking_calibration_run,
+        eyetracking_calibration_run,
         eyetracking_validation_instructions,
-        // eyetracking_validation_run,
+        eyetracking_validation_run,
         calibration_done,
     ],
     conditional_function: function () {
