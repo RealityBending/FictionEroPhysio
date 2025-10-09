@@ -72,7 +72,7 @@
             // message_progress_bar: "Progress",
             on_finish: function () {
                 // Get participant ID
-                jsPsych.data.displayData("json")
+                // jsPsych.data.displayData("json")
                 let participantID = jsPsych.data
                     .get()
                     .filter({ screen: "ppt_id" })
@@ -89,14 +89,14 @@
         var timeline = []
 
         // Demographics
-        // timeline.push(participant_ID)
+        timeline.push(participant_ID)
 
         // Enter fullscreen mode
-        // timeline.push({
-        //     type: jsPsychFullscreen,
-        //     fullscreen_mode: true,
-        //     delay_after: 0,
-        // })
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: true,
+            delay_after: 0,
+        })
 
         // Questionnaires ==================
         const questionnaire_block = {
@@ -114,33 +114,33 @@
         // Voluntary External Tapping
         timeline.push(VoluntaryExternal_instructions)
         timeline.push(TAP_countdown)
-        timeline.push(makeTAPblock(2, "external"))
+        timeline.push(makeTAPblock(40, "external"))
 
         // Voluntary Internal Tapping
         timeline.push(VoluntaryInternal_instructions)
         timeline.push(TAP_countdown)
-        timeline.push(makeTAPblock(2, "internal"))
+        timeline.push(makeTAPblock(40, "internal"))
 
         // Mixed Trials
         timeline.push(Mixedtrials_instructions)
         timeline.push(TAP_countdown)
-        timeline.push(makeTAPblock(2, "mixed"))
+        timeline.push(makeTAPblock(80, "mixed"))
 
         // Rhythmic Tapping
         timeline.push(TAP_preload)
         timeline.push(RhytmicTapping_instructions)
         timeline.push(TAP_countdown)
         timeline.push(TAP_beep_sequence) // Synchrony phase
-        timeline.push(create_TAP_sequence("Tap_Synchrony", 2))
+        timeline.push(create_TAP_sequence("Tap_Synchrony", 120))
 
         // Random Tapping
         timeline.push(RhytmicRandom_instructions)
         timeline.push(TAP_countdown)
-        timeline.push(create_TAP_sequence("TAP_random", 2))
+        timeline.push(create_TAP_sequence("TAP_random", 120))
 
         // Heart Tapping
         timeline.push(HeartTapping_Instructions)
-        timeline.push(create_TAP_sequence("TAP_heart", 2))
+        timeline.push(create_TAP_sequence("TAP_heart", 120))
 
         //HCT ===============================
 
@@ -165,7 +165,7 @@
         // Counterbalance HTC and Questionnaires
 
         count_tasks = jsPsych.randomization.shuffleNoRepeats([
-            // questionnaire_block,
+            questionnaire_block,
             HCT_procedure,
         ])
 
