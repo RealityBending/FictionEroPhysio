@@ -36,6 +36,34 @@
     <body></body>
 
     <script>
+        var participant_ID = {
+            type: jsPsychSurvey,
+            survey_json: {
+                title: "About yourself",
+                completeText: "Continue",
+                pageNextText: "Next",
+                pagePrevText: "Previous",
+                goNextPageAutomatic: false,
+                showQuestionNumbers: false,
+                pages: [
+                    {
+                        elements: [
+                            {
+                                title: "Enter the participant's ID:",
+                                type: "text",
+                                placeholder: "000",
+                                name: "Participant_ID",
+                                isRequired: true,
+                            },
+                        ],
+                    },
+                ],
+            },
+            data: {
+                screen: "ppt_id_rs",
+            },
+        }
+
         // Initialize experiment ===============================================================
         var jsPsych = initJsPsych({
             // show_progress_bar: true,
@@ -44,7 +72,7 @@
                 // Get participant ID
                 let participantID = jsPsych.data
                     .get()
-                    .filter({ screen: "demographic_questions1" })
+                    .filter({ screen: "ppt_id_rs" })
                     .values()[0].response["Participant_ID"]
 
                 // Save as JSON file locally
@@ -58,6 +86,8 @@
         var timeline = []
 
         // Demographics ===========================================================
+        timeline.push(participant_ID)
+
         timeline.push(demographics_consent)
         timeline.push({
             type: jsPsychFullscreen,
