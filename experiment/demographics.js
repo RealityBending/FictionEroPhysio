@@ -49,7 +49,7 @@ const demographics_consent = {
                 <p><sub>
                 For further information about this research, or if you have any concerns, please contact Dr Dominique Makowski 
                 (<i style='color:DodgerBlue;'>D.Makowski@sussex.ac.uk</i>), Ana Neves (<i style='color:DodgerBlue;'>A.Neves@sussex.ac.uk</i>).
-                This research has been approved (xx/xxx/xx) by the ethics board of the School of Psychology. 
+                This research has been approved (reference: 0294) by the ethics board of the School of Psychology. 
                 The University of Sussex has insurance in place to cover its legal liabilities in respect of this study.
                 </sub></p>
                 </div>`,
@@ -217,83 +217,83 @@ const demographics_questions1 = {
     },
 }
 
-const demographics_data2 = {
-    type: jsPsychSurvey,
-    survey_json: {
-        title: "About yourself",
-        completeText: "Continue",
-        pageNextText: "Next",
-        pagePrevText: "Previous",
-        goNextPageAutomatic: false,
-        showQuestionNumbers: false,
-        pages: [
-            {
-                elements: [
-                    {
-                        title: "What is your gender?",
-                        name: "Gender",
-                        type: "radiogroup",
-                        choices: ["Male", "Female", "Other"],
-                        isRequired: true,
-                        colCount: 0,
-                    },
-                ],
+// const demographics_data2 = {
+//     type: jsPsychSurvey,
+//     survey_json: {
+//         title: "About yourself",
+//         completeText: "Continue",
+//         pageNextText: "Next",
+//         pagePrevText: "Previous",
+//         goNextPageAutomatic: false,
+//         showQuestionNumbers: false,
+//         pages: [
+//             {
+//                 elements: [
+//                     {
+//                         title: "What is your gender?",
+//                         name: "Gender",
+//                         type: "radiogroup",
+//                         choices: ["Male", "Female", "Other"],
+//                         isRequired: true,
+//                         colCount: 0,
+//                     },
+//                 ],
 
-                elements: [
-                    {
-                        title: "What sexual orientation do you identify with?",
-                        description:
-                            "These questions are important to understand the results in the latter part of the experiment.",
-                        name: "SexualOrientation",
-                        type: "radiogroup",
-                        choices: ["Heterosexual", "Homosexual", "Bisexual"],
-                        showOtherItem: true,
-                        otherText: "Other",
-                        otherPlaceholder: "Please specify",
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                    {
-                        visibleIf:
-                            "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
-                        title: "Which types of images do you find the most arousing?",
-                        description:
-                            "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
-                        name: "StimuliChoice",
-                        type: "radiogroup",
-                        choices: [
-                            "Women (and heterosexual couples)",
-                            "Men (and heterosexual couples)",
-                            "Only women (and lesbian couples)",
-                            "Only men (and gay couples)",
-                        ],
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                    {
-                        title: "I am currently...",
-                        name: "SexualStatus",
-                        type: "radiogroup",
-                        choices: [
-                            "Single and not open to dating",
-                            "Single and open to dating",
-                            "In a relationship and not open to dating",
-                            "In a relationship and open to dating",
-                        ],
-                        showOtherItem: true,
-                        otherText: "Other",
-                        otherPlaceholder: "Please specify",
-                        isRequired: true,
-                        colCount: 1,
-                    },
-                ],
-            },
-        ],
-    },
-    data: {
-        screen: "demographic_questions2",
-    },
-}
+//                 elements: [
+//                     {
+//                         title: "What sexual orientation do you identify with?",
+//                         description:
+//                             "These questions are important to understand the results in the latter part of the experiment.",
+//                         name: "SexualOrientation",
+//                         type: "radiogroup",
+//                         choices: ["Heterosexual", "Homosexual", "Bisexual"],
+//                         showOtherItem: true,
+//                         otherText: "Other",
+//                         otherPlaceholder: "Please specify",
+//                         isRequired: true,
+//                         colCount: 1,
+//                     },
+//                     {
+//                         visibleIf:
+//                             "{Gender} == 'Other' || {SexualOrientation} == 'Bisexual' || {SexualOrientation} == 'Other'",
+//                         title: "Which types of images do you find the most arousing?",
+//                         description:
+//                             "The following tasks will involve erotic images, please specify which category of images you would prefer to see.",
+//                         name: "StimuliChoice",
+//                         type: "radiogroup",
+//                         choices: [
+//                             "Women (and heterosexual couples)",
+//                             "Men (and heterosexual couples)",
+//                             "Only women (and lesbian couples)",
+//                             "Only men (and gay couples)",
+//                         ],
+//                         isRequired: true,
+//                         colCount: 1,
+//                     },
+//                     {
+//                         title: "I am currently...",
+//                         name: "SexualStatus",
+//                         type: "radiogroup",
+//                         choices: [
+//                             "Single and not open to dating",
+//                             "Single and open to dating",
+//                             "In a relationship and not open to dating",
+//                             "In a relationship and open to dating",
+//                         ],
+//                         showOtherItem: true,
+//                         otherText: "Other",
+//                         otherPlaceholder: "Please specify",
+//                         isRequired: true,
+//                         colCount: 1,
+//                     },
+//                 ],
+//             },
+//         ],
+//     },
+//     data: {
+//         screen: "demographic_questions2",
+//     },
+// }
 
 // Thank you ========================================================================
 
