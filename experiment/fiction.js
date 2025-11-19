@@ -124,7 +124,7 @@ const fiction_instructions1 = {
                 <ul>
                 <li><b>Body Reaction</b>: How much did you feel your body physically respond to the image? Think about sensations like tension, warmth in your body, or changes in heart rate or breathing.</li>
                 <li><b>Valence</b>: How did you feel overall when viewing the image, ranging from negative to positive? Consider that feeling positive can also equate to feeling psychologically aroused.</li>
-                <li><b>Enticement</b>: “How sexually appealing do you think most people would find this image?</li>
+                <li><b>Enticement</b>: How sexually appealing do you think most people would find this image?</li>
                 </ul>
 
                 </div>
