@@ -48,7 +48,7 @@
     <body></body>
 
     <script>
-        const participant_ID = {
+        var participant_ID = {
             type: jsPsychSurvey,
             survey_json: {
                 title: "About yourself",
@@ -70,6 +70,9 @@
                         ],
                     },
                 ],
+            },
+            data: {
+                screen: "ppt_id",
             },
         }
 
@@ -132,12 +135,28 @@
                                 isRequired: true,
                                 colCount: 1,
                             },
+                            {
+                                title: "I am currently...",
+                                name: "SexualStatus",
+                                type: "radiogroup",
+                                choices: [
+                                    "Single and not open to dating",
+                                    "Single and open to dating",
+                                    "In a relationship and not open to dating",
+                                    "In a relationship and open to dating",
+                                ],
+                                showOtherItem: true,
+                                otherText: "Other",
+                                otherPlaceholder: "Please specify",
+                                isRequired: true,
+                                colCount: 1,
+                            },
                         ],
                     },
                 ],
             },
             data: {
-                screen: "demographic_questions3",
+                screen: "demographic_questions2",
             },
         }
 
@@ -151,7 +170,7 @@
                 // Get participant ID
                 let participantID = jsPsych.data
                     .get()
-                    .filter({ screen: "demographic_questions" })
+                    .filter({ screen: "ppt_id" })
                     .values()[0].response["Participant_ID"]
 
                 // Save as JSON file locally
@@ -168,81 +187,87 @@
         timeline.push(participant_ID)
         timeline.push(demographics_data)
 
-        // Eye-tracking ==================================================
-        timeline.push(eyetracking_consent)
-        timeline.push(eyetracking_calibration) // include full-screen #
-        timeline.push(fiction_preloadstims)
-
-        // Fiction ========================================================
         timeline.push({
-            timeline: [fiction_instructions1],
-            on_finish() {
-                //Phase 1A -------------------------------------------------------------
-                timeline.push({
-                    timeline_variables: stimuli.slice(
-                        0,
-                        Math.ceil(stimuli.length / 2)
-                    ),
-                    // .slice(0, 2),
-                    timeline: [
-                        fiction_fixation1a,
-                        fiction_cue,
-                        fiction_fixation1b,
-                        fiction_showimage1,
-                        fiction_ratings1,
-                    ],
-                })
-
-                // Break ----------------------------------------------------------------
-                timeline.push(fiction_phase1_break)
-                timeline.push(eyetracking_recalibration)
-
-                // Phase 1B -------------------------------------------------------------
-                timeline.push({
-                    timeline_variables: stimuli.slice(
-                        Math.ceil(stimuli.length / 2),
-                        stimuli.length
-                    ),
-                    // .slice(0, 2),
-                    timeline: [
-                        fiction_fixation1a,
-                        fiction_cue,
-                        fiction_fixation1b,
-                        fiction_showimage1,
-                        fiction_ratings1,
-                    ],
-                })
-
-                timeline.push(fiction_feedback1)
-
-                /*---------------------- Questionnaire----------- */
-                timeline.push(questionnaire_bait)
-
-                // Stage 2 ==============================================================
-                timeline.push(fiction_instructions2)
-                timeline.push({
-                    timeline_variables:
-                        jsPsych.randomization.shuffleNoRepeats(stimuli),
-                    timeline: [
-                        fiction_fixation2,
-                        fiction_showimage2,
-                        fiction_ratings2,
-                    ],
-                })
-
-                // Feedback
-                timeline.push(experiment_feedback)
-
-                timeline.push({
-                    type: jsPsychHtmlButtonResponse,
-                    stimulus: "You've reached the end of this part!",
-                    choices: ["Exit Fullscreen"],
-                    on_finish: function () {
-                        document.exitFullscreen()
-                    },
-                })
-            },
+            type: jsPsychFullscreen,
+            fullscreen_mode: true,
+            delay_after: 0,
         })
+
+        // // Eye-tracking ==================================================
+        // timeline.push(eyetracking_consent)
+        // timeline.push(eyetracking_calibration) // include full-screen #
+        // timeline.push(fiction_preloadstims)
+
+        // // Fiction ========================================================
+        // timeline.push({
+        //     timeline: [fiction_instructions1],
+        //     on_finish() {
+        //         //Phase 1A -------------------------------------------------------------
+        //         timeline.push({
+        //             timeline_variables: stimuli.slice(
+        //                 0,
+        //                 Math.ceil(stimuli.length / 2)
+        //             ),
+        //             // .slice(0, 2),
+        //             timeline: [
+        //                 fiction_fixation1a,
+        //                 fiction_cue,
+        //                 fiction_fixation1b,
+        //                 fiction_showimage1,
+        //                 fiction_ratings1,
+        //             ],
+        //         })
+
+        //         // Break ----------------------------------------------------------------
+        //         timeline.push(fiction_phase1_break)
+        //         timeline.push(eyetracking_recalibration)
+
+        //         // Phase 1B -------------------------------------------------------------
+        //         timeline.push({
+        //             timeline_variables: stimuli.slice(
+        //                 Math.ceil(stimuli.length / 2),
+        //                 stimuli.length
+        //             ),
+        //             // .slice(0, 2),
+        //             timeline: [
+        //                 fiction_fixation1a,
+        //                 fiction_cue,
+        //                 fiction_fixation1b,
+        //                 fiction_showimage1,
+        //                 fiction_ratings1,
+        //             ],
+        //         })
+
+        //         timeline.push(fiction_feedback1)
+
+        //         /*---------------------- Questionnaire----------- */
+        //         timeline.push(questionnaire_bait)
+
+        //         // Stage 2 ==============================================================
+        //         timeline.push(fiction_instructions2)
+        //         timeline.push({
+        //             timeline_variables:
+        //                 jsPsych.randomization.shuffleNoRepeats(stimuli),
+        //             timeline: [
+        //                 fiction_fixation2,
+        //                 fiction_showimage2,
+        //                 fiction_ratings2,
+        //             ],
+        //         })
+
+        //         // Feedback
+        //         timeline.push(experiment_feedback)
+
+        //         timeline.push({
+        //             type: jsPsychHtmlButtonResponse,
+        //             stimulus: "You've reached the end of this part!",
+        //             choices: ["Exit Fullscreen"],
+        //             on_finish: function () {
+        //                 document.exitFullscreen()
+        //             },
+        //         })
+        //     },
+        // })
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
