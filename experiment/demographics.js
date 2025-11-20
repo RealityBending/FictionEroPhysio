@@ -73,17 +73,17 @@ const demographics_questions1 = {
         goNextPageAutomatic: false,
         showQuestionNumbers: false,
         pages: [
-            {
-                elements: [
-                    {
-                        title: "Enter the participant's ID:",
-                        type: "text",
-                        placeholder: "000",
-                        name: "Participant_ID",
-                        isRequired: true,
-                    },
-                ],
-            },
+            // {
+            //     elements: [
+            //         {
+            //             title: "Enter the participant's ID:",
+            //             type: "text",
+            //             placeholder: "000",
+            //             name: "Participant_ID",
+            //             isRequired: true,
+            //         },
+            //     ],
+            // },
             {
                 elements: [
                     {
