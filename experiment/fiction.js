@@ -14,7 +14,7 @@ function assignCondition(stimuli_list) {
     // Access demographic data
     let demographic_data = jsPsych.data
         .get()
-        .filter({ screen: "demographic_questions3" })
+        .filter({ screen: "demographic_questions2" })
         .values()[0]
     let gender = demographic_data.response.Gender
     let sexuality = demographic_data.response.SexualOrientation
