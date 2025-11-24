@@ -120,11 +120,9 @@ var RS_buffer = {
     on_start: function () {
         document.body.style.backgroundColor = "#808080"
         document.body.style.cursor = "none"
-        create_marker(marker1, color = "white");
-        sendMarker("1"); // create black screen
+        create_marker(marker1, (color = "white")) // create black screen
     },
     on_finish: function () {
-        sendMarker("0");
         document.querySelector("#marker1").remove()
     },
     stimulus: "",
