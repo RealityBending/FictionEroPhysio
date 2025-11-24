@@ -1,3 +1,50 @@
+/* --------------------------
+   LSL bridge
+--------------------------- */
+
+var lslBaseTime = null;
+
+function syncLSL() {
+    return new Promise(async function(resolve, reject) {
+        try {
+            let offsets = [];
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now();
+                let resp = await fetch("http://10.60.70.86:5000/sync", { cache: "no-store" }); // replace IPv4 address as appropriate
+                let text = await resp.text();
+                var lslTime = parseFloat(text);
+                var endPerf = performance.now();
+                var perfMid = (startPerf + endPerf) / 2;
+                offsets.push(lslTime - perfMid / 1000);
+                await new Promise(r => setTimeout(r, 100));
+            }
+            lslBaseTime = offsets.reduce((a,b)=>a+b,0) / offsets.length;
+            console.log("LSL sync done:", lslBaseTime);
+            resolve(lslBaseTime);
+        }
+        catch (e) {
+            console.error("LSL sync failed:", e);
+            reject(e);
+        }
+    });
+}
+
+function sendMarker(value = "1") {
+    if (lslBaseTime === null) {
+        console.warn("No sync yet — sending without timestamp");
+        fetch("http://10.60.70.86:5000/marker?value=" + value); // replace IPv4 address as appropriate
+        return;
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000;
+    var url = "http://10.60.70.86:5000/marker?value=" + value + "&ts=" + ts; // replace IPv4 address as appropriate
+
+    fetch(url)
+        .then(() => console.log("sent marker", value, ts))
+        .catch(err => console.error("marker error", err));
+}
+
+
 const RS_instructions = {
     type: jsPsychSurvey,
     survey_json: {
@@ -56,7 +103,7 @@ const rs_items = {
     SomA_3: "I thought about my breathing",
 }
 
-// Convernience function to shuffle an object (used internally)
+// Convenience function to shuffle an object (used internally)
 function shuffleObject(obj) {
     const entries = Object.entries(obj)
     for (let i = entries.length - 1; i > 0; i--) {
@@ -73,9 +120,11 @@ var RS_buffer = {
     on_start: function () {
         document.body.style.backgroundColor = "#808080"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "white")) // create black screen
+        create_marker(marker1, color = "white");
+        sendMarker("1"); // create black screen
     },
     on_finish: function () {
+        sendMarker("0");
         document.querySelector("#marker1").remove()
     },
     stimulus: "",
@@ -88,7 +137,8 @@ var RS_buffer = {
 var RS_task = {
     type: jsPsychHtmlKeyboardResponse,
     on_load: function () {
-        create_marker(marker1)
+        create_marker(marker1);
+        sendMarker("1");
         // create_marker_2(marker2)
     },
     stimulus: "<p style='font-size:150px;'>+</p>",
@@ -102,6 +152,7 @@ var RS_task = {
         },
     },
     on_finish: function (data) {
+        sendMarker("0");
         document.querySelector("#marker1").remove()
         // document.querySelector("#marker2").remove()
         data.duration = (performance.now() - data.time_start) / 1000 / 60
