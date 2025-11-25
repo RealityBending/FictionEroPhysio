@@ -1,3 +1,49 @@
+/* --------------------------
+   LSL bridge
+--------------------------- */
+
+var lslBaseTime = null;
+
+function syncLSL() {
+    return new Promise(async function(resolve, reject) {
+        try {
+            let offsets = [];
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now();
+                let resp = await fetch("http://10.60.71.124:5000/sync", { cache: "no-store" }); // replace IPv4 address as appropriate
+                let text = await resp.text();
+                var lslTime = parseFloat(text);
+                var endPerf = performance.now();
+                var perfMid = (startPerf + endPerf) / 2;
+                offsets.push(lslTime - perfMid / 1000);
+                await new Promise(r => setTimeout(r, 100));
+            }
+            lslBaseTime = offsets.reduce((a,b)=>a+b,0) / offsets.length;
+            console.log("LSL sync done:", lslBaseTime);
+            resolve(lslBaseTime);
+        }
+        catch (e) {
+            console.error("LSL sync failed:", e);
+            reject(e);
+        }
+    });
+}
+
+function sendMarker(value = "1") {
+    if (lslBaseTime === null) {
+        console.warn("No sync yet — sending without timestamp");
+        fetch("http://10.60.71.124:5000/marker?value=" + value); // replace IPv4 address as appropriate
+        return;
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000;
+    var url = "http://10.60.71.124:5000/marker?value=" + value + "&ts=" + ts; // replace IPv4 address as appropriate
+
+    fetch(url)
+        .then(() => console.log("sent marker", value, ts))
+        .catch(err => console.error("marker error", err));
+}
+
 // // ============================ TAP Instructions ==================================
 
 const VoluntaryExternal_instructions = {
@@ -462,7 +508,8 @@ function ctap_keyListener(e) {
     if (e.key === " ") {
         ctap_pressTime = performance.now() - ctap_startTime
         document.removeEventListener("keydown", ctap_keyListener)
-        document.querySelector("#marker1").remove()
+        document.querySelector("#marker1").remove();
+        sendMarker("0");
     }
 }
 
@@ -501,7 +548,8 @@ const ctap_trial = {
     on_start: function () {
         document.body.style.backgroundColor = "white"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "black"))
+        create_marker(marker1, (color = "black"));
+        sendMarker("1");
     },
     canvas_size: function () {
         return [
@@ -538,6 +586,7 @@ const ctap_trial = {
         // Clean up markers
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
+        sendMarker("0");
         stopClock() // Stop the clock animation, should be called at the right time if our clock is correctly set up
         ;(document.body.style.cursor = "auto"),
             (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
@@ -606,6 +655,10 @@ function create_TAP_trial(
             screen: screen,
         },
         on_start: function (trial) {
+            if (markerColor === "black") {
+                sendMarker("1");
+            }
+            
             // Set the appropriate stimulus message
             if (screen === "TAP_heart") {
                 trial.stimulus =
@@ -615,6 +668,10 @@ function create_TAP_trial(
             }
         },
         on_finish: function (data) {
+            if (markerColor === "black") {
+                sendMarker("0");
+            }
+
             // Clean up markers
             document.querySelector("#marker1")?.remove()
             document.querySelector("#marker2")?.remove()

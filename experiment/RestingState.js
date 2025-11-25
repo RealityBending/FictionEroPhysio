@@ -141,7 +141,7 @@ var RS_task = {
     },
     stimulus: "<p style='font-size:150px;'>+</p>",
     choices: ["s"],
-    trial_duration: 8 * 60 * 1000,
+    trial_duration: 1 * 60 * 1000,
     css_classes: ["fixation"],
     data: {
         screen: "RS_resting",

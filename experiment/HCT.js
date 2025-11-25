@@ -1,3 +1,49 @@
+/* --------------------------
+   LSL bridge
+--------------------------- */
+
+var lslBaseTime = null;
+
+function syncLSL() {
+    return new Promise(async function(resolve, reject) {
+        try {
+            let offsets = [];
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now();
+                let resp = await fetch("http://10.60.71.124:5000/sync", { cache: "no-store" }); // replace IPv4 address as appropriate
+                let text = await resp.text();
+                var lslTime = parseFloat(text);
+                var endPerf = performance.now();
+                var perfMid = (startPerf + endPerf) / 2;
+                offsets.push(lslTime - perfMid / 1000);
+                await new Promise(r => setTimeout(r, 100));
+            }
+            lslBaseTime = offsets.reduce((a,b)=>a+b,0) / offsets.length;
+            console.log("LSL sync done:", lslBaseTime);
+            resolve(lslBaseTime);
+        }
+        catch (e) {
+            console.error("LSL sync failed:", e);
+            reject(e);
+        }
+    });
+}
+
+function sendMarker(value = "1") {
+    if (lslBaseTime === null) {
+        console.warn("No sync yet — sending without timestamp");
+        fetch("http://10.60.71.124:5000/marker?value=" + value); // replace IPv4 address as appropriate
+        return;
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000;
+    var url = "http://10.60.71.124:5000/marker?value=" + value + "&ts=" + ts; // replace IPv4 address as appropriate
+
+    fetch(url)
+        .then(() => console.log("sent marker", value, ts))
+        .catch(err => console.error("marker error", err));
+}
+
 // HBC duration in sec
 var HCT_durations = [20, 25, 30, 35, 40, 45]
 
