@@ -166,35 +166,35 @@
 
         // TAP procedure ===========================
         // Voluntary External Tapping
-        //timeline.push(VoluntaryExternal_instructions)
-        //timeline.push(TAP_countdown)
-        //timeline.push(makeTAPblock(40, "external"))
+        timeline.push(VoluntaryExternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(40, "external"))
 
         // Voluntary Internal Tapping
-        //timeline.push(VoluntaryInternal_instructions)
-        //timeline.push(TAP_countdown)
-        //timeline.push(makeTAPblock(40, "internal"))
+        timeline.push(VoluntaryInternal_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(40, "internal"))
 
         // Mixed Trials
-        //timeline.push(Mixedtrials_instructions)
-        //timeline.push(TAP_countdown)
-        //timeline.push(makeTAPblock(80, "mixed"))
+        timeline.push(Mixedtrials_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(makeTAPblock(80, "mixed"))
 
         // Rhythmic Tapping
-        //timeline.push(TAP_preload)
-        //timeline.push(RhytmicTapping_instructions)
-        //timeline.push(TAP_countdown)
-        //timeline.push(TAP_beep_sequence) // Synchrony phase
-        //timeline.push(create_TAP_sequence("Tap_Synchrony", 120))
+        timeline.push(TAP_preload)
+        timeline.push(RhytmicTapping_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(TAP_beep_sequence) // Synchrony phase
+        timeline.push(create_TAP_sequence("Tap_Synchrony", 120))
 
         // Random Tapping
-        //timeline.push(RhytmicRandom_instructions)
-        //timeline.push(TAP_countdown)
-        //timeline.push(create_TAP_sequence("TAP_random", 120))
+        timeline.push(RhytmicRandom_instructions)
+        timeline.push(TAP_countdown)
+        timeline.push(create_TAP_sequence("TAP_random", 120))
 
         // Heart Tapping
-        //timeline.push(HeartTapping_Instructions)
-        //timeline.push(create_TAP_sequence("TAP_heart", 120))
+        timeline.push(HeartTapping_Instructions)
+        timeline.push(create_TAP_sequence("TAP_heart", 120))
 
         //HCT ===============================
 
@@ -239,15 +239,16 @@
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
 
-        /* --------------------------
-        Run: first sync, then start
-        --------------------------- */
-
+        // -----------------------
+        // Run: first sync then start experiment
+        // -----------------------
         syncLSL()
-            .then(() => startExperiment())
-            .catch(err => {
-                console.warn("Running without sync:", err);
-                startExperiment();
-            });
+            .then(function () {
+                startExperiment()
+            })
+            .catch(function (err) {
+                console.warn("Proceeding without LSL sync (sync failed):", err)
+                startExperiment()
+            })
     </script>
 </html>
