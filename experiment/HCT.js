@@ -120,7 +120,8 @@ function HCT_interval() {
     return {
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
-            create_marker(marker1)
+            create_marker(marker1);
+            sendMarker("1");
         },
         stimulus: "<p style='font-size:150px;'>+</p>",
         choices: ["s"],
@@ -129,15 +130,16 @@ function HCT_interval() {
         data: {
             screen: "HCT_interval",
             time_start: function () {
-                return performance.now()
+                return performance.now();
             },
         },
         on_finish: function (data) {
-            document.querySelector("#marker1").remove()
-            data.duration = (performance.now() - data.time_start) / 1000 / 60
-            data.interval = jsPsych.timelineVariable("duration") / 1000
+            document.querySelector("#marker1").remove();
+            sendMarker("0"); 
+            data.duration = (performance.now() - data.time_start) / 1000 / 60;
+            data.interval = jsPsych.timelineVariable("duration") / 1000;
         },
-    }
+    };
 }
 
 var HCT_beep = {
