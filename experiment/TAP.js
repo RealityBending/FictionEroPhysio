@@ -9,7 +9,7 @@ function syncLSL() {
             let offsets = []
             for (let i = 0; i < 3; i++) {
                 var startPerf = performance.now()
-                let resp = await fetch("http://10.60.67.183:5000/sync", { cache: "no-store" })
+                let resp = await fetch("http://192.168.112.216:5000/sync", { cache: "no-store" })
                 let text = await resp.text()
                 var lslTime = parseFloat(text)
                 var endPerf = performance.now()
@@ -31,7 +31,7 @@ function sendMarker(value = "1") {
     // If not synced, still send marker (server will timestamp with local_clock())
     if (lslBaseTime === null) {
         console.warn("LSL not synced yet - sending without JS timestamp")
-        fetch("http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value))
+        fetch("http://192.168.112.216:5000/marker?value=" + encodeURIComponent(value))
             .then(function () {
                 console.log("sent marker (no-ts)", value)
             })
@@ -42,7 +42,7 @@ function sendMarker(value = "1") {
     }
 
     var ts = lslBaseTime + performance.now() / 1000
-    var url = "http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts)
+    var url = "http://192.168.112.216:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts)
     fetch(url)
         .then(function () {
             console.log("sent marker", value, "ts", ts)
@@ -592,9 +592,17 @@ const ctap_trial = {
     },
     on_finish: function (data) {
         // Clean up markers
+        if (ctap_pressTime === undefined) {
+            document.querySelector("#marker1")?.remove()
+            sendMarker("0")
+        } else {
+            // If there *was* a keypress, the marker was already removed
+            // and a "0" was already sent in ctap_keyListener.
+            document.querySelector("#marker1")?.remove() // safe cleanup if needed
+        }
+
         document.querySelector("#marker1")?.remove()
-        document.querySelector("#marker2")?.remove()
-        sendMarker("0");
+
         stopClock() // Stop the clock animation, should be called at the right time if our clock is correctly set up
         ;(document.body.style.cursor = "auto"),
             (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
