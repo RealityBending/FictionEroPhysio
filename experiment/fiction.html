@@ -196,7 +196,7 @@
 
         // // Eye-tracking ==================================================
         timeline.push(eyetracking_consent)
-        timeline.push(eyetracking_calibration) // include full-screen #
+        timeline.push(eyetracking_calibration) // include full-screen
         timeline.push(fiction_preloadstims)
 
         // Fiction ========================================================
@@ -273,9 +273,7 @@
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
 
-        // -----------------------
-        // Run: first sync then start experiment
-        // -----------------------
+        // Run: first sync then start experiment =================================================================
         syncLSL()
             .then(function () {
                 startExperiment()

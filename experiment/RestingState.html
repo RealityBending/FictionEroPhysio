@@ -36,7 +36,6 @@
     <body></body>
 
     <script>
-        
                 var marker_screen = {
                     type: jsPsychHtmlButtonResponse,
                     on_load: function () {
@@ -135,9 +134,7 @@
         // Run the timeline =================================================================
         jsPsych.run(timeline)
 
-        // -----------------------
-        // Run: first sync then start experiment
-        // -----------------------
+        // Run: first sync then start experiment =================================================================
         syncLSL()
             .then(function () {
                 startExperiment()

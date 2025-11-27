@@ -9,7 +9,7 @@ function syncLSL() {
             let offsets = []
             for (let i = 0; i < 3; i++) {
                 var startPerf = performance.now()
-                let resp = await fetch("http://10.60.67.183:5000/sync", { cache: "no-store" })
+                let resp = await fetch("http://10.60.67.183:5000/sync", { cache: "no-store" }) // change IPv4 address as appropriate
                 let text = await resp.text()
                 var lslTime = parseFloat(text)
                 var endPerf = performance.now()
@@ -31,7 +31,7 @@ function sendMarker(value = "1") {
     // If not synced, still send marker (server will timestamp with local_clock())
     if (lslBaseTime === null) {
         console.warn("LSL not synced yet - sending without JS timestamp")
-        fetch("http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value))
+        fetch("http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value)) // change IPv4 address as appropriate
             .then(function () {
                 console.log("sent marker (no-ts)", value)
             })
@@ -42,7 +42,7 @@ function sendMarker(value = "1") {
     }
 
     var ts = lslBaseTime + performance.now() / 1000
-    var url = "http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts)
+    var url = "http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts) // change IPv4 address as appropriate
     fetch(url)
         .then(function () {
             console.log("sent marker", value, "ts", ts)
