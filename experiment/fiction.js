@@ -417,6 +417,13 @@ const fiction_ratings1 = {
                                 text: "Strong reaction",
                             },
                         ],
+                        validators: [
+                            {
+                                type:"expression",
+                                expression: "{Body_Reaction} != 50",
+                                text: "Please indicate a preference (choose a value other than 50)."
+                            }
+                        ]
                     },
                     {
                         type: "rating",
@@ -572,6 +579,13 @@ var fiction_ratings2 = {
                                 value: 100,
                                 text: "Photograph",
                             },
+                        ],
+                        validators: [
+                            {
+                                type:"expression",
+                                expression: "{Realness} != 50",
+                                text: "Please indicate a preference (choose a value other than 50)."
+                            }
                         ],
                         defaultValue: 0,
                     },
