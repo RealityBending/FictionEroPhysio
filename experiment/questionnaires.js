@@ -331,7 +331,7 @@ const items_maia = {
     MAIA_Trusting_2: "I feel my body is a safe place",
     MAIA_Trusting_3: "I trust my body sensations",
     MAIA_AttentionCheck_1:
-        "I notice that I am being asked to respond all the way to the right",
+        "I notice that for this item I am being asked to respond all the way to the right",
 }
 
 // This function formats each question into a jsPsych-survey question that contains information about the question format
@@ -399,7 +399,8 @@ const items_ias = {
     IAS_19: "I can always accurately perceive when someone is touching me affectionately rather than non-affectionately",
     IAS_20: "I can always accurately perceive when something is going to be ticklish",
     IAS_21: "I can always accurately perceive when something is going to be itchy",
-    IAS_AttentionCheck_1: "I can always accurately choose the lowest option",
+    IAS_AttentionCheck_1:
+        "I can always accurately perceive that for this statement I must choose the lowest option",
 }
 
 // This function formats each question into a jsPsych-survey question that contains information about the question format
