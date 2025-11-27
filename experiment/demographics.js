@@ -389,6 +389,7 @@ const demographics_debriefing = {
                 We are testing the hypothesis that believing erotic images are fake leads to lower sexual arousal.</p>
                 <p>We are also assessing the role of <b style="color: #e228b1ff;">interoception</b> in this process. Interoception refers to the awareness of internal bodily states - both physiological (e.g., heart rate) and emotional - and it plays a crucial role in how we perceive and interpret the world around us.</p>
                 <p>Because we are interested in your <i>beliefs</i> about reality, <b>all the images you saw were actually real</b>. They were selected from a validated psychological database used in research on emotion.</p>
+                We also told you we were working with an <b>AI startup</b> company based in Brighton. This was also not true; <b>there is no such partnership or company</b>.
                 <p>We apologize for the necessary deception used in the task instructions. Deception was essential to maintain the validity of our experimental manipulation. We hope you understand the rationale behind this decision.</p>
 
                 <p><b>Thank you again!</b> Your participation in this study will be kept completely confidential. If you have any questions or concerns about the study, feel free to contact us:</p>
