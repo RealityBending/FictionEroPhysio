@@ -75,8 +75,8 @@ const demographics_consent = {
                             validators: [
                                 {
                                     type: "answercount",
-                                    minCount: 10, // number of checkboxes in choices
-                                    maxCount: 10,
+                                    minCount: 6, // number of checkboxes in choices
+                                    maxCount: 6,
                                     text: "You must agree to all statements before continuing.",
                                 },
                             ],
@@ -128,7 +128,12 @@ const demographics_questions1 = {
                         name: "Gender",
                         type: "radiogroup",
                         // Should change other to prefer to self-describe ? (for ethical approval)
-                        choices: ["Male", "Female", "Other"],
+                        choices: [
+                            "Male",
+                            "Female",
+                            "Other",
+                            "Prefer not to say",
+                        ],
                         isRequired: true,
                         colCount: 0,
                     },
