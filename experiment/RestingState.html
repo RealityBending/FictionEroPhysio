@@ -76,9 +76,7 @@
                     .values()[0].response["Participant_ID"]
 
                 // Save as JSON file locally
-                jsPsych.data
-                    .get()
-                    .localSave("json", `P${participantID}_rs.json`)
+                jsPsych.data.get().localSave("json", `${participantID}_rs.json`)
             },
         })
 
@@ -100,10 +98,10 @@
         //Resting State ================================================
         timeline.push(RS_instructions) // Instructions
 
-        timeline.push(RS_buffer) // Create blank grey screen just before rest period
-        timeline.push(RS_task) // Create blank grey screen for resting state
-        timeline.push(RS_beep) // Play beep
-        timeline.push(RS_questionnaire) // Add debriefing questionnaire
+        // timeline.push(RS_buffer) // Create blank grey screen just before rest period
+        // timeline.push(RS_task) // Create blank grey screen for resting state
+        // timeline.push(RS_beep) // Play beep
+        // timeline.push(RS_questionnaire) // Add debriefing questionnaire
 
         timeline.push({
             type: jsPsychHtmlButtonResponse,
@@ -112,6 +110,7 @@
             on_finish: function () {
                 document.exitFullscreen()
             },
+            data: { screen: "end_rs" },
         })
 
         // Run the timeline =================================================================
