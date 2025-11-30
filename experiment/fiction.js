@@ -152,15 +152,19 @@ const fiction_instructions1 = {
                         type: "html",
                         name: "fiction_instructions_page1",
                         html: `
-              <div class="narrow-text" style="max-width: 900px; margin: 0 auto; text-align: left;">
+                        <div class="narrow-text" style="max-width: 900px; margin: 0 auto; text-align: left;">
                 <h2> The Experiment</h2>
                 <p>This study stems from a partnership between researchers from the <b>University of Sussex</b> and an <b>AI startup</b> based in Brighton, UK, focused on developing ethical AI technology.</p>
                 <p>Our goal is to understand how different people react to various images. To do so, we use a new <b>image-generation algorithm</b> (based on a modified <i>Generative Adversarial Network</i>) trained on curated material to produce realistic, high-quality erotic images. This allows us to systematically manipulate features and study their effects on perception.</p>
                 <p>The animation below illustrates how a traditional <i>GAN</i> generates face images. Our enhanced version extends this to full-body images, including multi-person scenes, by refining the latent space derived from the training data.</p>
                 <p>If you are interested, more technical details will be available at the end of the experiment.</p>
                 <div style='text-align: center;'><img src='media/gan.gif' height='200'></img></div>
-              </div>
-            `,
+                </div>
+                <audio autoplay>
+                <source src = "utils/ding.mp3" type="audio/mpeg">
+                </audio>
+                </div>
+                `,
                     },
                 ],
             },
@@ -221,7 +225,12 @@ const fiction_instructions2 = {
                 </div>
                 <p style='text-align: left';>Press start once you are ready.</p>
                 <div style='text-align: center;'><img src='media/scales_phase2.png' height='170' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
-                </div>`,
+                </div>
+                <audio autoplay>
+                <source src = "utils/ding.mp3" type="audio/mpeg">
+                </audio>
+                </div>
+                `,
                     },
                 ],
             },

@@ -7,6 +7,10 @@ var eyetracking_consent = {
         "<img src='media/eyetracker.gif' height='300' align='center'></img>" +
         "<p>After you pressed <b>'I understand'</b>, a pop-up will appear asking you to enable your webcam. It may take a couple of seconds for the camera to initialize.</p>",
     choices: ["I understand"],
+    on_finish: function() {
+        var audio = new Audio("utils/ding.mp3");
+        audio.play();
+    },
     data: {
         screen: "eyetracking_consent",
     },

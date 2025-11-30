@@ -52,22 +52,24 @@ function sendMarker(value = "1") {
         })
 }
 
-
 const RS_instructions = {
-    type: jsPsychSurvey,
-    survey_json: {
-        showQuestionNumbers: false,
-        completeText: "Continue",
-        pages: [
-            {
-                elements: [
-                    {
-                        type: "html",
-                        name: "instructions_RS",
-                        html: `
+  type: jsPsychSurvey,
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "instructions_RS",
+            html: `
+              <audio autoplay>
+                <source src="utils/ding.mp3" type="audio/mpeg">
+              </audio>
               <div style="text-align: center;"> 
                 <h2>Resting State</h2>
-                <h3><b>Instructions</h3></p>
+                <h3><b>Instructions</b></h3>
               </div>
               <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
                 <div style="flex: 2; text-align: center;">
@@ -77,14 +79,14 @@ const RS_instructions = {
                   <p>When you are ready, close your eyes. The rest period will begin shortly.</p>
                 </div>
               </div>
-            `,
-                    },
-                ],
-            },
-        ],
-    },
-    data: { screen: "RS_Instructions" },
-}
+            `
+          }
+        ]
+      }
+    ]
+  },
+  data: { screen: "RS_Instructions" }
+};
 
 // Resting state questionnaire
 const rs_items = {

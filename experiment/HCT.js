@@ -79,7 +79,10 @@ const HCT_instructions = {
                         <p>The interval will start with a <b>'3-2-1'</b> signal, after which you need to count your heartbeats until you hear a beep.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },

@@ -82,7 +82,10 @@ const VoluntaryExternal_instructions = {
                         <div style="flex: 1; min-width: 200px; margin-right: -150px;">
                             <img src="media/voluntaryE.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                         </div>
-                        </div>`,
+                        </div>
+                        <audio autoplay>
+                        <source src = "utils/ding.mp3" type="audio/mpeg">
+                        </audio>`,
                     },
                 ],
             },
@@ -118,7 +121,10 @@ const VoluntaryInternal_instructions = {
                     <div style="flex: 1; min-width: 200px; margin-right: -150px;">
                         <img src="media/voluntaryI.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                     </div>
-                    </div> `,
+                    </div> 
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -157,7 +163,10 @@ const Mixedtrials_instructions = {
                         <div style="flex: 1; display: flex; justify-content: center;">
                             <img src="media/voluntaryI.jpg" alt="Task illustration right" style="max-width: 100%; height: auto;">
                         </div>
-                        </div>`,
+                        </div>
+                        <audio autoplay>
+                        <source src = "utils/ding.mp3" type="audio/mpeg">
+                        </audio>`,
                     },
                 ],
             },
@@ -189,7 +198,10 @@ const RhytmicTapping_instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -220,7 +232,10 @@ const RhytmicRandom_instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -250,7 +265,10 @@ const HeartTapping_Instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
