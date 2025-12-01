@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 
 
 # --- Load XDF ---
-filename = r"C:\Users\olive\Documents\GitHub\FictionEroPhysio\jspsychmarkers_validation\jspsychmarkers-bw-test.xdf"
+filename = r"C:\Users\olive\Documents\GitHub\FictionEroPhysio\jspsychmarkers_validation\test-01-nosync.xdf"
 streams, header = pyxdf.load_xdf(filename, synchronize_clocks=True)
 
 # --- Identify streams ---

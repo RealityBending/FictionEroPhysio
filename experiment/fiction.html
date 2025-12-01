@@ -48,60 +48,6 @@
     <body></body>
 
     <script>
-        
-        // -----------------------
-        // LSL bridge (promise-based)
-        // -----------------------
-        var lslBaseTime = null
-
-        function syncLSL() {
-            return new Promise(async function (resolve, reject) {
-                try {
-                    let offsets = []
-                    for (let i = 0; i < 3; i++) {
-                        var startPerf = performance.now()
-                        let resp = await fetch("http://10.60.67.183:5000/sync", { cache: "no-store" }) // change IPv4 address as appropriate
-                        let text = await resp.text()
-                        var lslTime = parseFloat(text)
-                        var endPerf = performance.now()
-                        var perfMid = (startPerf + endPerf) / 2
-                        offsets.push(lslTime - perfMid / 1000)
-                        await new Promise((r) => setTimeout(r, 100)) // Short delay between syncs
-                    }
-                    lslBaseTime = offsets.reduce((a, b) => a + b, 0) / offsets.length
-                    console.log("LSL sync done (averaged):", lslBaseTime)
-                    resolve(lslBaseTime)
-                } catch (e) {
-                    console.error("LSL sync exception:", e)
-                    reject(e)
-                }
-            })
-        }
-
-        function sendMarker(value = "1") {
-            // If not synced, still send marker (server will timestamp with local_clock())
-            if (lslBaseTime === null) {
-                console.warn("LSL not synced yet - sending without JS timestamp")
-                fetch("http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value)) // change IPv4 address as appropriate
-                    .then(function () {
-                        console.log("sent marker (no-ts)", value)
-                    })
-                    .catch(function (err) {
-                        console.error("Marker send error:", err)
-                    })
-                return
-            }
-
-            var ts = lslBaseTime + performance.now() / 1000
-            var url = "http://10.60.67.183:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts) // change IPv4 address as appropriate
-            fetch(url)
-                .then(function () {
-                    console.log("sent marker", value, "ts", ts)
-                })
-                .catch(function (err) {
-                    console.error("Marker send error:", err)
-                })
-        }
 
         var participant_ID = {
             type: jsPsychSurvey,
