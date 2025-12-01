@@ -57,7 +57,10 @@ var eyetracking_calibration_instructions = {
     type: jsPsychHtmlButtonResponse,
     stimulus:
         "<h2>Gaze Calibration (1/2)</h2>" +
-        "<p>You will now see a series of <b>black dots</b> appear on the screen. Look at each dot and <b>click on it</b> without moving your head too much.</p>",
+        "<p>You will now see a series of <b>black dots</b> appear on the screen. Look at each dot and <b>click on it</b> without moving your head too much.</p>" +
+        "<audio autoplay>" +
+            "<source src='utils/ding.mp3' type='audio/mpeg'>" +
+        "</audio>",
     choices: ["Ready"],
     data: {
         screen: "eyetracking_calibration_instructions",

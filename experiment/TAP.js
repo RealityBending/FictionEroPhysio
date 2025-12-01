@@ -656,7 +656,7 @@ const TAP_beep = {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     },
-    data: { screen: "tap_beep" },
+    data: { screen: "TAP_beep" },
 }
 
 // Beep sequence (5 beeps) // change after

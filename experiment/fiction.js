@@ -592,8 +592,8 @@ var fiction_ratings2 = {
                         validators: [
                             {
                                 type:"expression",
-                                expression: "{Realness} != 50",
-                                text: "Please indicate a preference (choose a value other than 50)."
+                                expression: "{Realness} != 0",
+                                text: "Please indicate a preference (choose a value other than 0)."
                             }
                         ],
                         defaultValue: 0,

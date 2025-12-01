@@ -175,6 +175,7 @@ var HCT_items = {
                         type: "text",
                         placeholder: "Enter number",
                         name: "HCT_count",
+                        input_type: "number",
                     },
                 ],
             },
