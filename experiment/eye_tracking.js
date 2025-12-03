@@ -116,6 +116,9 @@ var eyetracking_fullscreen = {
             return true
         }
     },
+    data: {
+        screen: "eyetracking_fullscreen_start",
+    },
 }
 
 // Recalibration ====================================================================
@@ -148,7 +151,7 @@ var eyetracking_recalibrate_process = {
         })
     },
     data: {
-        phase: "eyetracking_recalibration",
+        phase: "eyetracking_recalibration1",
     },
 }
 
@@ -176,6 +179,9 @@ var eyetracking_calibration = {
             return false
         }
     },
+    data: {
+        phase: "eyetracking_calibration",
+    },
 }
 
 var eyetracking_recalibration = {
@@ -195,5 +201,8 @@ var eyetracking_recalibration = {
         } else {
             return false
         }
+    },
+    data: {
+        phase: "eyetracking_recalibration2",
     },
 }
