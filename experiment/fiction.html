@@ -183,12 +183,11 @@
 
         // Initialize timeline
         var timeline = []
+
         // Demographics
-
         timeline.push(participant_ID)
-        timeline.push(demographics_data)
-
-        timeline.push({
+        
+          timeline.push({
             type: jsPsychFullscreen,
             fullscreen_mode: true,
             delay_after: 0,
@@ -197,6 +196,9 @@
             },
         })
 
+        timeline.push(demographics_data)
+
+       
         // // Eye-tracking ==================================================
         timeline.push(eyetracking_consent)
         timeline.push(eyetracking_calibration) // include full-screen
