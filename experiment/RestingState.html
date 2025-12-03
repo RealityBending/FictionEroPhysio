@@ -1,4 +1,4 @@
-<!DOCTYPE HTM>
+<!DOCTYPE HTML>
 <html>
     <head>
         <!-- Title shown in tab -->
@@ -36,33 +36,46 @@
     <body></body>
 
     <script>
-        var participant_ID = {
-            type: jsPsychSurvey,
-            survey_json: {
-                title: "About yourself",
-                completeText: "Continue",
-                pageNextText: "Next",
-                pagePrevText: "Previous",
-                goNextPageAutomatic: false,
-                showQuestionNumbers: false,
-                pages: [
-                    {
-                        elements: [
+
+                var marker_screen = {
+                    type: jsPsychHtmlButtonResponse,
+                    on_load: function () {
+                        create_marker(marker1);
+                    },
+                    stimulus: '<div style="display:none;"></div>',
+                    choices: ["Continue"],
+                    on_finish: function (data) {
+                        document.querySelector("#marker1").remove()
+                    },
+                }
+
+                var participant_ID = {
+                    type: jsPsychSurvey,
+                    survey_json: {
+                        title: "About yourself",
+                        completeText: "Continue",
+                        pageNextText: "Next",
+                        pagePrevText: "Previous",
+                        goNextPageAutomatic: false,
+                        showQuestionNumbers: false,
+                        pages: [
                             {
-                                title: "Enter the participant's ID:",
-                                type: "text",
-                                placeholder: "000",
-                                name: "Participant_ID",
-                                isRequired: true,
+                                elements: [
+                                    {
+                                        title: "Enter the participant's ID:",
+                                        type: "text",
+                                        placeholder: "000",
+                                        name: "Participant_ID",
+                                        isRequired: true,
+                                    },
+                                ],
                             },
                         ],
                     },
-                ],
-            },
-            data: {
-                screen: "ppt_id_rs",
-            },
-        }
+                    data: {
+                        screen: "ppt_id_rs",
+                    },
+                }
 
         // Initialize experiment ===============================================================
         var jsPsych = initJsPsych({
@@ -83,10 +96,7 @@
         // Initialize timeline
         var timeline = []
 
-        // Demographics ===========================================================
-        timeline.push(participant_ID)
-
-        timeline.push(demographics_consent)
+        // Enter fullscreen mode
         timeline.push({
             type: jsPsychFullscreen,
             fullscreen_mode: true,
@@ -95,6 +105,14 @@
                 screen: "fullscreen_start",
             },
         })
+        
+        // Marker Position
+        timeline.push(marker_screen)
+        
+        // Demographics ===========================================================
+        timeline.push(participant_ID)
+
+        timeline.push(demographics_consent)
 
         timeline.push(demographics_questions1)
 
@@ -118,5 +136,15 @@
 
         // Run the timeline =================================================================
         jsPsych.run(timeline)
-    </script>
+
+        // Run: first sync then start experiment =================================================================
+        syncLSL()
+            .then(function () {
+                startExperiment()
+            })
+            .catch(function (err) {
+                console.warn("Proceeding without LSL sync (sync failed):", err)
+                startExperiment()
+            })
+    </script> 
 </html>

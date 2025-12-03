@@ -16,6 +16,9 @@ const questionnaires_instructions = {
                 <p>We will continue with a series of questionnaires.</p>
                 <p>It is important that you answer truthfully. Please read the statements carefully and answer according to what describes you the best.</p>
               </div>
+              <audio autoplay>
+                <source src="utils/ding.mp3" type="audio/mpeg">
+              </audio>
             `,
                     },
                 ],

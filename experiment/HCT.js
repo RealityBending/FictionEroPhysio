@@ -1,3 +1,57 @@
+// -----------------------
+// LSL bridge (promise-based)
+// -----------------------
+var lslBaseTime = null
+
+function syncLSL() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            let offsets = []
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now()
+                let resp = await fetch("http://192.168.0.18:5000/sync", { cache: "no-store" }) // change IPv4 address as appropriate
+                let text = await resp.text()
+                var lslTime = parseFloat(text)
+                var endPerf = performance.now()
+                var perfMid = (startPerf + endPerf) / 2
+                offsets.push(lslTime - perfMid / 1000)
+                await new Promise((r) => setTimeout(r, 100)) // Short delay between syncs
+            }
+            lslBaseTime = offsets.reduce((a, b) => a + b, 0) / offsets.length
+            console.log("LSL sync done (averaged):", lslBaseTime)
+            resolve(lslBaseTime)
+        } catch (e) {
+            console.error("LSL sync exception:", e)
+            reject(e)
+        }
+    })
+}
+
+function sendMarker(value = "1") {
+    // If not synced, still send marker (server will timestamp with local_clock())
+    if (lslBaseTime === null) {
+        console.warn("LSL not synced yet - sending without JS timestamp")
+        fetch("http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value)) // change IPv4 address as appropriate
+            .then(function () {
+                console.log("sent marker (no-ts)", value)
+            })
+            .catch(function (err) {
+                console.error("Marker send error:", err)
+            })
+        return
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000
+    var url = "http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts) // change IPv4 address as appropriate
+    fetch(url)
+        .then(function () {
+            console.log("sent marker", value, "ts", ts)
+        })
+        .catch(function (err) {
+            console.error("Marker send error:", err)
+        })
+}
+
 // HBC duration in sec
 var HCT_durations = [20, 25, 30, 35, 40, 45]
 
@@ -25,7 +79,10 @@ const HCT_instructions = {
                         <p>The interval will start with a <b>'3-2-1'</b> signal, after which you need to count your heartbeats until you hear a beep.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -74,7 +131,8 @@ function HCT_interval() {
     return {
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
-            create_marker(marker1)
+            create_marker(marker1);
+            sendMarker("1");
         },
         stimulus: "<p style='font-size:150px;'>+</p>",
         choices: ["s"],
@@ -83,15 +141,16 @@ function HCT_interval() {
         data: {
             screen: "HCT_interval",
             time_start: function () {
-                return performance.now()
+                return performance.now();
             },
         },
         on_finish: function (data) {
-            document.querySelector("#marker1").remove()
-            data.duration = (performance.now() - data.time_start) / 1000 / 60
-            data.interval = jsPsych.timelineVariable("duration") / 1000
+            document.querySelector("#marker1").remove();
+            sendMarker("0"); 
+            data.duration = (performance.now() - data.time_start) / 1000 / 60;
+            data.interval = jsPsych.timelineVariable("duration") / 1000;
         },
-    }
+    };
 }
 
 var HCT_beep = {
@@ -116,6 +175,7 @@ var HCT_items = {
                         type: "text",
                         placeholder: "Enter number",
                         name: "HCT_count",
+                        input_type: "number",
                     },
                 ],
             },

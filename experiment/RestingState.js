@@ -1,18 +1,75 @@
+// -----------------------
+// LSL bridge (promise-based)
+// -----------------------
+var lslBaseTime = null
+
+function syncLSL() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            let offsets = []
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now()
+                let resp = await fetch("http://192.168.0.18:5000/sync", { cache: "no-store" }) // change IPv4 address as appropriate
+                let text = await resp.text()
+                var lslTime = parseFloat(text)
+                var endPerf = performance.now()
+                var perfMid = (startPerf + endPerf) / 2
+                offsets.push(lslTime - perfMid / 1000)
+                await new Promise((r) => setTimeout(r, 100)) // Short delay between syncs
+            }
+            lslBaseTime = offsets.reduce((a, b) => a + b, 0) / offsets.length
+            console.log("LSL sync done (averaged):", lslBaseTime)
+            resolve(lslBaseTime)
+        } catch (e) {
+            console.error("LSL sync exception:", e)
+            reject(e)
+        }
+    })
+}
+
+function sendMarker(value = "1") {
+    // If not synced, still send marker (server will timestamp with local_clock())
+    if (lslBaseTime === null) {
+        console.warn("LSL not synced yet - sending without JS timestamp")
+        fetch("http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value)) // change IPv4 address as appropriate
+            .then(function () {
+                console.log("sent marker (no-ts)", value)
+            })
+            .catch(function (err) {
+                console.error("Marker send error:", err)
+            })
+        return
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000
+    var url = "http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts) // change IPv4 address as appropriate
+    fetch(url)
+        .then(function () {
+            console.log("sent marker", value, "ts", ts)
+        })
+        .catch(function (err) {
+            console.error("Marker send error:", err)
+        })
+}
+
 const RS_instructions = {
-    type: jsPsychSurvey,
-    survey_json: {
-        showQuestionNumbers: false,
-        completeText: "Continue",
-        pages: [
-            {
-                elements: [
-                    {
-                        type: "html",
-                        name: "instructions_RS",
-                        html: `
+  type: jsPsychSurvey,
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "instructions_RS",
+            html: `
+              <audio autoplay>
+                <source src="utils/ding.mp3" type="audio/mpeg">
+              </audio>
               <div style="text-align: center;"> 
                 <h2>Resting State</h2>
-                <h3><b>Instructions</h3></p>
+                <h3><b>Instructions</b></h3>
               </div>
               <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
                 <div style="flex: 2; text-align: center;">
@@ -22,14 +79,14 @@ const RS_instructions = {
                   <p>When you are ready, close your eyes. The rest period will begin shortly.</p>
                 </div>
               </div>
-            `,
-                    },
-                ],
-            },
-        ],
-    },
-    data: { screen: "RS_Instructions" },
-}
+            `
+          }
+        ]
+      }
+    ]
+  },
+  data: { screen: "RS_Instructions" }
+};
 
 // Resting state questionnaire
 const rs_items = {
@@ -56,7 +113,7 @@ const rs_items = {
     SomA_3: "I thought about my breathing",
 }
 
-// Convernience function to shuffle an object (used internally)
+// Convenience function to shuffle an object (used internally)
 function shuffleObject(obj) {
     const entries = Object.entries(obj)
     for (let i = entries.length - 1; i > 0; i--) {
@@ -88,7 +145,8 @@ var RS_buffer = {
 var RS_task = {
     type: jsPsychHtmlKeyboardResponse,
     on_load: function () {
-        create_marker(marker1)
+        create_marker(marker1);
+        sendMarker("1");
         // create_marker_2(marker2)
     },
     stimulus: "<p style='font-size:150px;'>+</p>",
@@ -103,6 +161,7 @@ var RS_task = {
     },
     on_finish: function (data) {
         document.querySelector("#marker1").remove()
+        sendMarker("0");
         // document.querySelector("#marker2").remove()
         data.duration = (performance.now() - data.time_start) / 1000 / 60
     },

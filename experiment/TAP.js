@@ -1,3 +1,57 @@
+// -----------------------
+// LSL bridge (promise-based)
+// -----------------------
+var lslBaseTime = null
+
+function syncLSL() {
+    return new Promise(async function (resolve, reject) {
+        try {
+            let offsets = []
+            for (let i = 0; i < 3; i++) {
+                var startPerf = performance.now()
+                let resp = await fetch("http://192.168.0.18:5000/sync", { cache: "no-store" }) // change IPv4 address as appropriate
+                let text = await resp.text()
+                var lslTime = parseFloat(text)
+                var endPerf = performance.now()
+                var perfMid = (startPerf + endPerf) / 2
+                offsets.push(lslTime - perfMid / 1000)
+                await new Promise((r) => setTimeout(r, 100)) // Short delay between syncs
+            }
+            lslBaseTime = offsets.reduce((a, b) => a + b, 0) / offsets.length
+            console.log("LSL sync done (averaged):", lslBaseTime)
+            resolve(lslBaseTime)
+        } catch (e) {
+            console.error("LSL sync exception:", e)
+            reject(e)
+        }
+    })
+}
+
+function sendMarker(value = "1") {
+    // If not synced, still send marker (server will timestamp with local_clock())
+    if (lslBaseTime === null) {
+        console.warn("LSL not synced yet - sending without JS timestamp")
+        fetch("http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value)) // change IPv4 address as appropriate
+            .then(function () {
+                console.log("sent marker (no-ts)", value)
+            })
+            .catch(function (err) {
+                console.error("Marker send error:", err)
+            })
+        return
+    }
+
+    var ts = lslBaseTime + performance.now() / 1000
+    var url = "http://192.168.0.18:5000/marker?value=" + encodeURIComponent(value) + "&ts=" + encodeURIComponent(ts) // change IPv4 address as appropriate
+    fetch(url)
+        .then(function () {
+            console.log("sent marker", value, "ts", ts)
+        })
+        .catch(function (err) {
+            console.error("Marker send error:", err)
+        })
+}
+
 // // ============================ TAP Instructions ==================================
 
 const VoluntaryExternal_instructions = {
@@ -28,7 +82,10 @@ const VoluntaryExternal_instructions = {
                         <div style="flex: 1; min-width: 200px; margin-right: -150px;">
                             <img src="media/voluntaryE.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                         </div>
-                        </div>`,
+                        </div>
+                        <audio autoplay>
+                        <source src = "utils/ding.mp3" type="audio/mpeg">
+                        </audio>`,
                     },
                 ],
             },
@@ -64,7 +121,10 @@ const VoluntaryInternal_instructions = {
                     <div style="flex: 1; min-width: 200px; margin-right: -150px;">
                         <img src="media/voluntaryI.jpg" alt="Task illustration" style="max-width: 75%; height: auto; display: block; align-items: right;">
                     </div>
-                    </div> `,
+                    </div> 
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -103,7 +163,10 @@ const Mixedtrials_instructions = {
                         <div style="flex: 1; display: flex; justify-content: center;">
                             <img src="media/voluntaryI.jpg" alt="Task illustration right" style="max-width: 100%; height: auto;">
                         </div>
-                        </div>`,
+                        </div>
+                        <audio autoplay>
+                        <source src = "utils/ding.mp3" type="audio/mpeg">
+                        </audio>`,
                     },
                 ],
             },
@@ -135,7 +198,10 @@ const RhytmicTapping_instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -166,7 +232,10 @@ const RhytmicRandom_instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -196,7 +265,10 @@ const HeartTapping_Instructions = {
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>
-                    </div>`,
+                    </div>
+                    <audio autoplay>
+                    <source src = "utils/ding.mp3" type="audio/mpeg">
+                    </audio>`,
                     },
                 ],
             },
@@ -465,7 +537,8 @@ function ctap_keyListener(e) {
     if (e.key === " ") {
         ctap_pressTime = performance.now() - ctap_startTime
         document.removeEventListener("keydown", ctap_keyListener)
-        document.querySelector("#marker1").remove()
+        document.querySelector("#marker1").remove();
+        sendMarker("0");
     }
 }
 
@@ -506,7 +579,8 @@ const ctap_trial = {
     on_start: function () {
         document.body.style.backgroundColor = "white"
         document.body.style.cursor = "none"
-        create_marker(marker1, (color = "black"))
+        create_marker(marker1, (color = "black"));
+        sendMarker("1");
     },
     canvas_size: function () {
         return [
@@ -541,8 +615,16 @@ const ctap_trial = {
     },
     on_finish: function (data) {
         // Clean up markers
-        document.querySelector("#marker1")?.remove()
+        if (ctap_pressTime === undefined) {
+            document.querySelector("#marker1")?.remove()
+            sendMarker("0")
+        } 
+        else {
+            document.querySelector("#marker1")?.remove() // safe cleanup if needed
+        }
+
         document.querySelector("#marker2")?.remove()
+
         stopClock() // Stop the clock animation, should be called at the right time if our clock is correctly set up
         ;(document.body.style.cursor = "auto"),
             (data.response_time = ctap_pressTime) // Time user pressed spacebar - same as RT
@@ -583,7 +665,7 @@ const TAP_beep = {
         document.body.style.backgroundColor = "#FFFFFF"
         document.body.style.cursor = "auto"
     },
-    data: { screen: "tap_beep" },
+    data: { screen: "TAP_beep" },
 }
 
 // Beep sequence (5 beeps) // change after
@@ -615,6 +697,10 @@ function create_TAP_trial(
             screen: screen,
         },
         on_start: function (trial) {
+            if (markerColor === "black") {
+                sendMarker("1");
+            }
+            
             // Set the appropriate stimulus message
             if (screen === "TAP_heart") {
                 trial.stimulus =
@@ -624,8 +710,12 @@ function create_TAP_trial(
             }
         },
         on_finish: function (data) {
+
             // Clean up markers
             document.querySelector("#marker1")?.remove()
+            if (markerColor === "black") {
+                sendMarker("0");
+            }
             document.querySelector("#marker2")?.remove()
             document.body.style.cursor = "auto"
 

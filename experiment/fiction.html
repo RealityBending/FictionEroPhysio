@@ -1,4 +1,4 @@
-<!DOCTYPE HTM>
+<!DOCTYPE HTML>
 <html>
     <head>
         <!-- Title shown in tab -->
@@ -48,6 +48,7 @@
     <body></body>
 
     <script>
+
         var participant_ID = {
             type: jsPsychSurvey,
             survey_json: {
@@ -198,7 +199,7 @@
 
         // // Eye-tracking ==================================================
         timeline.push(eyetracking_consent)
-        timeline.push(eyetracking_calibration) // include full-screen #
+        timeline.push(eyetracking_calibration) // include full-screen
         timeline.push(fiction_preloadstims)
 
         // Fiction ========================================================
@@ -274,5 +275,15 @@
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
+
+        // Run: first sync then start experiment =================================================================
+        syncLSL()
+            .then(function () {
+                startExperiment()
+            })
+            .catch(function (err) {
+                console.warn("Proceeding without LSL sync (sync failed):", err)
+                startExperiment()
+            })
     </script>
 </html>

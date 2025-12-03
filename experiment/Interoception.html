@@ -1,4 +1,4 @@
-<!DOCTYPE HTM>
+<!DOCTYPE HTML>
 <html>
     <head>
         <!--create title shown in tab; not the same as header on webpage-->
@@ -38,6 +38,7 @@
     <body></body>
 
     <script>
+
         var participant_ID = {
             type: jsPsychSurvey,
             survey_json: {
@@ -187,5 +188,15 @@
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)
+
+        // Run: first sync then start experiment =================================================================
+        syncLSL()
+            .then(function () {
+                startExperiment()
+            })
+            .catch(function (err) {
+                console.warn("Proceeding without LSL sync (sync failed):", err)
+                startExperiment()
+            })
     </script>
 </html>
