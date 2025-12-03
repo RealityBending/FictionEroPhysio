@@ -236,6 +236,9 @@ const TAP_countdown = {
         document.querySelector("#marker1")?.remove()
         document.querySelector("#marker2")?.remove()
     },
+    data: {
+        screen: "tap_countdown",
+    },
 }
 
 // ############################ Voluntary Tapping Task
@@ -489,6 +492,8 @@ function ctap_maketrials(nTrials = 10, condition = "external") {
                 Math.random() * (max_trial_duration - min_trial_duration + 1) +
                     min_trial_duration
             ),
+            screen: `clock_${condition}_trial`,
+            trial_number: i + 1,
         }
         trials.push(trial_info)
     }
@@ -547,6 +552,10 @@ const ctap_trial = {
             jsPsych.evaluateTimelineVariable("start_angle")
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
         data.space_pressed = ctap_pressTime !== undefined // Save whether the space bar was pressed
+    },
+    data: {
+        screen: jsPsych.timelineVariable("screen"),
+        trial_number: jsPsych.timelineVariable("trial_number"),
     },
 }
 
@@ -661,7 +670,7 @@ const TAP_warning = {
         ],
     },
     data: {
-        screen: "fiction_fixation1a",
+        screen: "tap_warning",
     },
 }
 
@@ -673,7 +682,7 @@ const TAP_fixation = {
     trial_duration: 500, // 500 ms fixation
     save_trial_parameters: { trial_duration: true },
     data: {
-        screen: "fiction_fixation1a",
+        screen: "tap_fixation1a",
     },
 }
 
