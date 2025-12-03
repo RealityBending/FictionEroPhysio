@@ -660,6 +660,9 @@ const TAP_warning = {
             },
         ],
     },
+    data: {
+        screen: "fiction_fixation1a",
+    },
 }
 
 const TAP_fixation = {
