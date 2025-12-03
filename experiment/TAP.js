@@ -635,10 +635,11 @@ const ctap_trial = {
         ) // Where user pressed spacebar in radians, relative to 12'clock = 0
         data.space_pressed = ctap_pressTime !== undefined // Save whether the space bar was pressed
     },
-    data: {
-        screen: jsPsych.timelineVariable("screen"),
-        trial_number: jsPsych.timelineVariable("trial_number"),
-    },
+    data: function () {
+        return {
+            screen: jsPsych.evaluateTimelineVariable("screen"),
+            trial_number: jsPsych.evaluateTimelineVariable("trial_number"),
+        }
 }
 
 // ================================ Rhythmic Tapping Task ======================================================
