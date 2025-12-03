@@ -640,6 +640,7 @@ const ctap_trial = {
             screen: jsPsych.evaluateTimelineVariable("screen"),
             trial_number: jsPsych.evaluateTimelineVariable("trial_number"),
         }
+    }
 }
 
 // ================================ Rhythmic Tapping Task ======================================================
