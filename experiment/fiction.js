@@ -153,7 +153,7 @@ const fiction_instructions1 = {
                         name: "fiction_instructions_page1",
                         html: `
                         <div class="narrow-text" style="max-width: 900px; margin: 0 auto; text-align: left;">
-                <h2> The Experiment</h2>
+                <h2> The Task</h2>
                 <p>This study stems from a partnership between researchers from the <b>University of Sussex</b> and an <b>AI startup</b> based in Brighton, UK, focused on developing ethical AI technology.</p>
                 <p>Our goal is to understand how different people react to various images. To do so, we use a new <b>image-generation algorithm</b> (based on a modified <i>Generative Adversarial Network</i>) trained on curated material to produce realistic, high-quality erotic images. This allows us to systematically manipulate features and study their effects on perception.</p>
                 <p>The animation below illustrates how a traditional <i>GAN</i> generates face images. Our enhanced version extends this to full-body images, including multi-person scenes, by refining the latent space derived from the training data.</p>
@@ -243,7 +243,7 @@ const fiction_instructions2 = {
 const fiction_preloadstims = {
     type: jsPsychPreload,
     message:
-        "Please wait while the experiment is being loaded (it can take a few seconds)",
+        "Please wait while the task is being loaded (it can take a few seconds)",
     images: stimuli_list.map((a) => "stimuli/" + a.stimulus),
     on_load: function () {
         stimuli = assignCondition(stimuli_list)
@@ -672,6 +672,20 @@ var fiction_feedback1 = {
                 minRateDescription: "Not at all",
                 maxRateDescription: "Completely certain",
             },
+            {
+                type: "html",
+                name: "fiction_feedback_end",
+                html: `
+              <div class="narrow-text" style="max-width: 800px; margin: 0 auto; text-align: left;">
+                <h4>We appreciate you staying with us so far.</h4>
+                <p>The next stage will involve a questionnaire. </p>
+                <p>Please let the experimetner know when you've answered these questions, and they will remove the EDA and muse for you. </p>
+              <audio autoplay>
+                <source src = "utils/ding.mp3" type="audio/mpeg">
+                </audio>
+                </div>
+            `,
+            }
         ],
     },
     data: {
