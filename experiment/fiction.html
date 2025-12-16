@@ -2,7 +2,7 @@
 <html>
     <head>
         <!-- Title shown in tab -->
-        <title>Experiment</title>
+        <title>Task</title>
 
         <!--Load JsPsych -->
         <script src="https://unpkg.com/jspsych@8.2.2"></script>
@@ -183,8 +183,9 @@
 
         // Initialize timeline
         var timeline = []
+        timeline.push(fiction_feedback1)
 
-        // Demographics
+        // Demographics 
         timeline.push(participant_ID)
         
           timeline.push({
@@ -199,7 +200,7 @@
         timeline.push(demographics_data)
 
        
-        // // Eye-tracking ==================================================
+         // Eye-tracking ==================================================
         timeline.push(eyetracking_consent)
         timeline.push(eyetracking_calibration) // include full-screen
         timeline.push(fiction_preloadstims)

@@ -98,6 +98,12 @@ var eyetracking_validation_run = {
     time_to_saccade: 1000,
     validation_duration: 2000,
     show_validation_data: false,
+    on_start: function () {
+        document.body.style.cursor = "none";
+    },
+    on_finish: function () {
+        document.body.style.cursor = "default";
+    },
     data: {
         screen: "eyetracking_validation_run",
     },

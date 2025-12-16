@@ -33,9 +33,9 @@ const demographics_consent = {
                     As we are not collecting any personally identifiable information, it will not be possible to withdraw your data after you submit it.
                     
                         <p><b>Physiological Signals</b><br>
-                    We will be recording some of your body's electric activity using ECG and EEG; both are simple non-intrusive procedures used in research and in the life sciences. 
+                    We will be recording some of your body's electric activity using ECG, EEG and EDA; both are simple non-intrusive procedures used in research and in the life sciences. 
                     Since this study is being undertaken for research purposes only, we will not be able to provide any feedback or information on clinical aspects of the data obtained. 
-                    For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse 2 headset which contains electrodes that will be placed on your forehead and behind the ears. 
+                    For the ECG we will be attaching some sensors to the skin, and for the EEG we will be using the Muse headset which contains electrodes that will be placed on your forehead and behind the ears. 
                     We kindly ask that you refrain from participating if you are aware of having skin reactions or allergies to adhesives or the materials used in the electrodes - primarily composed of silver and silver chloride.</p>
 
                     <p><b>What will happen to the results and my personal information?</b><br>
