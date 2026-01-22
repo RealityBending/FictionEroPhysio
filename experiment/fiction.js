@@ -679,7 +679,7 @@ var fiction_feedback1 = {
               <div class="narrow-text" style="max-width: 800px; margin: 0 auto; text-align: left;">
                 <h4>We appreciate you staying with us so far.</h4>
                 <p>The next stage will involve a questionnaire. </p>
-                <p>Please let the experimetner know when you've answered these questions, and they will remove the EDA and muse for you. </p>
+                <p>Please let the experimenter know when you've answered these questions, and they will remove the EDA for you. </p>
               <audio autoplay>
                 <source src = "utils/ding.mp3" type="audio/mpeg">
                 </audio>
