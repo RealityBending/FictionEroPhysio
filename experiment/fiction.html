@@ -164,8 +164,8 @@
         // Initialize experiment ===============================================================
 
         var jsPsych = initJsPsych({
-            // show_progress_bar: true,
-            // message_progress_bar: "Progress",
+             show_progress_bar: true,
+             message_progress_bar: "Progress",
             extensions: [{ type: jsPsychExtensionWebgazer }],
             on_finish: function () {
                 // Get participant ID
@@ -245,6 +245,7 @@
                 })
 
                 timeline.push(fiction_feedback1)
+                timeline.push(fiction_feedback2)
 
                 /*---------------------- Questionnaire----------- */
                 timeline.push(questionnaire_bait)

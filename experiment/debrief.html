@@ -1,0 +1,95 @@
+<!DOCTYPE HTML>
+<html>
+    <head>
+        <!-- Title shown in tab -->
+        <title>Debrief</title>
+
+        <!--Load JsPsych -->
+        <script src="https://unpkg.com/jspsych@8.2.2"></script>
+        <link
+            href="https://unpkg.com/jspsych@8.2.2/css/jspsych.css"
+            rel="stylesheet"
+            type="text/css"
+        />
+
+        <!--Load plugins-->
+        <script src="https://unpkg.com/@jspsych/plugin-fullscreen@2.1.0"></script>
+        <script src="https://unpkg.com/@jspsych/plugin-survey@3.0.0"></script>
+
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/@jspsych/plugin-survey@3.0.0/css/survey.css"
+        />
+
+        <!-- Custom scripts -->
+        <script src="demographics.js"></script>
+    </head>
+
+    <body></body>
+
+    <script>
+        var participant_ID = {
+                    type: jsPsychSurvey,
+                    survey_json: {
+                        title: "Participant ID",
+                        completeText: "Continue",
+                    //    pageNextText: "Next",
+                    //    pagePrevText: "Previous",
+                        goNextPageAutomatic: false,
+                        showQuestionNumbers: false,
+                        pages: [
+                            {
+                                elements: [
+                                    {
+                                        title: "Enter the participant's ID:",
+                                        type: "text",
+                                        placeholder: "000",
+                                        name: "Participant_ID",
+                                        isRequired: true,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    data: {
+                        screen: "ppt_id_db",
+                    },
+                }
+
+      var jsPsych = initJsPsych({
+             show_progress_bar: true,
+             message_progress_bar: "Progress",
+            on_finish: function () {
+                // Get participant ID
+                let participantID = jsPsych.data
+                    .get()
+                    .filter({ screen: "ppt_id_db" })
+                    .values()[0].response["Participant_ID"]
+
+                // Save as JSON file locally
+                jsPsych.data.get().localSave("json", `${participantID}_rs.json`)
+            },
+        })
+
+        // Initialize timeline
+        var timeline = []
+
+        // Enter fullscreen mode
+        timeline.push({
+            type: jsPsychFullscreen,
+            fullscreen_mode: true,
+            delay_after: 0,
+            data: {
+                screen: "fullscreen_start",
+            },
+        })
+        
+        // Feedback and debriefing
+        timeline.push(participant_ID)
+        timeline.push(experiment_feedback)
+        timeline.push(demographics_debriefing)
+
+        jsPsych.run(timeline)
+
+    </script> 
+</html>
