@@ -17,7 +17,7 @@ const demographics_consent = {
                     
                     <img src='https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png' width='150px' align='right'/><br><br><br><br><br>
 
-                     <h1>Informed Sheet</h1>
+                     <h1>Information Sheet</h1>
                     <p><b>Invitation to Take Part</b><br>
                     Thank you for considering to take part in this study that aims at deepening our understanding of human perception. 
                     This study is being conducted by Dr Dominique Makowski, and his team, from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>
