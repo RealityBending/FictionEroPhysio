@@ -612,10 +612,12 @@ var fiction_ratings2 = {
 var fiction_feedback1 = {
     type: jsPsychSurvey,
     survey_json: {
+        goNextPageAutomatic: false,
+        showQuestionNumbers: false,
+        completeText: "Continue",
         title: "Thank you!",
         description:
             "Before we start the second phase, we wanted to know your thoughts.",
-        showQuestionNumbers: false,
         elements: [
             {
                 type: "checkbox",
@@ -672,23 +674,42 @@ var fiction_feedback1 = {
                 minRateDescription: "Not at all",
                 maxRateDescription: "Completely certain",
             },
-            {
-                type: "html",
-                name: "fiction_feedback_end",
-                html: `
-              <div class="narrow-text" style="max-width: 800px; margin: 0 auto; text-align: left;">
-                <h4>We appreciate you staying with us so far.</h4>
-                <p>The next stage will involve a questionnaire. </p>
-                <p>Please let the experimenter know when you've answered these questions, and they will remove the EDA for you. </p>
-              <audio autoplay>
-                <source src = "utils/ding.mp3" type="audio/mpeg">
-                </audio>
-                </div>
-            `,
-            }
         ],
     },
     data: {
         screen: "fiction_feedback1",
     },
 }
+
+const fiction_feedback2 = {
+  type: jsPsychSurvey,
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "fictionfeedback2",
+            html: `
+              <audio autoplay>
+                <source src="utils/ding.mp3" type="audio/mpeg">
+              </audio>
+              <div style="text-align: center;"> 
+                <h3><b>Thank you for staying with us so far!</b></h3>
+              </div>
+              <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+                <div style="flex: 2; text-align: center;">
+                  <p>The next part includes some questionnaires.</p>
+                  <p>The experimenter will now remove the EDA for you.</p>
+                </div>
+              </div>
+            `
+          }
+        ]
+      }
+    ]
+  },
+  data: { screen: "fiction_feedback2" }
+};

@@ -345,8 +345,8 @@ const experiment_feedback = {
         title: "Feedback",
         description:
             "It is the end of the experiment! Don't hesitate to leave us a feedback." +
-            "After clicking 'Complete', your data will be saved on our secure servers, after what we will provide you with more information about the study.",
-        completeText: "Complete the experiment",
+            "After clicking 'Next', we will provide you with more information about the study.",
+        completeText: "Next",
         showQuestionNumbers: false,
         pages: [
             {
@@ -378,6 +378,9 @@ const experiment_feedback = {
 const demographics_debriefing = {
     type: jsPsychSurvey,
     data: { screen: "debriefing" },
+    on_finish: function () {
+         document.exitFullscreen() },
+         data: { screen: "end_db" },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "Continue",
