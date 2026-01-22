@@ -176,7 +176,16 @@ var HCT_items = {
                         placeholder: "Enter number",
                         name: "HCT_count",
                         input_type: "number",
-                    },
+                        isRequired: true,
+
+                validators: [
+                            {
+                                type:"expression",
+                                expression: "{HCT_count} < 100",
+                                text: "Please enter a valid number."
+                            }
+                        ]
+                    }, 
                 ],
             },
             {

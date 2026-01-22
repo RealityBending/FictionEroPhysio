@@ -17,7 +17,7 @@ const demographics_consent = {
                     
                     <img src='https://blogs.brighton.ac.uk/sussexwrites/files/2019/06/University-of-Sussex-logo-transparent.png' width='150px' align='right'/><br><br><br><br><br>
 
-                     <h1>Informed Sheet</h1>
+                     <h1>Information Sheet</h1>
                     <p><b>Invitation to Take Part</b><br>
                     Thank you for considering to take part in this study that aims at deepening our understanding of human perception. 
                     This study is being conducted by Dr Dominique Makowski, and his team, from the <b>University of Sussex</b>, who are happy to be contacted if you have any questions (see contact information below).</p>
@@ -345,8 +345,8 @@ const experiment_feedback = {
         title: "Feedback",
         description:
             "It is the end of the experiment! Don't hesitate to leave us a feedback." +
-            "After clicking 'Complete', your data will be saved on our secure servers, after what we will provide you with more information about the study.",
-        completeText: "Complete the experiment",
+            "After clicking 'Next', we will provide you with more information about the study.",
+        completeText: "Next",
         showQuestionNumbers: false,
         pages: [
             {
@@ -378,6 +378,9 @@ const experiment_feedback = {
 const demographics_debriefing = {
     type: jsPsychSurvey,
     data: { screen: "debriefing" },
+    on_finish: function () {
+         document.exitFullscreen() },
+         data: { screen: "end_db" },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "Continue",
