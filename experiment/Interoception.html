@@ -48,6 +48,9 @@
                 pagePrevText: "Previous",
                 goNextPageAutomatic: false,
                 showQuestionNumbers: false,
+                on_start: function () {
+                    jsPsych.progressBar.progress = 0.0
+                },
                 pages: [
                     {
                         elements: [
@@ -71,6 +74,7 @@
         var jsPsych = initJsPsych({
              show_progress_bar: true,
              message_progress_bar: "Progress",
+             auto_update_progress_bar: false,
             on_finish: function () {
                 // Get participant ID
                 // jsPsych.data.displayData("json")
@@ -114,6 +118,7 @@
             ],
         } // randomise order of questionnaires
 
+
         // TAP procedure ===========================
         // Voluntary External Tapping
         timeline.push(VoluntaryExternal_instructions)
@@ -144,7 +149,8 @@
 
         // Heart Tapping
         timeline.push(HeartTapping_Instructions)
-        timeline.push(create_TAP_sequence("TAP_heart", 120))
+        timeline.push(create_TAP_sequence("TAP_heart", 120)) 
+
 
         //HCT ===============================
 
@@ -175,6 +181,7 @@
 
         timeline.push(count_tasks)
 
+
         //timeline.push(demographics_debriefing)
 
         timeline.push({
@@ -185,6 +192,8 @@
                 document.exitFullscreen()
             },
         })
+
+
 
         // Run the timeline -------------------------------------------------------
         jsPsych.run(timeline)

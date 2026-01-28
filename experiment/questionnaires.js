@@ -151,6 +151,10 @@ function make_bait(items, required = true, ticks = ["Disagree", "Agree"]) {
 
 const questionnaire_bait = {
     type: jsPsychSurvey,
+    //on_finish: function () {
+           // curr_progress = jsPsych.progressBar.progress;
+          //  jsPsych.progressBar.progress = curr_progress + 0.075;
+    //},
     survey_json: function () {
         return {
             title: "Artificial Intelligence",
@@ -253,6 +257,10 @@ function make_mint(items, required = true, ticks = ["Disagree", "Agree"]) {
 // Questionnaire ================================================
 const questionnaire_mint = {
     type: jsPsychSurvey,
+    on_finish: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: function () {
         return {
             title: "About you and your body",
@@ -364,6 +372,10 @@ function make_maia(items, required = true, ticks = ["Never", "Always"]) {
 // Questionnaire ================================================
 const questionnaire_maia = {
     type: jsPsychSurvey,
+    on_finish: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: function () {
         return {
             title: "About you and your body",
@@ -438,6 +450,10 @@ function make_ias(
 // Questionnaire ================================================
 const questionnaire_ias = {
     type: jsPsychSurvey,
+    on_finish: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: function () {
         return {
             title: "Bodily sensations",
