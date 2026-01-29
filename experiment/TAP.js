@@ -56,6 +56,10 @@ function sendMarker(value = "1") {
 
 const VoluntaryExternal_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -96,6 +100,10 @@ const VoluntaryExternal_instructions = {
 
 const VoluntaryInternal_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -135,6 +143,10 @@ const VoluntaryInternal_instructions = {
 
 const Mixedtrials_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -177,6 +189,10 @@ const Mixedtrials_instructions = {
 
 const RhytmicTapping_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -212,6 +228,10 @@ const RhytmicTapping_instructions = {
 
 const RhytmicRandom_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -246,6 +266,10 @@ const RhytmicRandom_instructions = {
 
 const HeartTapping_Instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
@@ -261,7 +285,7 @@ const HeartTapping_Instructions = {
                     </div>
                     <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
                     <div style="flex: 2; text-align: left;">
-                        <p>For the final trial, please try to tap <b style="color: #E91E63;">every time you feel a heart beat</b>. Do continue making new presses until the trial is over.</p>
+                        <p>Finally, <b>without physically measuring it</b>, please try to tap <b style="color: #E91E63;">every time you <i>feel</i> a heart beat</b>. Do continue making new presses until the trial is over.</p>
                         <p>The task will begin with a short countdown: <b>3 - 2 - 1</b>.</p>
                         <p>Press the button below when you're ready to begin.</p>
                     </div>

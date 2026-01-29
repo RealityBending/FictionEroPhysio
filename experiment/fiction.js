@@ -184,6 +184,7 @@ const fiction_instructions1 = {
                 <li><b>Body Reaction</b>: How much did you feel your body physically respond to the image? Think about sensations like tension, warmth in your body, or changes in heart rate or breathing.</li>
                 <li><b>Valence</b>: How did you feel overall when viewing the image, ranging from negative to positive? Consider that feeling positive can also equate to feeling psychologically aroused.</li>
                 <li><b>Enticement</b>: How sexually appealing do you think this image is for people like you?</li>
+                <li><b>Attention Check</b>: What was the category of the image?</li>
                 </ul>
 
                 </div>
@@ -192,7 +193,7 @@ const fiction_instructions1 = {
                 <p>While these questions might seem similar, they capture different reactions. For example, an image can make you feel mentally aroused or emotionally stirred without causing a strong reaction in your body, and vice versa.</p>
                 <p><b>Please pay attention to how the images make you feel in your mind and body. Respond according to your <i>gut reactions</i>.</b></p>
                 <p>Below is an example of the rating screen you will see after each image:</p>
-                <div style='text-align: center;'><img src='media/scales_phase1.png' height='400' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
+                <div style='text-align: center;'><img src='media/scales_phase1.png' height='600' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
                 <p style='text-align: center;'>Press <b>Start</b> when you are ready.</p>
               </div>
             `,
@@ -457,6 +458,15 @@ const fiction_ratings1 = {
                         minRateDescription: "Not at all",
                         maxRateDescription: "Very much",
                         displayMode: "buttons",
+                    },
+                    {
+                        title: "What was the category of the image?",
+                        name: "AttentionCheck",
+                        type: "radiogroup",
+                        choices: ["AI-Generated", "Photograph", "I don't remember"],
+                        isRequired: true,
+                        colCount: 0,
+                        showOtherItem: false,
                     },
                 ],
             },

@@ -58,6 +58,10 @@ var HCT_durations = [20, 25, 30, 35, 40, 45]
 // Instructions
 const HCT_instructions = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionsNumbers: false,
         completeText: "I'm ready",
