@@ -207,7 +207,7 @@ function rs_questions(
             elements: questions,
             description:
                 "We are interested in the potential feelings and thoughts you may have experienced during the resting period." +
-                "Please indicate the extent to which you agree with each statement.",
+                " Please indicate the extent to which you agree with each statement.",
         },
     ]
 }

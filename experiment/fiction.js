@@ -193,7 +193,7 @@ const fiction_instructions1 = {
                 <p>While these questions might seem similar, they capture different reactions. For example, an image can make you feel mentally aroused or emotionally stirred without causing a strong reaction in your body, and vice versa.</p>
                 <p><b>Please pay attention to how the images make you feel in your mind and body. Respond according to your <i>gut reactions</i>.</b></p>
                 <p>Below is an example of the rating screen you will see after each image:</p>
-                <div style='text-align: center;'><img src='media/scales_phase1.png' height='600' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
+                <div style='text-align: center;'><img src='media/newscales_phase1.png' height='600' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
                 <p style='text-align: center;'>Press <b>Start</b> when you are ready.</p>
               </div>
             `,
@@ -207,6 +207,10 @@ const fiction_instructions1 = {
 
 const fiction_instructions2 = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.33;
+    },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "Start",
@@ -225,7 +229,7 @@ const fiction_instructions2 = {
                 <p>Sometimes, it is hard to tell, but don't overthink it and <b>go with your gut feeling</b>. At the end, we will tell you if you were correct or wrong!</p>
                 </div>
                 <p style='text-align: left';>Press start once you are ready.</p>
-                <div style='text-align: center;'><img src='media/scales_phase2.png' height='170' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
+                <div style='text-align: center;'><img src='media/scales_phase2.png' height='270' style='border:5px solid #D3D3D3; padding:3px; margin:5px'></img></div>
                 </div>
                 <audio autoplay>
                 <source src = "utils/ding.mp3" type="audio/mpeg">
@@ -618,9 +622,45 @@ var fiction_ratings2 = {
 }
 
 // Feedback ====================================================================
+const fiction_feedback1a = {
+  type: jsPsychSurvey,
+  survey_json: {
+    showQuestionNumbers: false,
+    completeText: "Continue",
+    pages: [
+      {
+        elements: [
+          {
+            type: "html",
+            name: "fictionfeedback1a",
+            html: `
+            <audio autoplay>
+            <source src="utils/ding.mp3" type="audio/mpeg">
+            </audio>
+            <div style="text-align: center;"> 
+            <h3><b>Thank you for staying with us so far!</b></h3>
+            </div>
+            <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
+            <div style="flex: 2; text-align: center;">
+                <p>The next part includes some questionnaires.</p>
+                <p>The experimenter will now remove the EDA for you.</p>
+            </div>
+            </div>
+            `
+          }
+        ]
+      }
+    ]
+  },
+  data: { screen: "fiction_feedback1a" }
+};
 
-var fiction_feedback1 = {
+var fiction_feedback1b = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.33;
+    },
     survey_json: {
         goNextPageAutomatic: false,
         showQuestionNumbers: false,
@@ -687,39 +727,6 @@ var fiction_feedback1 = {
         ],
     },
     data: {
-        screen: "fiction_feedback1",
+        screen: "fiction_feedback1b",
     },
 }
-
-const fiction_feedback2 = {
-  type: jsPsychSurvey,
-  survey_json: {
-    showQuestionNumbers: false,
-    completeText: "Continue",
-    pages: [
-      {
-        elements: [
-          {
-            type: "html",
-            name: "fictionfeedback2",
-            html: `
-              <audio autoplay>
-                <source src="utils/ding.mp3" type="audio/mpeg">
-              </audio>
-              <div style="text-align: center;"> 
-                <h3><b>Thank you for staying with us so far!</b></h3>
-              </div>
-              <div style="display: flex; gap: 20px; align-items: flex-start; max-width: 1000px; margin: 0 auto;">
-                <div style="flex: 2; text-align: center;">
-                  <p>The next part includes some questionnaires.</p>
-                  <p>The experimenter will now remove the EDA for you.</p>
-                </div>
-              </div>
-            `
-          }
-        ]
-      }
-    ]
-  },
-  data: { screen: "fiction_feedback2" }
-};

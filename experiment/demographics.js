@@ -146,6 +146,14 @@ const demographics_questions1 = {
                         min: 0,
                         max: 100,
                         placeholder: "e.g., 21",
+                        validators: [
+                            {
+                                type: "numeric",
+                                minValue: 18,
+                                maxValue: 100,
+                                text: "You must be at least 18 years old to participate.",
+                            },
+                        ],
                     },
                 ],
             },
