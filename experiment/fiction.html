@@ -166,6 +166,7 @@
         var jsPsych = initJsPsych({
              show_progress_bar: true,
              message_progress_bar: "Progress",
+             auto_update_progress_bar: false,
             extensions: [{ type: jsPsychExtensionWebgazer }],
             on_finish: function () {
                 // Get participant ID
@@ -183,11 +184,10 @@
 
         // Initialize timeline
         var timeline = []
-
         // Demographics 
         timeline.push(participant_ID)
         
-          timeline.push({
+        timeline.push({
             type: jsPsychFullscreen,
             fullscreen_mode: true,
             delay_after: 0,
@@ -244,10 +244,10 @@
                     ],
                 })
 
-                timeline.push(fiction_feedback1)
-                timeline.push(fiction_feedback2)
+                timeline.push(fiction_feedback1a)
+                timeline.push(fiction_feedback1b)
 
-                /*---------------------- Questionnaire----------- */
+                /*---------------------- Questionnaire-----------*/
                 timeline.push(questionnaire_bait)
 
                 // Stage 2 ==============================================================
@@ -268,6 +268,10 @@
                 timeline.push({
                     type: jsPsychHtmlButtonResponse,
                     stimulus: "You've reached the end of this part!",
+                    on_start: function () {
+                        curr_progress = jsPsych.progressBar.progress;
+                        jsPsych.progressBar.progress = curr_progress + 0.33;
+                    },
                     choices: ["Exit Fullscreen"],
                     on_finish: function () {
                         document.exitFullscreen()
