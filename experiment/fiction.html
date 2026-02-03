@@ -270,12 +270,12 @@
                     stimulus: "You've reached the end of this part!",
                     on_start: function () {
                         curr_progress = jsPsych.progressBar.progress;
-                        jsPsych.progressBar.progress = curr_progress + 0.33;
+                        jsPsych.progressBar.progress = curr_progress + 0.4;
                     },
                     choices: ["Exit Fullscreen"],
                     on_finish: function () {
                         document.exitFullscreen()
-                    },
+                    },                    
                 })
             },
         })

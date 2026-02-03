@@ -142,6 +142,10 @@ var text_cue = { Reality: "Photograph", Fiction: "AI-generated" }
 //instructions for phase 1
 const fiction_instructions1 = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.1;
+    },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "Start",
@@ -209,7 +213,7 @@ const fiction_instructions2 = {
     type: jsPsychSurvey,
     on_start: function () {
             curr_progress = jsPsych.progressBar.progress;
-            jsPsych.progressBar.progress = curr_progress + 0.33;
+            jsPsych.progressBar.progress = curr_progress + 0.166;
     },
     survey_json: {
         showQuestionNumbers: false,
@@ -483,6 +487,10 @@ const fiction_ratings1 = {
 
 const fiction_phase1_break = {
     type: jsPsychSurvey,
+    on_start: function () {
+            curr_progress = jsPsych.progressBar.progress;
+            jsPsych.progressBar.progress = curr_progress + 0.166;
+    },
     survey_json: {
         showQuestionNumbers: false,
         completeText: "Ready to continue!",
@@ -624,6 +632,10 @@ var fiction_ratings2 = {
 // Feedback ====================================================================
 const fiction_feedback1a = {
   type: jsPsychSurvey,
+  on_start: function () {
+    curr_progress = jsPsych.progressBar.progress;
+    jsPsych.progressBar.progress = curr_progress + 0.166;
+  },
   survey_json: {
     showQuestionNumbers: false,
     completeText: "Continue",
@@ -657,10 +669,6 @@ const fiction_feedback1a = {
 
 var fiction_feedback1b = {
     type: jsPsychSurvey,
-    on_start: function () {
-            curr_progress = jsPsych.progressBar.progress;
-            jsPsych.progressBar.progress = curr_progress + 0.33;
-    },
     survey_json: {
         goNextPageAutomatic: false,
         showQuestionNumbers: false,
