@@ -131,28 +131,28 @@ var HCT_countdown = {
     css_classes: ["fixation"],
 }
 
-function HCT_interval() {
+function HCT_interval(duration_ms) {
+    let trialStartTime = null;
+
     return {
         type: jsPsychHtmlKeyboardResponse,
         on_load: function () {
+            trialStartTime = performance.now();
             create_marker(marker1);
             sendMarker("1");
         },
         stimulus: "<p style='font-size:150px;'>+</p>",
         choices: ["s"],
-        trial_duration: jsPsych.timelineVariable("duration"),
+        trial_duration: duration_ms,
         css_classes: ["fixation"],
         data: {
             screen: "HCT_interval",
-            time_start: function () {
-                return performance.now();
-            },
+            interval: duration_ms / 1000,
         },
         on_finish: function (data) {
             document.querySelector("#marker1").remove();
-            sendMarker("0"); 
-            data.duration = (performance.now() - data.time_start) / 1000 / 60;
-            data.interval = jsPsych.timelineVariable("duration") / 1000;
+            sendMarker("0");
+            data.duration = (performance.now() - trialStartTime) / 1000;
         },
     };
 }

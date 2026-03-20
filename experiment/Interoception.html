@@ -158,16 +158,12 @@
             timeline: [
                 HCT_instructions,
                 {
-                    timeline: [
+                    timeline: jsPsych.randomization.shuffle(HCT_durations).flatMap((i) => [
                         HCT_countdown,
-                        HCT_interval(),
+                        HCT_interval(i * 1000),
                         HCT_beep,
                         HCT_items,
-                    ],
-                    timeline_variables: HCT_durations.map((i) => ({
-                        duration: i * 1000,
-                    })),
-                    randomize_order: true,
+                    ]),
                 },
             ],
         }
