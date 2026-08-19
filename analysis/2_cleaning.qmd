@@ -35,8 +35,82 @@ df <- read_tsv("C:/Users/asf25/Box/FictionEroPhysio/Rebel - FictionEroPhysio/par
 ```
 The initial sample consisted of `r report::report_participants(df, age="Age", gender="Gender")`.
 
+## Incentive 
 
-## Dimensions
+```{r}
+# Table
+summarize(df, N = n(), .by=c("Incentive")) |> 
+  arrange(desc(N)) |> 
+  gt::gt() |> 
+  gt::grand_summary_rows(columns = "N", fns = Total ~ sum(.)) |> 
+  gt::opt_stylize(style = 2, color = "gray") |> 
+  gt::tab_header("Number of participants per icentive") 
+```
+
+## Feedback 
+
+```{r}
+df |> 
+  summarise(n = n(), .by=c("Experiment_Enjoyment")) |>
+  filter(!is.na(Experiment_Enjoyment)) |> 
+  mutate(n = n / sum(n),
+         Experiment_Enjoyment = fct_rev(as.factor(Experiment_Enjoyment))) |>
+  ggplot(aes(y = n, x = 1, fill = Experiment_Enjoyment)) +
+  geom_bar(stat="identity", position="stack") +
+  scale_fill_manual(values=c("green", "yellowgreen",  "yellow", "orange", "red")) +
+  coord_flip() +
+  scale_x_continuous(expand=c(0, 0))  +
+  scale_y_continuous(labels = scales::percent)  +
+  labs(title="Experiment Enjoyment",
+       subtitle="Proportion of participants by condition") + 
+  guides(fill = guide_legend(reverse=TRUE)) +
+  theme_minimal() +
+  theme(
+    axis.title = element_blank(),
+    axis.text.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor.y = element_blank(),
+    legend.position = "top",
+    legend.title = element_blank()) 
+```
+
+
+## Dimension Computation
+
+::: {.panel-tabset}
+
+### MINT
+
+```{r}
+compute_and_remove <- function(df, name="BodyAwareness", pattern=name, method="mean") {
+  items <- select(df, starts_with(pattern), -contains("AttentionCheck"))
+  df <- df[!names(df) %in% names(items)]
+  if(method == "mean") {
+    df[[name]] <- rowMeans(items, na.rm=TRUE)
+  } else {
+    df[[name]] <- rowSums(items, na.rm=TRUE)
+  }
+  df
+}
+```
+
+
+```{r}
+df <- compute_and_remove(df, name="MINT_Card", method="mean")
+df <- compute_and_remove(df, name="MINT_Urin", method="mean")
+df <- compute_and_remove(df, name="MINT_SexS", method="mean")
+df <- compute_and_remove(df, name="MINT_Gast", method="mean")
+df <- compute_and_remove(df, name="MINT_Olfa", method="mean")
+df <- compute_and_remove(df, name="MINT_Derm", method="mean")
+df <- compute_and_remove(df, name="MINT_ExAc", method="mean")
+df <- compute_and_remove(df, name="MINT_ReIA", method="mean")
+df <- compute_and_remove(df, name="MINT_Resp", method="mean")
+df <- compute_and_remove(df, name="MINT_Sati", method="mean")
+df <- compute_and_remove(df, name="MINT_CaCo", method="mean")
+
+```
+
+### MAIA
 
 ```{r}
 df$MAIA_AttentionRegulation = rowSums(select(df, starts_with("MAIA_AttentionRegulation_"))) / 7 
@@ -82,21 +156,6 @@ df$MAIA_NotWorrying_5_R
 df$MAIA_NotWorrying = rowSums(select(df, starts_with("MAIA_NotWorrying_"))) / 5
 
 ```
-
-```{r}
-df$IAS_Total = rowSums(select(df, starts_with("IAS"), -"IAS_AttentionCheck_1")) / 21
-```
-
-
-## Exclusions
-
-```{r}
-outliers <- list()
-```
-
-::: {.panel-tabset}
-
-### MAIA
 
 
 ```{r}
@@ -156,13 +215,86 @@ select(df, starts_with("MAIA"), -matches("\\d$"), -contains("_R"))  |>
   make_correlation()
 ```
 
-
-### IAS
+### IAS 
 
 ```{r}
-#| code-fold: false
+df$IAS_Total = rowSums(select(df, starts_with("IAS"), -"IAS_AttentionCheck_1")) / 21
+```
 
+```{r}
+select(df, "IAS_Total") |> 
+  make_hist(scales="free") 
+```
+
+### BAIT
+```{r}
+df$BAIT_Issues <- rowMeans(select(df, BAIT_8_TextIssues, BAIT_2_ImagesIssues, BAIT_3_VideosIssues), na.rm=TRUE)
+
+df$BAIT_Realistic <- rowMeans(select(df, BAIT_5_ImitatingReality, BAIT_4_VideosRealistic, BAIT_1_ImagesRealistic, BAIT_6_EnvironmentReal, BAIT_7_TextRealistic), na.rm=TRUE)
+
+df$BAIT_Negative <- rowMeans(select(df, BAIT_9_Dangerous, BAIT_10_Worry))
+
+df$BAIT_Positive <- rowMeans(select(df, BAIT_12_Benefit, BAIT_11_Exciting), na.rm=TRUE)
+
+# df$BAIT_Total <- rowMeans(select(mutate(
+#   df, BAIT_Negative = abs(BAIT_Negative - 6),
+#       BAIT_Issues = abs(BAIT_Issues - 6)), 
+#   BAIT_Negative, BAIT_Positive, BAIT_Realistic, BAIT_Issues), na.rm=TRUE)
+
+```
+
+```{r}
+select(df, "BAIT_Negative", "BAIT_Positive", "BAIT_Issues", "BAIT_Realistic", "BAIT_Total") |> 
+  make_hist(scales="free") 
+```
+
+```{r}
+df |> 
+  select(starts_with("BAIT")) |>
+  mutate(BAIT_AI_Use = case_when(
+    BAIT_AI_Use == "Never" ~ 0,
+    BAIT_AI_Use == "A few times per month" ~ 1,
+    BAIT_AI_Use == "A few times per week" ~ 2,
+    BAIT_AI_Use == "Once a day" ~ 3,
+    BAIT_AI_Use == "A few times per day" ~ 4,
+    .default = NA
+  )) |> 
+  correlation::correlation(redundant = TRUE) |> 
+  correlation::cor_sort() |> 
+  correlation::cor_lower() |> 
+  summary() |> 
+  plot(text = list(size = 2.5)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+:::
+
+## Exclusions
+
+```{r}
+outliers <- list()
+```
+
+::: {.panel-tabset}
+
+### Questionnaires
+
+```{r}
 outliers$ias <- df$participant_id[df$IAS_Total < 0.4]
 
 df[df$participant_id %in% outliers$ias, str_detect(names(df), "IAS_")] <- NA
 ```
+
+```{r}
+dfchecks <- data.frame(
+  Participant = df$participant_id,
+  A_MINT = ifelse(df$MINT_AttentionCheck == 0, 0, 1),
+  A_IAS = ifelse(df$IAS_AttentionCheck_1 == 1, 0, 1),
+  A_BAIT = ifelse(df$BAIT_AttentionCheck == 6, 0, 1),
+  A_MAIA = ifelse(df$MAIA_AttentionCheck_1 == 6, 0, 1)
+)
+
+summary(correlation(dfchecks))
+```
+
