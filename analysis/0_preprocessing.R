@@ -19,6 +19,7 @@ alldata_int <- list()
 for (ppt in participants) {
   progbar$tick()
   
+  ppt="P001"
   
   # PARTCIPANT DATA ===========================================================
   rawdata_db  <- fromJSON(file.path(path, paste0(ppt, "_db.json")))
@@ -135,8 +136,8 @@ for (ppt in participants) {
   # Experiment Feedback
   exp_feedback <- rawdata_db$response[which(rawdata_db$screen == "experiment_feedback"), , drop = FALSE]
   
-  data_ppt$Experiment_Enjoyment <- exp_feedback$Feedback_Enjoyment
-  data_ppt$Experiment_Feedback  <- exp_feedback$Feedback_Text
+  df_ppt$Experiment_Enjoyment <- exp_feedback$Feedback_Enjoyment
+  df_ppt$Experiment_Feedback  <- exp_feedback$Feedback_Text
   
   # TASKS ================================================
   
@@ -214,6 +215,11 @@ for (ppt in participants) {
   )
   
   # TAP
+  rawdata_int$response(rawdata_int$screen == "clock_external_trial")
+  
+  ext <- rawdata_int[which(rawdata_int$screen == "clock_external_trial"),
+                     c("trial_number", "trial_index", "space_pressed", "timeout",
+                       "rt", "response_time", "response_angle", "time_elapsed")]
   
 }
   
