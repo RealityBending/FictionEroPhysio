@@ -39,7 +39,7 @@ def load_rs(path, sub):
 
     
     rs = mne.io.read_raw_brainvision(file, preload=True)
-    rs = rs.set_channel_types({"ECG": "ecg","RSP": "resp"})
+    rs = rs.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
     rs = rs.set_montage("standard_1020")
     # rs.to_data_frame().plot(subplots=True)
     sfreq = rs.info["sfreq"]
@@ -48,7 +48,7 @@ def load_rs(path, sub):
     events = nk.events_find(
             rs["PHOTO"][0][0],  
             threshold_keep="below",
-            duration_min=int(rs.info["sfreq"] * 5),
+            duration_min=int(sfreq * 5),
         )
 
 
@@ -56,10 +56,10 @@ def load_rs(path, sub):
     # raise ValueError(f"{sub}: no PHOTO event detected in RS. Plot PHOTO to check.")
 
     # Crop 
-    rs = nk.mne_crop(
-            rs, smin=events["onset"][0], smax=events["onset"][0] + events["duration"][0]
-        )
-    
+    start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
+    smin = int(max(0, start_end[0] - 2000))
+    smax = int(min(rs.n_times - 1, start_end[1] + 2000))
+    rs = nk.mne_crop(rs, smin=smin, smax=smax)
     
     return rs
 
@@ -76,7 +76,7 @@ def load_hct(path, sub):
     
     
     hct = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    hct = hct.set_channel_types({"ECG": "ecg","RSP": "resp"})
+    hct = hct.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
     hct = hct.set_montage("standard_1020")
     # hct.to_data_frame().plot(subplots=True)
     sfreq = hct.info["sfreq"]
@@ -89,8 +89,11 @@ def load_hct(path, sub):
         duration_min= int(sfreq * 10)
         )
     # nk.signal_plot(hct["PHOTO"][0][0])
+    
     start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
-    hct = nk.mne_crop(hct, smin=start_end[0] - 2000, smax=start_end[1] + 2000)
+    smin = int(max(0, start_end[0] - 2000))
+    smax = int(min(hct.n_times - 1, start_end[1] + 2000))
+    hct = nk.mne_crop(hct, smin=smin, smax=smax)    
     
     return hct
 
@@ -120,7 +123,7 @@ def load_tap(path, sub):
     
     
     tap = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    tap = tap.set_channel_types({"ECG": "ecg","RSP": "resp"})
+    tap = tap.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
     tap = tap.set_montage("standard_1020")
     # tap.to_data_frame().plot(subplots=True)
     sfreq = tap.info["sfreq"]
@@ -133,7 +136,9 @@ def load_tap(path, sub):
     )
 
     start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
-    tap = nk.mne_crop(tap, smin=start_end[0] - 2000, smax=start_end[1] + 2000)
+    smin = int(max(0, start_end[0] - 2000))
+    smax = int(min(tap.n_times - 1, start_end[1] + 2000))
+    tap = nk.mne_crop(tap, smin=smin, smax=smax)
     
     return tap
 
@@ -141,7 +146,7 @@ def load_tap(path, sub):
 # Fiction ================================================
 
 
-def load_fiction(path, sub, pad_start=10, pad_end=20):
+def load_fiction(path, sub):
     """Load the fiction task and crop to the task period.
 
     Images are shown for 4 s in phase 1 and 1 s in phase 2, so a 0.5 s floor
@@ -156,7 +161,7 @@ def load_fiction(path, sub, pad_start=10, pad_end=20):
         
     
     fic = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp"})
+    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
     fic = fic.set_montage("standard_1020")
     # fic.to_data_frame().plot(subplots=True)
     sfreq = fic.info["sfreq"]
@@ -170,8 +175,9 @@ def load_fiction(path, sub, pad_start=10, pad_end=20):
     )
 
     start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
-    fic = nk.mne_crop(fic, smin=start_end[0] - 2000, smax=start_end[1] + 2000)
-       
+    smin = int(max(0, start_end[0] - 2000))
+    smax = int(min(fic.n_times - 1, start_end[1] + 2000))
+    fic = nk.mne_crop(fic, smin=smin, smax=smax)
     return fic
    
     
