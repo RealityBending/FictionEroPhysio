@@ -22,7 +22,7 @@ exec(
     ).text
 )
 
-
+# Summary plots for ECG, RSP, and EDA 
 def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
     """Quality control (QC) of physiological signals."""
 
@@ -86,7 +86,7 @@ meta = pd.read_csv(path + "participants.tsv", sep="\t")
 
 # Initialize data
 df = pd.DataFrame()
-df = pd.read_csv("../data/rawdata_participants.csv")
+#df = pd.read_csv("../data/rawdata_participants.csv")
 
 # Trial-level data (fiction task only)
 df_trials = pd.DataFrame()
@@ -102,7 +102,7 @@ for i, sub in enumerate(meta["participant_id"].values):
 
     # Print progress and comments
     print(sub)
-    print("  * " + str(meta[meta["participant_id"] == sub]["Comments"].values[0]))
+    print("  * " + str(meta[meta["participant_id"] == sub]["Comments_General_y"].values[0]))
 
     if "participant_id" in df.columns and sub in df["participant_id"].values:
         print("  - Already processed")
