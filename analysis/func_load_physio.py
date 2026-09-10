@@ -5,6 +5,8 @@ import mne
 import neurokit2 as nk
 import numpy as np
 
+#sub = "sub-001"
+
 path = "C:/Users/asf25/Box/FictionEroPhysio/Rebel - FictionEroPhysio/"
 
 
@@ -142,6 +144,8 @@ def load_tap(path, sub):
     
     return tap
 
+# create events based on whether it goes down/upwards 
+# two seperate events based on the task 
 
 # Fiction ================================================
 
@@ -161,7 +165,7 @@ def load_fiction(path, sub):
         
     
     fic = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
+    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "EDA"})
     fic = fic.set_montage("standard_1020")
     # fic.to_data_frame().plot(subplots=True)
     sfreq = fic.info["sfreq"]
