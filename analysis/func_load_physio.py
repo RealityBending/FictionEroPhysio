@@ -5,7 +5,7 @@ import mne
 import neurokit2 as nk
 import numpy as np
 
-#sub = "sub-001"
+sub = "sub-036"
 
 path = "C:/Users/asf25/Box/FictionEroPhysio/Rebel - FictionEroPhysio/"
 
@@ -39,9 +39,18 @@ def load_rs(path, sub):
     file = [file for file in os.listdir(path_eeg) if "RS" in file]
     file = path_eeg + [f for f in file if ".vhdr" in f][0]
 
+    #P036 no EDA channel on RS
+    
     
     rs = mne.io.read_raw_brainvision(file, preload=True)
-    rs = rs.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
+    # Set channel types, handling missing channels gracefully
+    ch_types = {"ECG": "ecg", "RSP": "resp", "EDA": "gsr"}
+    
+    if sub == "sub-036":
+        ch_types.pop("EDA")  # No EDA channel in RS for this participant
+
+    rs = rs.set_channel_types(ch_types)
+
     rs = rs.set_montage("standard_1020")
     # rs.to_data_frame().plot(subplots=True)
     sfreq = rs.info["sfreq"]
@@ -165,7 +174,7 @@ def load_fiction(path, sub):
         
     
     fic = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "EDA"})
+    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
     fic = fic.set_montage("standard_1020")
     # fic.to_data_frame().plot(subplots=True)
     sfreq = fic.info["sfreq"]
