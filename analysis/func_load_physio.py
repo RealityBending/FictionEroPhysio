@@ -184,7 +184,7 @@ def load_fiction(path, sub):
     events = nk.events_find(
         fic["PHOTO"][0][0],
         threshold_keep="below",
-        duration_min=int(sfreq * 0.5),
+        duration_min=1,
     )
 
     start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
