@@ -32,7 +32,7 @@ def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
 
     # Remove legend and resize
     [ax.legend().set_visible(False) for ax in fig.axes]
-    fig.set_size_inches(fig.get_size_inches() * 0.7)
+    fig.set_size_inches(fig.get_size_inches() * 1.5)
 
     # Add text
     img = ill.image_text(
@@ -48,7 +48,7 @@ def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
 
         # Remove legend and resize
         [ax.legend().set_visible(False) for ax in fig.axes]
-        fig.set_size_inches(fig.get_size_inches() * 0.7)
+        fig.set_size_inches(fig.get_size_inches() * 1.5)
 
         # Add text
         img = ill.image_text(
@@ -65,7 +65,7 @@ def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
 
         # Remove legend and resize
         [ax.legend().set_visible(False) for ax in fig.axes]
-        fig.set_size_inches(fig.get_size_inches() * 0.7)
+        fig.set_size_inches(fig.get_size_inches() * 1.5)
 
         # Add text
         img = ill.image_text(
@@ -98,12 +98,16 @@ qc = {
 }
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"].values):
-
+for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
+    
+    if sub in ["sub-003"]: # sub-003: split recording, handle separately
+        continue 
+    
     # Print progress and comments
     print(sub)
-    print("  * " + str(meta[meta["participant_id"] == sub]["Comments_General_y"].values[0]))
+    print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
 
+    
     if "participant_id" in df.columns and sub in df["participant_id"].values:
         print("  - Already processed")
         continue
@@ -113,14 +117,14 @@ for i, sub in enumerate(meta["participant_id"].values):
     path_beh = path + sub + "/beh/"
 
     # Questionnaires -------------------------------------------------------------------------
-    file = [file for file in os.listdir(path_beh) if "Questionnaires" in file]
-    file = path_beh + [f for f in file if ".tsv" in f][0]
-    dfsub = pd.read_csv(file, sep="\t")
+    dfsub = meta[meta["participant_id"] == sub].reset_index(drop=True)
 
     # Resting State ==========================================================================
     if sub not in []:  # No RS file
         # Preprocessing --------------------------------------------------------------------------
         print("  - RS - Preprocessing")
+        print("   Comment:" + str(meta[meta["participant_id"] == sub]["Comments_RS"].values[0]))
+
 
         rs = load_rs(path, sub)  # Function loaded from script at URL
         srate = rs.info["sfreq"]
@@ -155,8 +159,10 @@ for i, sub in enumerate(meta["participant_id"].values):
 
     # Heartbeat Counting Task (HCT) ===========================================================
     if sub not in []:  # No photosensor
+        
         # Preprocessing --------------------------------------------------------------------------
         print("  - HCT - Preprocessing")
+        print("   Comment:" + str(meta[meta["participant_id"] == sub]["Comments_HCT"].values[0]))
 
         hct = load_hct(path, sub)
         srate = hct.info["sfreq"]
@@ -166,6 +172,7 @@ for i, sub in enumerate(meta["participant_id"].values):
         file = path_beh + [f for f in file if ".tsv" in f][0]
         hct_beh = pd.read_csv(file, sep="\t")
 
+
         # Find events (again as data was cropped) and epoch
         events = nk.events_find(
             hct["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 10)
@@ -174,9 +181,10 @@ for i, sub in enumerate(meta["participant_id"].values):
         # Make sure there are 6 events
         assert len(events["onset"]) == 6
 
-        # Make sure they are of expected duration
-        durations = events["duration"] / srate
-        assert np.max(np.abs(durations - hct_beh["interval"].values)) < 0.50
+        # Only run the duration check if interval data is available (first 19 ppts don't have that info on the interval/duration columns)
+        if not hct_beh["Duration_Interval"].isna().all():
+            durations = events["duration"] / srate
+            assert np.max(np.abs(durations - hct_beh["Duration_Interval"].values)) < 0.50
 
         # Process signals
         hct, info = nk.bio_process(
@@ -193,6 +201,7 @@ for i, sub in enumerate(meta["participant_id"].values):
 
         # Analysis --------------------------------------------------------------------------
         # Make epochs
+        # i.e., cutting continuous HCT psignals into 6 seperate segments (6 dfs) 
         epochs = nk.epochs_create(
             hct,
             events,
@@ -201,14 +210,14 @@ for i, sub in enumerate(meta["participant_id"].values):
             epochs_end="from_events",
         )
 
-        # Count R peaks in each epoch
+        # Count R peaks in each epoch 
         hct_beh["N_R_peaks"] = [
             epoch["ECG_R_Peaks"].sum() for i, epoch in epochs.items()
         ]
 
         peaks = hct_beh["N_R_peaks"].values
 
-        # Compute accuracy
+        # Compute accuracy based on response and acutal r-peaks 
         hct_beh["HCT_Accuracy"] = 1 - ((np.abs(hct_beh["HCT_count"] - peaks)) / peaks)
 
         # Replace zeros with nans
@@ -242,9 +251,12 @@ for i, sub in enumerate(meta["participant_id"].values):
 
     # Fiction (FIC) ===========================================================================
     # Trial-level rather than participant-level: one row per image
-    if sub not in []:
+    if sub not in []:      
+        
         # Preprocessing --------------------------------------------------------------------------
         print("  - FIC - Preprocessing")
+        print("   Comment:" + str(meta[meta["participant_id"] == sub]["Comments_Fiction"].values[0]))
+
 
         fic = load_fiction(path, sub)
         srate = fic.info["sfreq"]
@@ -256,8 +268,20 @@ for i, sub in enumerate(meta["participant_id"].values):
 
         # Find events (again as data was cropped)
         events = nk.events_find(
-            fic["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 2)
+            fic["PHOTO"][0][0], threshold_keep="below", duration_min=1 
         )
+        
+        
+        # FICTION NOTES ==== 
+        # sub-002 as a 6 minute gap between trials 7 and 8 (eda was re-fitted)
+        # sub-003: split recording, handle separately
+        
+        # ==================
+        
+        # Per-participant fixes for event detection issues
+        if sub in ["sub-001", "sub-002", "sub-004", "sub-007"]:  # startup blip before first trial
+            for key in events:
+                events[key] = events[key][1:]
 
         # Make sure the number of events matches the number of trials
         assert len(events["onset"]) == len(fic_beh)
@@ -276,6 +300,15 @@ for i, sub in enumerate(meta["participant_id"].values):
             fic, info, sub,
             plot_ecg=qc["fic_ecg"], plot_rsp=qc["fic_rsp"], plot_eda=qc["fic_eda"]
         )
+        
+        # check plots
+        # if len(qc["fic_ecg"]) > 0:
+        #     ill.image_mosaic(qc["fic_ecg"], ncols=6, nrows="auto").show()
+        # if len(qc["fic_rsp"]) > 0:
+        #     ill.image_mosaic(qc["fic_rsp"], ncols=6, nrows="auto").show()
+        # if len(qc["fic_eda"]) > 0:
+        #     ill.image_mosaic(qc["fic_eda"], ncols=6, nrows="auto").show()
+        
 
         # Analysis --------------------------------------------------------------------------
         # Epoch: -2 s gives a pre-stimulus baseline, +8 s runs past the 4 s image
