@@ -355,7 +355,8 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
     gc.collect()
 
     # Save data ==============================================================================
-    if i in [29, 59, 89, 119, len(meta["participant_id"].values) - 1]:
+
+    if i in [9, 29, 59, 89, 119, len(meta["participant_id"].values) - 1]:
         print("**SAVING DATA**")
         pd.merge(meta, df, on="participant_id", suffixes=("", "_DUP")).filter(
             regex="^(?!.*_DUP)"
