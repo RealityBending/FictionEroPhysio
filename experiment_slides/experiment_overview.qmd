@@ -640,10 +640,12 @@ This lets us compare the **actual** bodily response, the **perceived** bodily re
 - **Congruence**: whether the Phase 2 belief matches the Phase 1 label
 - **Interoceptive accuracy**: objective performance (e.g., HCT score)
 - **Interoceptive sensibility**: self-reported ability (questionnaires)
+- **Interoceptive awareness**: how well confidence tracks accuracy
 :::
 
 ::: {.column width="50%"}
-- **Interoceptive awareness**: how well confidence tracks accuracy
+- **ECG**: electrocardiography, the heart's electrical activity (gives heartbeats and HRV)
+- **EEG**: electroencephalography, the brain's electrical activity recorded from the scalp
 - **HRV**: heart rate variability
 - **EDA**: electrodermal activity (sweating, a marker of arousal)
 - **Reality monitoring**: deciding whether an experience is real or imagined/fake
