@@ -109,7 +109,7 @@ We use the [believed-origin]{.photo} approach and have tested AI labels on:
 ::: {.card .fic}
 [Study 1 (N = 58)]{.card-title .fic}
 
-The more participants **judged** an image to be real, the more arousing they found it
+The more **realistic** participants rated an image, the more arousing they found it
 
 ![](img/Marini_Study1.png)
 :::
@@ -285,7 +285,12 @@ How well a person detects, interprets and integrates signals from **inside** the
 ::::
 
 ::: {.fragment .keybox}
-FictionEroPhysio separates these two directions **in time**: Phase 1 measures belief → affect, Phase 2 measures affect → belief.
+FictionEroPhysio separates these two directions **in time**:
+
+- [Belief → Affect]{.path .ba} Phase 1 alone: does the **label** change how people feel about the image?
+- [Affect → Belief]{.path .ab} Phase 1 **and** Phase 2 together: does how someone felt about an image in Phase 1 predict whether they later judge **that same image** to be real?
+
+Phase 2 itself only measures the **belief**; the affect → belief link comes from connecting the two phases.
 :::
 
 ## Why would the body matter for reality beliefs?
@@ -386,7 +391,7 @@ H3 and H4 point in opposite directions **by design**: both follow from the same 
 ::: {.column width="35%"}
 ::: {.card .rest}
 [1. Set-up]{.card-title .rest}
-Consent, demographics, sensors fitted
+Consent, general demographics; ECG, respiration belt and EEG headband fitted (EDA comes later)
 :::
 
 ::: {.card .rest}
@@ -421,6 +426,7 @@ All images were real photographs
 ::: {.card .fic}
 [Fiction]{.card-title .fic}
 
+- **Start**: gender and sexual orientation (to match the images), eye-tracking consent and calibration, EDA electrodes fitted
 - **Phase 1**: affective evaluations (belief → affect)
 - **BAIT** questionnaire: beliefs about AI
 - **Phase 2**: reality evaluations (affect → belief)
@@ -441,7 +447,7 @@ All images were real photographs
 
 ## Fiction task: Phase 1 (affective evaluation)
 
-**Cover story**: we are working with a young AI start-up in Brighton, and participants will see their AI-generated images mixed with real photographs
+**Cover story**: we are working with a young AI start-up in Brighton, and participants will see the start-up's AI-generated images mixed with real photographs
 
 ::: {.timeline}
 ::: {.step}
@@ -566,6 +572,8 @@ We cover several levels: [**objective**]{.int} (tasks, physiology) and [**subjec
 5. **Random**: tap as unpredictably as possible
 6. **Heartbeat**: tap along with your own heartbeat, without taking your pulse
 
+**Outcome measures: to be decided**
+
 [Why? Evidence suggests that actions are coupled with the cardiac cycle [ref]{.todo}]{.tiny}
 :::
 :::
@@ -577,7 +585,7 @@ We cover several levels: [**objective**]{.int} (tasks, physiology) and [**subjec
 - 6 intervals (20, 25, 30, 35, 40, 45 s) in random order
 - Silently count heartbeats, no pulse-taking
 - Report the count, then confidence (0–5)
-- **Accuracy**, **confidence** and **awareness** (how well confidence tracks accuracy)
+- **Accuracy**, **confidence** and **metacognitive awareness** (how well confidence tracks accuracy)
 :::
 
 ::: {.card .int}
@@ -601,8 +609,8 @@ HCT and questionnaires are done in random order after TAP
 ::: {.card .accent}
 [BITalino (1000 Hz)]{.card-title .accent}
 
-- **ECG**: heart activity, throughout
-- **Respiration**: chest belt, throughout
+- **ECG**: heart activity
+- **Respiration**: chest belt
 - **EDA**: skin conductance on the left hand, **Fiction Phase 1 only**
 - **Light sensor**: image onset and offset
 :::
@@ -612,13 +620,16 @@ HCT and questionnaires are done in random order after TAP
 ::: {.card .accent}
 [Muse S Athena headband]{.card-title .accent}
 
-- **EEG**: 4 dry electrodes (AF7, AF8, TP9, TP10), 256 Hz, throughout
+- **EEG**: 4 dry electrodes (AF7, AF8, TP9, TP10), 256 Hz
 :::
 
 ::: {.card}
-[Synchronisation]{.card-title}
+[What is recorded, and when]{.card-title}
 
-All streams are recorded with **Lab Streaming Layer** (LSL) into one file per task
+All streams are synchronised with **Lab Streaming Layer** (LSL), one file per task:
+
+- **Recorded**: resting state, TAP, HCT, Fiction Phase 1
+- **Not recorded**: questionnaires (IAS, MAIA-2, MInt, BAIT) and Fiction Phase 2
 :::
 :::
 
@@ -646,7 +657,7 @@ This lets us compare the **actual** bodily response, the **perceived** bodily re
 - **Congruence**: whether the Phase 2 belief matches the Phase 1 label
 - **Interoceptive accuracy**: objective performance (e.g., HCT score)
 - **Interoceptive sensibility**: self-reported ability (questionnaires)
-- **Interoceptive awareness**: how well confidence tracks accuracy
+- **Metacognitive awareness**: how well confidence tracks accuracy (not the same as "awareness" in MAIA-2 or MInt, which is self-reported)
 :::
 
 ::: {.column width="50%"}
