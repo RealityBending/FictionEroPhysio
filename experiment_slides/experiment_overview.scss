@@ -1,0 +1,150 @@
+/*-- scss:defaults --*/
+
+$font-family-sans-serif: "Source Sans Pro", "Helvetica Neue", Helvetica, Arial, sans-serif;
+$body-color: #2b2530;
+$link-color: #6a596a;
+$presentation-heading-color: #4a3d4a;
+$presentation-heading-font-weight: 700;
+
+// Project palette
+$col-ai: #e0533d;       // "AI-generated" label
+$col-photo: #1f3c88;    // "Photograph" label
+$col-fic: #1e7b5a;      // Fiction task (matches FEP.png)
+$col-int: #4f46a5;      // Interoception task (matches FEP.png)
+$col-rest: #7a6f5c;     // Resting state
+$col-accent: #6a596a;   // Sussex-ish purple from the title slide
+$col-soft: #f6f3f6;
+
+/*-- scss:rules --*/
+
+// ---- Coloured words -------------------------------------------------------
+.ai     { color: $col-ai;    font-weight: 700; }
+.photo  { color: $col-photo; font-weight: 700; }
+.fic    { color: $col-fic;   font-weight: 700; }
+.int    { color: $col-int;   font-weight: 700; }
+.rest   { color: $col-rest;  font-weight: 700; }
+.accent { color: $col-accent; font-weight: 700; }
+.muted  { color: #8a8290; }
+.small  { font-size: 0.75em; }
+.tiny   { font-size: 0.6em; }
+
+// Highlighter-pen effect for key phrases
+.hl {
+  background: linear-gradient(transparent 55%, rgba($col-ai, 0.25) 55%);
+  padding: 0 0.1em;
+}
+
+// ---- Headings ---------------------------------------------------------------
+.reveal h2 {
+  border-bottom: 4px solid $col-accent;
+  padding-bottom: 0.15em;
+  margin-bottom: 0.6em;
+}
+
+// Section divider slides (level-1 headings)
+.reveal section.level1 h1 { color: white; font-size: 2.2em; }
+
+// ---- Cards ------------------------------------------------------------------
+.card {
+  background: $col-soft;
+  border-radius: 12px;
+  padding: 0.6em 0.8em;
+  margin: 0.2em 0.2em 0.6em 0.2em;
+  border-top: 6px solid $col-accent;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  font-size: 0.85em;
+
+  > p:first-child { margin-top: 0; }
+  ul { margin-left: 0.8em; }
+}
+.card.ai    { border-top-color: $col-ai;    color: inherit; font-weight: normal; }
+.card.photo { border-top-color: $col-photo; color: inherit; font-weight: normal; }
+.card.fic   { border-top-color: $col-fic;   color: inherit; font-weight: normal; }
+.card.int   { border-top-color: $col-int;   color: inherit; font-weight: normal; }
+.card.rest  { border-top-color: $col-rest;  color: inherit; font-weight: normal; }
+.card.accent { border-top-color: $col-accent; color: inherit; font-weight: normal; }
+
+.card-title {
+  font-weight: 700;
+  font-size: 1.05em;
+  margin-bottom: 0.3em;
+  display: block;
+}
+
+// Grid of cards (e.g. hypotheses)
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em 0.9em;
+}
+.grid3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 0.5em 0.9em;
+}
+
+// Big number / stat
+.big {
+  font-size: 2.2em;
+  font-weight: 800;
+  line-height: 1;
+  display: block;
+}
+
+// ---- Trial timeline ------------------------------------------------------------
+.timeline {
+  display: flex;
+  align-items: stretch;
+  gap: 0.35em;
+  margin: 0.6em 0 0.9em 0;
+  font-size: 0.7em;
+}
+.timeline .step {
+  flex: 1;
+  text-align: center;
+  background: $col-soft;
+  border-radius: 10px;
+  padding: 0.5em 0.3em;
+  position: relative;
+  border-bottom: 5px solid $col-accent;
+}
+.timeline .step b { display: block; font-size: 1.05em; }
+.timeline .step .dur { color: #8a8290; font-size: 0.9em; }
+.timeline .step.cue  { border-bottom-color: $col-ai; }
+.timeline .step.img  { border-bottom-color: $col-fic; }
+.timeline .step.rate { border-bottom-color: $col-int; }
+
+// ---- Quote / key message box -------------------------------------------------
+.keybox {
+  border-left: 8px solid $col-ai;
+  background: rgba($col-ai, 0.07);
+  padding: 0.5em 0.9em;
+  border-radius: 0 10px 10px 0;
+  font-size: 0.9em;
+  margin-top: 0.6em;
+}
+
+// Path arrows (belief -> affect)
+.path {
+  display: inline-block;
+  padding: 0.15em 0.6em;
+  border-radius: 999px;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9em;
+}
+.path.ba { background: $col-photo; }
+.path.ab { background: $col-fic; }
+
+// Placeholder / to-do markers for missing references
+.todo {
+  background: #fff3b0;
+  color: #7a5c00;
+  font-size: 0.7em;
+  padding: 0 0.3em;
+  border-radius: 4px;
+}
+
+// Tables
+.reveal table { font-size: 0.7em; }
+.reveal table th { border-bottom: 3px solid $col-accent; }
