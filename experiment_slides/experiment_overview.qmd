@@ -508,6 +508,12 @@ All 50 images are **real photographs** from NAPS ERO (Wierzba et al., 2015). The
 :::: {.columns}
 
 ::: {.column width="45%"}
+::: {.card}
+[Straight after Phase 1: feedback]{.card-title .accent}
+
+Were AI images more or less arousing? Did the labels ever seem wrong or reversed? Were all images real or all AI?
+:::
+
 ::: {.card .accent}
 [BAIT questionnaire]{.card-title .accent}
 
@@ -527,7 +533,7 @@ All 50 images are **real photographs** from NAPS ERO (Wierzba et al., 2015). The
 
 - Each image is shown again (1 s), in a new random order
 - "I think this image is..." on a slider from [AI-generated]{.ai} to [Photograph]{.photo}
-- Then a short feedback survey, and the debrief
+- Then the debrief
 :::
 :::
 
