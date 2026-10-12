@@ -148,3 +148,23 @@ $col-soft: #f6f3f6;
 // Tables
 .reveal table { font-size: 0.7em; }
 .reveal table th { border-bottom: 3px solid $col-accent; }
+
+// ---- Flow diagram (label + body -> belief -> feeling) -------------------------
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-size: 0.8em;
+  margin: 0.4em 0 0.6em 0;
+}
+.flow .inputs {
+  flex: 1.3;
+  display: flex;
+  flex-direction: column;
+}
+.flow .node { flex: 1; }
+.flow .arrow {
+  font-size: 2em;
+  font-weight: 800;
+  color: $col-accent;
+}

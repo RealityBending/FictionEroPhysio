@@ -238,9 +238,9 @@ Do [interoceptive abilities]{.int} explain **who** shows the [anti-AI bias]{.ai}
 ::: {.card .ai}
 [Anti-AI bias]{.card-title .ai}
 
-Rating something less positively **simply because** it is labelled as AI-generated
+A lower response to content **believed** to be AI-generated
 
-We treat it as a window onto how people form [reality beliefs]{.accent}
+We treat it as the measurable footprint of a [reality belief]{.accent} (next slide)
 :::
 :::
 
@@ -253,6 +253,20 @@ How well a person detects, interprets and integrates signals from **inside** the
 :::
 
 ::::
+
+## Why is the anti-AI bias about reality?
+
+- For **art**, an AI label can mean "less effort" or "not made by a human"
+- For an **erotic image**, it means [no real person exists]{.hl}: the label is a claim about **reality**, not just authorship
+- So the bias is the **footprint** of a reality belief, not the belief itself:
+   - [Phase 1]{.fic}: what the belief **does** to feelings (the bias)
+   - [Phase 2]{.fic}: the belief **itself** ("is this image real?")
+
+::: {.fragment .card}
+[But isn't it just disliking AI?]{.card-title .accent}
+
+We measure AI attitudes with the **BAIT**. In FictionEro, AI attitudes did **not** reliably change the size of the label effect, while people's **beliefs** about each image did.
+:::
 
 ## Two directions between belief and feeling
 
@@ -303,6 +317,10 @@ Phase 2 itself only measures the **belief**; the affect → belief link comes fr
    - **Psychosis**: higher resting heart rate, lower HRV, lower interoceptive accuracy
    - **Dissociation**: lower interoceptive accuracy and less trust in bodily signals (Woelk & Garfinkel, 2024; McDonald et al., 2026)
 
+::: {.fragment .keybox}
+**The bridge to AI images is our extension.** Reality monitoring research is about *internal* experiences (imagined vs perceived, self-generated vs external). Our task is about an *external* image. What they share: the brain has to decide whether an experience reflects something real "out there", using the same kinds of evidence (vividness, emotional and bodily signals).
+:::
+
 ::: {.callout-note collapse="true"}
 ## What is dissociation?
 "A disruption of and/or discontinuity in the normal integration of consciousness, memory, identity, emotion, perception, body representation, motor control, and behavior" (APA, 2022, p. 329)
@@ -349,8 +367,48 @@ Under **predictive processing**, a reality belief combines two sources of eviden
 ::::
 
 ::: {.fragment .keybox}
-So interoception is not just another correlate: it may decide **which direction wins** in a given person.
+The label does **not** change feelings directly. It is combined with bodily evidence into a **belief**, and the belief shapes the **feeling**: [label + body → belief → feeling]{.accent}. So interoception is not just another correlate: it may decide **which direction wins** in a given person.
 :::
+
+## The logic in one picture
+
+Every image is a **real photograph**, so there are **no visual clues** to separate "AI" from "real". Only two sources of evidence are left:
+
+::: {.flow}
+::: {.inputs}
+::: {.card .ai}
+[The label]{.card-title .ai}
+Context: [AI-generated]{.ai} or [Photograph]{.photo}
+:::
+
+::: {.card .int}
+[The body]{.card-title .int}
+How strongly I react. **Its weight is set by interoception**
+:::
+:::
+
+::: {.arrow}
+→
+:::
+
+::: {.node .card .photo}
+[Belief]{.card-title .photo}
+"Is there a real person here?"
+:::
+
+::: {.arrow}
+→
+:::
+
+::: {.node .card .fic}
+[Feeling]{.card-title .fic}
+Body reaction, valence, enticement
+:::
+:::
+
+- [Phase 1]{.fic} tests **belief → feeling**: the label effect, i.e. the anti-AI bias ([H1]{.photo}, [H4]{.ai})
+- [Phase 1 + Phase 2]{.fic} test **feeling → belief**: the feeling is also evidence, and feeds back into the belief ([H2]{.fic}, [H3]{.int})
+- We separate the **actual** response (ECG, EDA), the **perceived** response (body reaction rating) and the **judgement** (Phase 2). Interoception may act on the **gap between actual and perceived**, not only on how much weight the body gets
 
 ## Hypotheses
 
@@ -363,7 +421,9 @@ Images cued [Photograph]{.photo} get higher body reaction, valence and enticemen
 
 ::: {.card .fic .fragment}
 [H2: affect → belief]{.card-title .fic}
-A stronger Phase 1 response predicts a more "Photograph" judgement in Phase 2, over and above the cue (plus a test for an **inverted U**)
+A stronger Phase 1 response predicts a more "Photograph" judgement in Phase 2, over and above the cue
+
+[Separately, the affective reality hypothesis predicts an **inverted U**: the most intense responses may shift back towards "AI"]{.small}
 :::
 
 ::: {.card .int .fragment}
@@ -645,8 +705,12 @@ This lets us compare the **actual** bodily response, the **perceived** bodily re
 |:--|:--|:--|
 | [**H1**]{.photo} label effect | Cue ([Photograph]{.photo} vs [AI]{.ai}) | Body reaction, valence, enticement |
 | [**H2**]{.fic} affect → belief | Phase 1 ratings (and physiology) | Phase 2 reality judgement |
-| [**H3**]{.int} interoception × H2 | HCT, TAP, IAS, MAIA-2, MInt | Strength of the H2 link |
-| [**H4**]{.ai} interoception × H1 | HCT, TAP, IAS, MAIA-2, MInt | Size of the label effect |
+| [**H3**]{.int} interoception × H2 | Precision: HCT accuracy, metacognitive awareness, heartbeat tapping<br>Trust: MAIA-2 Trusting | Strength of the H2 link |
+| [**H4**]{.ai} interoception × H1 | The same measures (low scores), plus MInt Interoceptive Deficit | Size of the label effect |
+
+::: {.small .muted}
+Which interoception measure matters most is **tentative**. The theory is about how **precise** and **trusted** bodily signals are, which fits performance and metacognitive measures better than general self-report. IAS, MAIA-2 and MInt (interoceptive *sensibility*) are tested too, but they may not track precision.
+:::
 
 ## Glossary
 
