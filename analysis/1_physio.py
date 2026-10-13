@@ -91,6 +91,9 @@ df = pd.DataFrame()
 # Trial-level data (fiction task only)
 df_trials = pd.DataFrame()
 
+# Heart rate time course around image onset (fiction task only)
+hr_timecourse = []
+
 qc = {
     "rs_ecg": [], "rs_rsp": [],
     "hct_ecg": [], "hct_rsp": [],
@@ -98,7 +101,9 @@ qc = {
 }
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
+subs = meta["participant_id"].values[0:30]  # change the slice to choose participants
+
+for i, sub in enumerate(subs):
     
     if sub in ["sub-003"]: # sub-003: split recording, handle separately
         continue 
@@ -265,26 +270,39 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
         file = [file for file in os.listdir(path_beh) if "FIC" in file]
         file = path_beh + [f for f in file if ".tsv" in f][0]
         fic_beh = pd.read_csv(file, sep="\t")
+        # Order rows as presented in phase 1, so they line up with the events
+        fic_beh = fic_beh.sort_values("Trial_Order_Phase1").reset_index(drop=True)
 
-        # Find events (again as data was cropped)
+        # Find events (again as data was cropped); only phase 1 is recorded
         events = nk.events_find(
-            fic["PHOTO"][0][0], threshold_keep="below", duration_min=1 
+            fic["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 0.5)
         )
-        
-        
-        # FICTION NOTES ==== 
+
+
+        # FICTION NOTES ====
         # sub-002 as a 6 minute gap between trials 7 and 8 (eda was re-fitted)
         # sub-003: split recording, handle separately
-        
+
         # ==================
-        
-        # Per-participant fixes for event detection issues
-        if sub in ["sub-001", "sub-002", "sub-004", "sub-007"]:  # startup blip before first trial
+
+        # Startup blip before the first trial (seen in sub-001, 002, 004, 007):
+        # drop it if there is one extra event and it is shorter than an image
+        if len(events["onset"]) == len(fic_beh) + 1 and events["duration"][0] < srate * 3:
             for key in events:
                 events[key] = events[key][1:]
 
+        # Missing photosensor marker: sub-005 has no marker for trial 23 (the gap
+        # between events 22 and 23 equals the predicted duration of two trials)
+        if sub == "sub-005":
+            fic_beh = fic_beh[fic_beh["Trial_Order_Phase1"] != 23].reset_index(drop=True)
+
         # Make sure the number of events matches the number of trials
         assert len(events["onset"]) == len(fic_beh)
+
+        # Cross-validate photosensor with behavioural data: each image lasts 4 s
+        # (0.3 s tolerance: sub-001 has one image at 4.20 s)
+        durations = events["duration"] / srate
+        assert np.max(np.abs(durations - fic_beh["Trial_Duration_Phase1"].values)) < 0.3
 
         # Process signals
         fic, info = nk.bio_process(
@@ -311,9 +329,18 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
         
 
         # Analysis --------------------------------------------------------------------------
-        # Epoch: -2 s gives a pre-stimulus baseline, +8 s runs past the 4 s image
-        # so the skin conductance response has time to peak
-        epochs = nk.epochs_create(
+        # Both epochs start at -2 s for a pre-stimulus baseline
+        # ECG: -2 to 5 s, covers the 4 s image plus 1 s after offset
+        epochs_ecg = nk.epochs_create(
+            fic,
+            events,
+            sampling_rate=srate,
+            epochs_start=-2,
+            epochs_end=5,
+        )
+        # EDA (and RSP): -2 to 8 s, slower signals, so the skin conductance
+        # response has time to peak after the 4 s image
+        epochs_eda = nk.epochs_create(
             fic,
             events,
             sampling_rate=srate,
@@ -322,22 +349,41 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
         )
 
         # Extract one row of features per trial, baseline-corrected
+        # (epochs are in event order, which matches the sorted fic_beh rows)
         features = []
-        for j, epoch in epochs.items():
-            base = epoch[epoch.index < 0]
-            resp = epoch[(epoch.index >= 0) & (epoch.index <= 6)]
+        for k, (epoch_ecg, epoch_eda) in enumerate(
+            zip(epochs_ecg.values(), epochs_eda.values())
+        ):
+            base_ecg = epoch_ecg[epoch_ecg.index < 0]
+            resp_ecg = epoch_ecg[epoch_ecg.index >= 0]
+            base_eda = epoch_eda[epoch_eda.index < 0]
+            resp_eda = epoch_eda[epoch_eda.index >= 0]
             features.append(
                 {
-                    "ECG_Rate_Baseline": base["ECG_Rate"].mean(),
-                    "ECG_Rate_Mean": resp["ECG_Rate"].mean(),
-                    "ECG_Rate_Min": resp["ECG_Rate"].min(),
-                    "ECG_Rate_Change": resp["ECG_Rate"].mean() - base["ECG_Rate"].mean(),
-                    "RSP_Rate_Change": resp["RSP_Rate"].mean() - base["RSP_Rate"].mean(),
-                    "RSP_Amplitude_Mean": resp["RSP_Amplitude"].mean(),
-                    "EDA_Tonic_Baseline": base["EDA_Tonic"].mean(),
-                    "EDA_Phasic_Max": resp["EDA_Phasic"].max() - base["EDA_Phasic"].mean(),
-                    "EDA_Phasic_Mean": resp["EDA_Phasic"].mean() - base["EDA_Phasic"].mean(),
+                    "ECG_Rate_Baseline": base_ecg["ECG_Rate"].mean(),
+                    "ECG_Rate_Mean": resp_ecg["ECG_Rate"].mean(),
+                    "ECG_Rate_Min": resp_ecg["ECG_Rate"].min(),
+                    "ECG_Rate_Change": resp_ecg["ECG_Rate"].mean() - base_ecg["ECG_Rate"].mean(),
+                    "RSP_Rate_Change": resp_eda["RSP_Rate"].mean() - base_eda["RSP_Rate"].mean(),
+                    "RSP_Amplitude_Mean": resp_eda["RSP_Amplitude"].mean(),
+                    "EDA_Tonic_Baseline": base_eda["EDA_Tonic"].mean(),
+                    "EDA_Phasic_Max": resp_eda["EDA_Phasic"].max() - base_eda["EDA_Phasic"].mean(),
+                    "EDA_Phasic_Mean": resp_eda["EDA_Phasic"].mean() - base_eda["EDA_Phasic"].mean(),
                 }
+            )
+
+            # Heart rate time course (change from baseline), in 0.1 s bins
+            hr = epoch_ecg["ECG_Rate"] - base_ecg["ECG_Rate"].mean()
+            hr = hr.groupby((hr.index * 10).round() / 10).mean()
+            hr_timecourse.append(
+                pd.DataFrame(
+                    {
+                        "participant_id": sub,
+                        "Condition": fic_beh["Condition"].values[k],
+                        "Time": hr.index,
+                        "ECG_Rate_Change": hr.values,
+                    }
+                )
             )
 
         features = pd.DataFrame(features)
@@ -350,19 +396,20 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
     dfsub["participant_id"] = sub
     df = pd.concat([df, dfsub], axis=0)
 
-    del rs, hct, fic, epochs
+    del rs, hct, fic, epochs, epochs_ecg, epochs_eda
     plt.close("all")
     gc.collect()
 
     # Save data ==============================================================================
 
-    if i in [9, 29, 59, 89, 119, len(meta["participant_id"].values) - 1]:
+    if i in [9, 29, 59, 89, 119, len(subs) - 1]:
         print("**SAVING DATA**")
         pd.merge(meta, df, on="participant_id", suffixes=("", "_DUP")).filter(
             regex="^(?!.*_DUP)"
         ).to_csv("../data/rawdata_participants.csv", index=False)
 
         df_trials.to_csv("../data/rawdata_trials.csv", index=False)
+        pd.concat(hr_timecourse).to_csv("../data/rawdata_hr_timecourse.csv", index=False)
 
         # Save figures
         for key in qc.keys():
@@ -374,5 +421,22 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]): # first 5
         # Reset
         qc = {k: [] for k in qc}
 
+
+# Heart rate time course: AI-generated vs Photograph ========================================
+# Average within each participant first, then across participants
+hr = pd.concat(hr_timecourse)
+hr = hr.groupby(["participant_id", "Condition", "Time"])["ECG_Rate_Change"].mean()
+hr = hr.groupby(["Condition", "Time"]).mean().reset_index()
+
+fig, ax = plt.subplots()
+for cond, label in {"Fiction": "AI-generated", "Reality": "Photograph"}.items():
+    d = hr[hr["Condition"] == cond]
+    ax.plot(d["Time"], d["ECG_Rate_Change"], label=label)
+ax.axvline(0, linestyle="--", color="black")  # Image onset
+ax.set_xlabel("Time from image onset (s)")
+ax.set_ylabel("Heart rate change from baseline (bpm)")
+ax.legend()
+os.makedirs("signals", exist_ok=True)
+fig.savefig("signals/fic_hr_timecourse.png", dpi=150)
 
 print("Done!")
