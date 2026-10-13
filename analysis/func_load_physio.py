@@ -41,7 +41,6 @@ def load_rs(path, sub):
 
     #P036 no EDA channel on RS
     
-    
     rs = mne.io.read_raw_brainvision(file, preload=True)
     # Set channel types, handling missing channels gracefully
     ch_types = {"ECG": "ecg", "RSP": "resp", "EDA": "gsr"}
@@ -162,9 +161,8 @@ def load_tap(path, sub):
 def load_fiction(path, sub):
     """Load the fiction task and crop to the task period.
 
-    Images are shown for 4 s in phase 1 and 1 s in phase 2, so a 0.5 s floor
-    catches both while rejecting flicker. The two phases separate cleanly by
-    duration, which gives a free check against task-FIC_beh.tsv.
+    Only phase 1 is recorded (no physiological data for phase 2). Images are
+    shown for 4 s, so a 0.5 s floor keeps every image while rejecting flicker.
     """
 
     # Open Fiction file
@@ -180,11 +178,11 @@ def load_fiction(path, sub):
     sfreq = fic.info["sfreq"]
     
 
-    # Find events, keeping anything over 0.5 s (catches 4 s and 1 s images)
+    # Find events, keeping anything over 0.5 s (images are shown for 4 s)
     events = nk.events_find(
         fic["PHOTO"][0][0],
         threshold_keep="below",
-        duration_min=1,
+        duration_min=int(sfreq * 0.5),
     )
 
     start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
@@ -192,5 +190,3 @@ def load_fiction(path, sub):
     smax = int(min(fic.n_times - 1, start_end[1] + 2000))
     fic = nk.mne_crop(fic, smin=smin, smax=smax)
     return fic
-   
-    
