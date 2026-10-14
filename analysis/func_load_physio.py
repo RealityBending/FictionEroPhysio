@@ -163,30 +163,40 @@ def load_fiction(path, sub):
 
     Only phase 1 is recorded (no physiological data for phase 2). Images are
     shown for 4 s, so a 0.5 s floor keeps every image while rejecting flicker.
+
+    If the recording was split into several runs (e.g. sub-014 stopped at the
+    break and restarted), each run is cropped and they are joined in order.
     """
 
-    # Open Fiction file
+    # Open Fiction file(s), one per run
     path_eeg = path + sub + "/eeg/"
-    file = [file for file in os.listdir(path_eeg) if "FIC" in file]
-    file = path_eeg + [f for f in file if ".vhdr" in f][0]
-        
-    
-    fic = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
-    fic = fic.set_montage("standard_1020")
-    # fic.to_data_frame().plot(subplots=True)
-    sfreq = fic.info["sfreq"]
-    
+    files = sorted([f for f in os.listdir(path_eeg) if "FIC" in f and ".vhdr" in f])
 
-    # Find events, keeping anything over 0.5 s (images are shown for 4 s)
-    events = nk.events_find(
-        fic["PHOTO"][0][0],
-        threshold_keep="below",
-        duration_min=int(sfreq * 0.5),
-    )
+    runs = []
+    for file in files:
+        fic = mne.io.read_raw_brainvision(path_eeg + file, preload=True, verbose=False)
+        fic = fic.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
+        fic = fic.set_montage("standard_1020")
+        # fic.to_data_frame().plot(subplots=True)
+        sfreq = fic.info["sfreq"]
 
-    start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
-    smin = int(max(0, start_end[0] - 2000))
-    smax = int(min(fic.n_times - 1, start_end[1] + 2000))
-    fic = nk.mne_crop(fic, smin=smin, smax=smax)
+        # Find events, keeping anything over 0.5 s (images are shown for 4 s)
+        events = nk.events_find(
+            fic["PHOTO"][0][0],
+            threshold_keep="below",
+            duration_min=int(sfreq * 0.5),
+        )
+        if len(events["onset"]) == 0:
+            continue
+
+        # Crop with margins long enough for the epochs used in the analysis:
+        # 3 s before the first image (epochs start at -2 s) and 5 s after the
+        # last image ends (EDA epochs run to 8 s after a 4 s image)
+        start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
+        smin = int(max(0, start_end[0] - sfreq * 3))
+        smax = int(min(fic.n_times - 1, start_end[1] + sfreq * 5))
+        runs.append(nk.mne_crop(fic, smin=smin, smax=smax))
+
+    # Runs can store channels in a different order, so match them before joining
+    fic = mne.concatenate_raws(mne.match_channel_orders(runs)) if len(runs) > 1 else runs[0]
     return fic
