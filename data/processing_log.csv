@@ -1,91 +1,91 @@
 participant_id,task,status,reason,trials,last_run
-sub-015,RS,Processed,Processed before the log existed,,
-sub-015,HCT,Processed,Processed before the log existed,,
-sub-015,FIC,Processed,Processed before the log existed,,
-sub-016,RS,Processed,Processed before the log existed,,
-sub-016,HCT,Processed,Processed before the log existed,,
-sub-016,FIC,Processed,Processed before the log existed,,
-sub-017,RS,Processed,Processed before the log existed,,
-sub-017,HCT,Processed,Processed before the log existed,,
-sub-017,FIC,Processed,Processed before the log existed,,
-sub-018,RS,Processed,Processed before the log existed,,
-sub-018,HCT,Processed,Processed before the log existed,,
-sub-018,FIC,Processed,Processed before the log existed,,
-sub-019,RS,Processed,Processed before the log existed,,
-sub-019,HCT,Processed,Processed before the log existed,,
-sub-019,FIC,Processed,Processed before the log existed,,
-sub-020,RS,Processed,Processed before the log existed,,
-sub-020,HCT,Processed,Processed before the log existed,,
-sub-020,FIC,Processed,Processed before the log existed,,
-sub-001,RS,Processed,,,2026-10-14 17:47
-sub-001,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:47
-sub-001,FIC,Processed,,50/50,2026-10-14 17:48
-sub-002,RS,Processed,,,2026-10-14 17:48
-sub-002,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:48
-sub-002,FIC,Processed,,50/50,2026-10-14 17:50
-sub-003,RS,Excluded,"Split recording, handle separately",,2026-10-14 17:50
-sub-003,HCT,Excluded,"Split recording, handle separately",,2026-10-14 17:50
-sub-003,FIC,Excluded,"Split recording, handle separately",,2026-10-14 17:50
-sub-004,RS,Processed,,,2026-10-14 17:51
-sub-004,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:51
-sub-004,FIC,Processed,,50/50,2026-10-14 17:52
-sub-005,RS,Processed,,,2026-10-14 17:52
-sub-005,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:52
-sub-005,FIC,Processed,Missing trial(s) 23 kept with NA,49/50,2026-10-14 17:53
-sub-006,RS,Processed,,,2026-10-14 17:54
-sub-006,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:54
-sub-006,FIC,Processed,Missing trial(s) 1 kept with NA,49/50,2026-10-14 17:55
-sub-007,RS,Processed,,,2026-10-14 17:55
-sub-007,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:56
-sub-007,FIC,Processed,,50/50,2026-10-14 17:58
-sub-008,RS,Processed,,,2026-10-14 17:58
-sub-008,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 17:59
-sub-008,FIC,Processed,,50/50,2026-10-14 18:00
-sub-009,RS,Processed,,,2026-10-14 18:11
-sub-009,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:11
-sub-009,FIC,Processed,,50/50,2026-10-14 18:12
-sub-010,RS,Processed,,,2026-10-14 18:12
-sub-010,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped; 1 interval(s) with a count of 0 (excluded from awareness),,2026-10-14 18:12
-sub-010,FIC,Processed,,50/50,2026-10-14 18:14
-sub-011,RS,Processed,,,2026-10-14 18:14
-sub-011,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:14
-sub-011,FIC,Processed,,50/50,2026-10-14 18:15
-sub-012,RS,Processed,,,2026-10-14 18:15
-sub-012,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:15
-sub-012,FIC,Excluded,"Only a few images recorded (Muse battery died, recording not resumed)",,2026-10-14 18:15
-sub-013,RS,Processed,,,2026-10-14 18:16
-sub-013,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:16
-sub-013,FIC,Processed,,50/50,2026-10-14 18:17
-sub-014,RS,Processed,,,2026-10-14 18:17
-sub-014,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:17
-sub-014,FIC,Excluded,"Recording split into two files at the break, not handled yet",,2026-10-14 18:17
-sub-021,RS,Processed,,,2026-10-14 18:18
-sub-021,HCT,Processed,,,2026-10-14 18:18
-sub-021,FIC,Processed,,50/50,2026-10-14 18:19
-sub-022,RS,Processed,,,2026-10-14 18:20
-sub-022,HCT,Processed,,,2026-10-14 18:20
-sub-022,FIC,Processed,,50/50,2026-10-14 18:21
-sub-023,RS,Processed,,,2026-10-14 18:22
-sub-023,HCT,Processed,,,2026-10-14 18:22
-sub-023,FIC,Processed,,50/50,2026-10-14 18:23
-sub-024,RS,Processed,,,2026-10-14 18:23
-sub-024,HCT,Processed,Interval 1 photosensor is 34.23 s vs 35 s programmed (screen appeared late); duration tolerance raised to 1 s,,2026-10-14 18:23
-sub-024,FIC,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:23
-sub-025,RS,Processed,,,2026-10-14 18:24
-sub-025,HCT,Processed,,,2026-10-14 18:24
-sub-025,FIC,Failed,"MemoryError: Unable to allocate 24.4 MiB for an array with shape (3200199,) and data type uint64",,2026-10-14 18:24
-sub-026,RS,Failed,"MemoryError: Unable to allocate 103. MiB for an array with shape (14, 964064) and data type int64",,2026-10-14 18:24
-sub-026,HCT,Processed,,,2026-10-14 18:24
-sub-026,FIC,Failed,"MemoryError: Unable to allocate 776. MiB for an array with shape (36, 2825378) and data type float64",,2026-10-14 18:24
-sub-027,RS,Failed,"MemoryError: Unable to allocate 66.2 MiB for an array with shape (9, 964000) and data type float64",,2026-10-14 18:25
-sub-027,HCT,Failed,"MemoryError: Unable to allocate 68.2 MiB for an array with shape (17, 525962) and data type float64",,2026-10-14 18:25
-sub-027,FIC,Failed,"MemoryError: Unable to allocate 743. MiB for an array with shape (36, 2706473) and data type float64",,2026-10-14 18:25
-sub-028,RS,Failed,"MemoryError: Unable to allocate 58.8 MiB for an array with shape (8, 963997) and data type float64",,2026-10-14 18:25
-sub-028,HCT,Failed,"MemoryError: Unable to allocate 154. MiB for an array with shape (36, 561383) and data type float64",,2026-10-14 18:25
-sub-028,FIC,Failed,"MemoryError: Unable to allocate 633. MiB for an array with shape (36, 2306310) and data type float64",,2026-10-14 18:25
-sub-029,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:25
-sub-029,HCT,Failed,"MemoryError: Unable to allocate 66.4 MiB for an array with shape (17, 511963) and data type float64",,2026-10-14 18:25
-sub-029,FIC,Failed,"MemoryError: Unable to allocate 683. MiB for an array with shape (36, 2485363) and data type float64",,2026-10-14 18:25
-sub-030,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:25
-sub-030,HCT,Processed,,,2026-10-14 18:26
-sub-030,FIC,Failed,"MemoryError: Unable to allocate 722. MiB for an array with shape (36, 2628442) and data type float64",,2026-10-14 18:26
+sub-001,RS,Processed,,,2026-10-14 18:30
+sub-001,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:30
+sub-001,FIC,Processed,,50/50,2026-10-14 18:31
+sub-002,RS,Processed,,,2026-10-14 18:31
+sub-002,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:32
+sub-002,FIC,Processed,,50/50,2026-10-14 18:33
+sub-003,RS,Processed,,,2026-10-14 18:33
+sub-003,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:33
+sub-003,FIC,Excluded,"Recording split into two files at the break (FP1b), not handled yet",,2026-10-14 18:33
+sub-004,RS,Processed,,,2026-10-14 18:33
+sub-004,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:34
+sub-004,FIC,Processed,,50/50,2026-10-14 18:35
+sub-005,RS,Processed,,,2026-10-14 18:35
+sub-005,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:35
+sub-005,FIC,Processed,Missing trial(s) 23 kept with NA,49/50,2026-10-14 18:36
+sub-006,RS,Processed,,,2026-10-14 18:36
+sub-006,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:36
+sub-006,FIC,Processed,Missing trial(s) 1 kept with NA,49/50,2026-10-14 18:37
+sub-007,RS,Processed,,,2026-10-14 18:37
+sub-007,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:38
+sub-007,FIC,Processed,,50/50,2026-10-14 18:39
+sub-011,RS,Processed,,,2026-10-14 18:42
+sub-011,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:42
+sub-011,FIC,Failed,"MemoryError: Unable to allocate 708. MiB for an array with shape (36, 2576376) and data type float64",,2026-10-14 18:42
+sub-012,RS,Failed,"MemoryError: Unable to allocate 125. MiB for an array with shape (17, 963967) and data type float64",,2026-10-14 18:43
+sub-012,HCT,Failed,"MemoryError: Unable to allocate 87.6 MiB for an array with shape (21, 547060) and data type float64",,2026-10-14 18:43
+sub-012,FIC,Excluded,"Only a few images recorded (Muse battery died, recording not resumed)",,2026-10-14 18:43
+sub-013,RS,Failed,"MemoryError: Unable to allocate 80.9 MiB for an array with shape (11, 963998) and data type int64",,2026-10-14 18:43
+sub-013,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-14 18:43
+sub-013,FIC,Failed,"MemoryError: Unable to allocate 733. MiB for an array with shape (36, 2670286) and data type float64",,2026-10-14 18:43
+sub-014,RS,Failed,"MemoryError: Unable to allocate 14.7 MiB for an array with shape (2, 963995) and data type float64",,2026-10-14 18:43
+sub-014,HCT,Failed,"MemoryError: Unable to allocate 87.6 MiB for an array with shape (21, 546680) and data type float64",,2026-10-14 18:43
+sub-014,FIC,Excluded,"Recording split into two files at the break, not handled yet",,2026-10-14 18:43
+sub-015,RS,Failed,"MemoryError: Unable to allocate 66.2 MiB for an array with shape (9, 963995) and data type float64",,2026-10-14 18:43
+sub-015,HCT,Failed,"MemoryError: Unable to allocate 52.4 MiB for an array with shape (13, 528206) and data type float64",,2026-10-14 18:44
+sub-015,FIC,Failed,"MemoryError: Unable to allocate 700. MiB for an array with shape (36, 2547337) and data type float64",,2026-10-14 18:44
+sub-016,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:44
+sub-016,HCT,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:44
+sub-016,FIC,Failed,"MemoryError: Unable to allocate 671. MiB for an array with shape (36, 2442310) and data type float64",,2026-10-14 18:44
+sub-017,RS,Failed,"MemoryError: Unable to allocate 58.8 MiB for an array with shape (8, 963927) and data type float64",,2026-10-14 18:44
+sub-017,HCT,Failed,"MemoryError: Unable to allocate 69.8 MiB for an array with shape (17, 538439) and data type float64",,2026-10-14 18:44
+sub-017,FIC,Failed,"MemoryError: Unable to allocate 717. MiB for an array with shape (36, 2609330) and data type float64",,2026-10-14 18:44
+sub-018,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:44
+sub-018,HCT,Failed,"MemoryError: Unable to allocate 53.0 MiB for an array with shape (13, 534027) and data type int64",,2026-10-14 18:44
+sub-018,FIC,Failed,"MemoryError: Unable to allocate 836. MiB for an array with shape (36, 3045379) and data type float64",,2026-10-14 18:44
+sub-019,RS,Failed,"MemoryError: Unable to allocate 66.2 MiB for an array with shape (9, 964035) and data type float64",,2026-10-14 18:44
+sub-019,HCT,Failed,"MemoryError: Unable to allocate 7.96 MiB for an array with shape (2, 521982) and data type int64",,2026-10-14 18:44
+sub-019,FIC,Failed,"MemoryError: Unable to allocate 860. MiB for an array with shape (36, 3129693) and data type float64",,2026-10-14 18:44
+sub-020,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:45
+sub-020,HCT,Failed,"MemoryError: Unable to allocate 45.1 MiB for an array with shape (11, 537964) and data type int64",,2026-10-14 18:45
+sub-020,FIC,Failed,"MemoryError: Unable to allocate 721. MiB for an array with shape (36, 2625659) and data type float64",,2026-10-14 18:45
+sub-021,RS,Failed,"MemoryError: Unable to allocate 58.8 MiB for an array with shape (8, 964000) and data type float64",,2026-10-14 18:45
+sub-021,HCT,Failed,"RuntimeError: Incorrect number of samples (0 != 21474648), please report this error to MNE-Python developers",,2026-10-14 18:45
+sub-021,FIC,Failed,"MemoryError: Unable to allocate 799. MiB for an array with shape (36, 2908599) and data type float64",,2026-10-14 18:45
+sub-022,RS,Failed,"MemoryError: Unable to allocate 80.9 MiB for an array with shape (11, 964057) and data type int64",,2026-10-14 18:45
+sub-022,HCT,Failed,"MemoryError: Unable to allocate 157. MiB for an array with shape (36, 573313) and data type float64",,2026-10-14 18:45
+sub-022,FIC,Failed,"MemoryError: Unable to allocate 871. MiB for an array with shape (36, 3170257) and data type float64",,2026-10-14 18:45
+sub-023,RS,Failed,"MemoryError: Unable to allocate 58.8 MiB for an array with shape (8, 963964) and data type float64",,2026-10-14 18:45
+sub-023,HCT,Failed,"MemoryError: Unable to allocate 157. MiB for an array with shape (36, 570243) and data type float64",,2026-10-14 18:45
+sub-023,FIC,Failed,"MemoryError: Unable to allocate 643. MiB for an array with shape (36, 2340288) and data type float64",,2026-10-14 18:45
+sub-024,RS,Failed,MemoryError: std::bad_alloc,,2026-10-14 18:45
+sub-024,HCT,Failed,"MemoryError: Unable to allocate 45.1 MiB for an array with shape (11, 537970) and data type int64",,2026-10-14 18:45
+sub-024,FIC,Failed,"MemoryError: Unable to allocate 771. MiB for an array with shape (36, 2806336) and data type float64",,2026-10-14 18:45
+sub-025,RS,Failed,"MemoryError: Unable to allocate 66.2 MiB for an array with shape (9, 963973) and data type float64",,2026-10-14 18:45
+sub-025,HCT,Failed,"MemoryError: Unable to allocate 84.0 MiB for an array with shape (21, 524190) and data type float64",,2026-10-14 18:45
+sub-025,FIC,Failed,"MemoryError: Unable to allocate 95.4 MiB for an array with shape (24999993,) and data type float32",,2026-10-14 18:45
+sub-026,RS,Failed,"MemoryError: Unable to allocate 73.5 MiB for an array with shape (10, 963996) and data type int64",,2026-10-14 18:45
+sub-026,HCT,Failed,"MemoryError: Unable to allocate 80.7 MiB for an array with shape (21145932,) and data type float32",,2026-10-14 18:45
+sub-026,FIC,Failed,"MemoryError: Unable to allocate 776. MiB for an array with shape (36, 2825378) and data type float64",,2026-10-14 18:45
+sub-027,RS,Failed,"MemoryError: Unable to allocate 29.4 MiB for an array with shape (4, 964000) and data type float64",,2026-10-14 18:45
+sub-027,HCT,Failed,"RuntimeError: Incorrect number of samples (0 != 19845900), please report this error to MNE-Python developers",,2026-10-14 18:45
+sub-027,FIC,Failed,"MemoryError: Unable to allocate 743. MiB for an array with shape (36, 2706473) and data type float64",,2026-10-14 18:45
+sub-028,RS,Failed,"MemoryError: Unable to allocate 73.5 MiB for an array with shape (10, 963997) and data type int64",,2026-10-14 18:46
+sub-028,HCT,Failed,"MemoryError: Unable to allocate 77.1 MiB for an array with shape (20209788,) and data type float32",,2026-10-14 18:46
+sub-028,FIC,Failed,"MemoryError: Unable to allocate 633. MiB for an array with shape (36, 2306310) and data type float64",,2026-10-14 18:46
+sub-029,RS,Failed,"MemoryError: Unable to allocate 58.8 MiB for an array with shape (8, 963986) and data type float64",,2026-10-14 18:46
+sub-029,HCT,Failed,"MemoryError: Unable to allocate 152. MiB for an array with shape (36, 551608) and data type float64",,2026-10-14 18:46
+sub-029,FIC,Failed,"MemoryError: Unable to allocate 683. MiB for an array with shape (36, 2485363) and data type float64",,2026-10-14 18:46
+sub-030,RS,Failed,"MemoryError: Unable to allocate 33.1 MiB for an array with shape (36, 963694) and data type bool",,2026-10-14 18:46
+sub-030,HCT,Failed,"MemoryError: Unable to allocate 53.3 MiB for an array with shape (13, 537533) and data type int64",,2026-10-14 18:46
+sub-030,FIC,Failed,"MemoryError: Unable to allocate 722. MiB for an array with shape (36, 2628442) and data type float64",,2026-10-14 18:46
+sub-008,RS,Processed,,,2026-10-15 09:16
+sub-008,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-15 09:16
+sub-008,FIC,Processed,,50/50,2026-10-15 09:17
+sub-009,RS,Processed,,,2026-10-15 09:18
+sub-009,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped,,2026-10-15 09:18
+sub-009,FIC,Processed,,50/50,2026-10-15 09:20
+sub-010,RS,Processed,,,2026-10-15 09:21
+sub-010,HCT,Processed,Interval lengths not saved in behavioural file; duration check skipped; 1 interval(s) with a count of 0 (excluded from awareness),,2026-10-15 09:21
+sub-010,FIC,Processed,,50/50,2026-10-15 09:23
