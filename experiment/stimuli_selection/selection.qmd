@@ -136,7 +136,7 @@ dat |>
 #| code-fold: true
 
 selection <- napsero |> 
-  filter(ID %in% selected_erotic)
+  filter(ID %in% dat)
 
 # Sum the arousal scores 
 selection <- selection |>
