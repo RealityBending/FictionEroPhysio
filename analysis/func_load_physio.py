@@ -5,7 +5,6 @@ import mne
 import neurokit2 as nk
 import numpy as np
 
-sub = "sub-036"
 
 path = "C:/Users/asf25/Box/FictionEroPhysio/Rebel - FictionEroPhysio/"
 
