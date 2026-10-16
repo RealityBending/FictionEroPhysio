@@ -162,7 +162,7 @@ def write_report(log, meta, exclusions, missing_trials, file="processing_report.
   h3 {{ margin-top: 28px; }}
 </style></head><body>
 <h1>Physio processing report</h1>
-<p class="meta">Updated {now} by 1_physio.py. Statuses: <b>Processed</b> ran without errors;
+<p class="meta">Updated {now}. Statuses: <b>Processed</b> ran without errors;
 <b>Excluded</b> skipped on purpose (see reason); <b>Failed</b> stopped with an error (see reason);
 <b>Not run</b> not processed yet.</p>
 <h2>Summary</h2>{summary}
