@@ -153,7 +153,16 @@ def save_data(qc, label):
     os.makedirs("signals", exist_ok=True)
     for key in qc.keys():
         if len(qc[key]) > 0:
-            ill.image_mosaic(qc[key], ncols=6, nrows="auto").save(f"signals/{key}_{label}.png")
+            mosaic = ill.image_mosaic(qc[key], ncols=6, nrows="auto")
+            file = f"signals/{key}_{label}.png"
+            try:
+                mosaic.save(file)
+            except OSError:
+                # The file is probably open in another program (e.g. an image viewer),
+                # so save under a new name instead of stopping the run
+                file = f"signals/{key}_{label}_{pd.Timestamp.now():%Y%m%d-%H%M%S}.png"
+                mosaic.save(file)
+                print(f"  ! Could not overwrite signals/{key}_{label}.png (open elsewhere?), saved as {file}")
     return {k: [] for k in qc}
 
 
@@ -165,6 +174,8 @@ def update_report():
 
 # Loop through participants ==================================================================
 subs = meta["participant_id"].values[14:20]
+
+out_of_memory = False  # set when a task runs out of memory; stops the run
 
 for i, sub in enumerate(subs):
 
@@ -187,11 +198,6 @@ for i, sub in enumerate(subs):
         print(f"{sub} - Already processed")
         continue
 
-    # Re-processing: remove any earlier (partial) results for this participant
-    df = drop_sub(df, sub)
-    df_trials = drop_sub(df_trials, sub)
-    hr_timecourse = [drop_sub(h, sub) for h in hr_timecourse]
-
     # Print progress and comments
     print(sub)
     print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
@@ -201,7 +207,12 @@ for i, sub in enumerate(subs):
     path_beh = path + sub + "/beh/"
 
     # Questionnaires -------------------------------------------------------------------------
-    dfsub = meta[meta["participant_id"] == sub].reset_index(drop=True)
+    # Start from the participant's saved row if they were partly processed before, so that
+    # results from tasks that worked last time are kept if a task fails this time
+    if "participant_id" in df.columns and sub in df["participant_id"].values:
+        dfsub = df[df["participant_id"] == sub].reset_index(drop=True)
+    else:
+        dfsub = meta[meta["participant_id"] == sub].reset_index(drop=True)
 
     # Resting State ==========================================================================
     if "RS" in excl:
@@ -242,12 +253,14 @@ for i, sub in enumerate(subs):
             ]
             hrv = hrv[["HRV_" + s for s in idx]]
             hrv.columns = [s + "_RS" for s in hrv.columns]
-            dfsub = pd.concat([dfsub, hrv], axis=1)
+            for col in hrv.columns:  # add or overwrite (no duplicate columns when re-processing)
+                dfsub[col] = hrv[col].values[0]
 
             log = log_task(log, sub, "RS", "Processed", note.get("RS", ""))
         except Exception as e:
             print(f"  ! RS failed: {type(e).__name__}: {e}")
             log = log_task(log, sub, "RS", "Failed", f"{type(e).__name__}: {e}")
+            out_of_memory = out_of_memory or isinstance(e, MemoryError)
 
     # Heartbeat Counting Task (HCT) ===========================================================
     if "HCT" in excl:
@@ -355,12 +368,14 @@ for i, sub in enumerate(subs):
             )
             hrv = hrv[["HRV_" + s for s in ["MeanNN", "SDNN", "RMSSD"]]].mean(axis=0)
             hrv.index = [s + "_HCT" for s in hrv.index]
-            dfsub = pd.concat([dfsub, pd.DataFrame(hrv).T], axis=1)
+            for col, value in hrv.items():  # add or overwrite (no duplicate columns when re-processing)
+                dfsub[col] = value
 
             log = log_task(log, sub, "HCT", "Processed", "; ".join(hct_notes))
         except Exception as e:
             print(f"  ! HCT failed: {type(e).__name__}: {e}")
             log = log_task(log, sub, "HCT", "Failed", f"{type(e).__name__}: {e}")
+            out_of_memory = out_of_memory or isinstance(e, MemoryError)
 
     # Fiction (FIC) ===========================================================================
     # Trial-level rather than participant-level: one row per image
@@ -498,8 +513,9 @@ for i, sub in enumerate(subs):
 
             trials = fic_beh.join(features).reset_index(drop=True)
             trials["participant_id"] = sub
-            df_trials = pd.concat([df_trials, trials], axis=0)
-            hr_timecourse.extend(hr_sub)
+            # Replace any earlier results for this participant only now that it has worked
+            df_trials = pd.concat([drop_sub(df_trials, sub), trials], axis=0)
+            hr_timecourse = [drop_sub(h, sub) for h in hr_timecourse] + hr_sub
 
             fic_notes = [note["FIC"]] if "FIC" in note else []
             if sub in missing_trials:
@@ -512,10 +528,11 @@ for i, sub in enumerate(subs):
         except Exception as e:
             print(f"  ! FIC failed: {type(e).__name__}: {e}")
             log = log_task(log, sub, "FIC", "Failed", f"{type(e).__name__}: {e}")
+            out_of_memory = out_of_memory or isinstance(e, MemoryError)
 
     # Append participant to rest --------------------------------------------------------------
     dfsub["participant_id"] = sub
-    df = pd.concat([df, dfsub], axis=0)
+    df = pd.concat([drop_sub(df, sub), dfsub], axis=0)
 
     # Free memory (some variables are missing for tasks that were skipped or failed)
     for name in ["rs", "hct", "fic", "epochs", "epochs_ecg", "epochs_eda"]:
@@ -525,6 +542,11 @@ for i, sub in enumerate(subs):
 
     # Update the processing log and the HTML report after every participant
     update_report()
+
+    # Stop if memory ran out: every later task would fail too. Restart Python and run again
+    if out_of_memory:
+        print("!! Out of memory: stopping here. Restart Python and run the script again to continue.")
+        break
 
     # Save data at checkpoints ================================================================
     if i in [9, 29, 59, 89, 119]:
