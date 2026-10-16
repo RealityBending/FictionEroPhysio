@@ -66,20 +66,14 @@ def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
     return plot_ecg, plot_rsp, plot_eda
 
 
-# QC images: each participant's plots are saved straight away in
-# signals/participants/<signal>/<sub>.png, so they survive a crash and do not fill up the
-# memory. At the end they are combined into one image per signal with every participant
-# (also the ones processed in earlier runs).
+# QC images: each participant's plots are saved straight away. At the end they are combined into one image per signal with every participant
 qc_keys = ["rs_ecg", "rs_rsp", "hct_ecg", "hct_rsp", "fic_ecg", "fic_rsp", "fic_eda"]
-
-
 def save_qc(images, sub):
     """Save this participant's QC images."""
     for key, imgs in images.items():
         if imgs:  # skips None and empty lists
             os.makedirs(f"signals/participants/{key}", exist_ok=True)
             imgs[-1].save(f"signals/participants/{key}/{sub}.png")
-
 
 def make_qc_mosaics():
     """Combine every participant's saved QC image into one image per signal."""
@@ -117,22 +111,22 @@ meta = pd.read_csv(path + "participants.tsv", sep="\t")
 # Initialize data ============================================================================
 # resume = False starts from scratch (delete signals/participants/ first, so old QC images
 # are not mixed in); True carries on from the saved files, e.g. after a crash
-resume = False
+# resume = False
 
-if resume:
-    df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
-    df_trials = pd.read_csv("../data/rawdata_trials.csv")  # one row per image (fiction)
-    hr_timecourse = []  # heart rate time course around image onset (fiction)
-    if os.path.exists("../data/rawdata_hr_timecourse.csv"):
-        hr_timecourse = [pd.read_csv("../data/rawdata_hr_timecourse.csv")]
-else:
-    df = pd.DataFrame()  # one row per participant
-    df_trials = pd.DataFrame()  # one row per image (fiction)
-    hr_timecourse = []  # heart rate time course around image onset (fiction)
+# if resume:
+#     df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
+#     df_trials = pd.read_csv("../data/rawdata_trials.csv")  # one row per image (fiction)
+#     hr_timecourse = []  # heart rate time course around image onset (fiction)
+#     if os.path.exists("../data/rawdata_hr_timecourse.csv"):
+#         hr_timecourse = [pd.read_csv("../data/rawdata_hr_timecourse.csv")]
+# else:
+#     df = pd.DataFrame()  # one row per participant
+#     df_trials = pd.DataFrame()  # one row per image (fiction)
+#     hr_timecourse = []  # heart rate time course around image onset (fiction)
 
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"]):
+for i, sub in enumerate(meta["participant_id"]).values[0:5]:
     # Print progress and comments
     print(sub)
     print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
