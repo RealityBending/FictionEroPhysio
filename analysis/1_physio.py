@@ -90,7 +90,7 @@ meta = pd.read_csv(path + "participants.tsv", sep="\t")
 # Whole-task exclusions: participant -> {task: reason}. "ALL" skips every task.
 # Tasks: "RS" (resting state), "HCT" (heartbeat counting), "FIC" (fiction phase 1)
 exclusions = {
-    "sub-003": {"ALL": "Split recording, handle separately"},
+    "sub-003": {"FIC": "Split recording, handle separately"},
     "sub-012": {"FIC": "Only a few images recorded (Muse battery died, recording not resumed)"},
     "sub-014": {"FIC": "Recording split into two files at the break, not handled yet"},
 }
@@ -124,11 +124,9 @@ else:
 log_file = "../data/processing_log.csv"
 log = load_log(log_file, df if resume else None, df_trials if resume else None)
 
-qc = {
-    "rs_ecg": [], "rs_rsp": [],
-    "hct_ecg": [], "hct_rsp": [],
-    "fic_ecg": [], "fic_rsp": [], "fic_eda": [],
-}
+# QC images are saved per participant in signals/participants/<signal>/<sub>.png and
+# combined at the end of every run into one image per signal for ALL participants
+qc_keys = ["rs_ecg", "rs_rsp", "hct_ecg", "hct_rsp", "fic_ecg", "fic_rsp", "fic_eda"]
 
 
 def drop_sub(d, sub):
@@ -138,8 +136,44 @@ def drop_sub(d, sub):
     return d
 
 
-def save_data(qc, label):
-    """Save the data files and the QC figures, then empty the QC lists."""
+def save_image(img, file):
+    """Save an image; if the file is open elsewhere (e.g. an image viewer), use a new name."""
+    try:
+        img.save(file)
+    except OSError:
+        new = file.replace(".png", f"_{pd.Timestamp.now():%Y%m%d-%H%M%S}.png")
+        img.save(new)
+        print(f"  ! Could not overwrite {file} (open elsewhere?), saved as {new}")
+
+
+def save_qc(images, sub):
+    """Save this participant's QC images straight away (no need to keep them in memory)."""
+    for key, imgs in images.items():
+        if len(imgs) > 0:
+            os.makedirs(f"signals/participants/{key}", exist_ok=True)
+            save_image(imgs[-1], f"signals/participants/{key}/{sub}.png")
+
+
+def make_qc_mosaics():
+    """Combine every participant's saved QC image into one image per signal."""
+    for key in qc_keys:
+        folder = f"signals/participants/{key}"
+        if not os.path.isdir(folder):
+            continue
+        files = sorted(f for f in os.listdir(folder) if f.endswith(".png"))
+        if len(files) == 0:
+            continue
+        imgs = []
+        for f in files:
+            with PIL.Image.open(f"{folder}/{f}") as im:
+                imgs.append(im.copy())
+        save_image(ill.image_mosaic(imgs, ncols=6, nrows="auto"), f"signals/{key}_all.png")
+        del imgs
+        gc.collect()
+
+
+def save_data():
+    """Save the data files."""
     print("**SAVING DATA**")
     if "participant_id" in df.columns:
         pd.merge(meta, df, on="participant_id", suffixes=("", "_DUP")).filter(
@@ -148,22 +182,6 @@ def save_data(qc, label):
     df_trials.to_csv("../data/rawdata_trials.csv", index=False)
     if len(hr_timecourse) > 0:
         pd.concat(hr_timecourse).to_csv("../data/rawdata_hr_timecourse.csv", index=False)
-
-    # Save figures
-    os.makedirs("signals", exist_ok=True)
-    for key in qc.keys():
-        if len(qc[key]) > 0:
-            mosaic = ill.image_mosaic(qc[key], ncols=6, nrows="auto")
-            file = f"signals/{key}_{label}.png"
-            try:
-                mosaic.save(file)
-            except OSError:
-                # The file is probably open in another program (e.g. an image viewer),
-                # so save under a new name instead of stopping the run
-                file = f"signals/{key}_{label}_{pd.Timestamp.now():%Y%m%d-%H%M%S}.png"
-                mosaic.save(file)
-                print(f"  ! Could not overwrite signals/{key}_{label}.png (open elsewhere?), saved as {file}")
-    return {k: [] for k in qc}
 
 
 def update_report():
@@ -233,9 +251,8 @@ for i, sub in enumerate(subs):
             )
 
             # QC
-            qc["rs_ecg"], qc["rs_rsp"], _ = qc_physio(
-                rs, info, sub, plot_ecg=qc["rs_ecg"], plot_rsp=qc["rs_rsp"], plot_eda=None
-            )
+            img_ecg, img_rsp, _ = qc_physio(rs, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=None)
+            save_qc({"rs_ecg": img_ecg, "rs_rsp": img_rsp}, sub)
 
             # Hear Rate Variability (HRV) ---------------------------------------------------------
             hrv = nk.hrv(rs["ECG_R_Peaks"].values.nonzero()[0], sampling_rate=srate)
@@ -314,9 +331,8 @@ for i, sub in enumerate(subs):
             )
 
             # QC
-            qc["hct_ecg"], qc["hct_rsp"], _ = qc_physio(
-                hct, info, sub, plot_ecg=qc["hct_ecg"], plot_rsp=qc["hct_rsp"], plot_eda=None
-            )
+            img_ecg, img_rsp, _ = qc_physio(hct, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=None)
+            save_qc({"hct_ecg": img_ecg, "hct_rsp": img_rsp}, sub)
 
             # Analysis ---------------------------------------------------------------------------
             # Make epochs
@@ -339,11 +355,10 @@ for i, sub in enumerate(subs):
             # Compute accuracy based on response and acutal r-peaks
             hct_beh["HCT_Accuracy"] = 1 - ((np.abs(hct_beh["HCT_count"] - peaks)) / peaks)
 
-            # Replace zeros with nans
+            # A count of 0 is a real answer (felt no heartbeats) and is kept as such
             n_zero = int((hct_beh["HCT_count"] == 0).sum())
             if n_zero > 0:
-                hct_beh["HCT_count"] = hct_beh["HCT_count"].replace(0, np.nan)
-                hct_notes.append(f"{n_zero} interval(s) with a count of 0 (excluded from awareness)")
+                hct_notes.append(f"{n_zero} interval(s) with a count of 0 (kept as real answers)")
 
             valid = hct_beh["HCT_count"].notna()
 
@@ -443,13 +458,13 @@ for i, sub in enumerate(subs):
             )
 
             # QC
-            qc["fic_ecg"], qc["fic_rsp"], qc["fic_eda"] = qc_physio(
-                fic, info, sub,
-                plot_ecg=qc["fic_ecg"], plot_rsp=qc["fic_rsp"], plot_eda=qc["fic_eda"]
+            img_ecg, img_rsp, img_eda = qc_physio(
+                fic, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]
             )
+            save_qc({"fic_ecg": img_ecg, "fic_rsp": img_rsp, "fic_eda": img_eda}, sub)
 
             # Analysis ---------------------------------------------------------------------------
-            # Both epochs start at -2 s for a pre-stimulus baseline
+            # Both epochs start at -2 s so the time course before the image can be plotted
             # ECG: -2 to 5 s, covers the 4 s image plus 1 s after offset
             epochs_ecg = nk.epochs_create(
                 fic,
@@ -468,33 +483,34 @@ for i, sub in enumerate(subs):
                 epochs_end=8,
             )
 
-            # Extract one row of features per trial, baseline-corrected
+            # Extract one row of features per trial, corrected for the value at image onset
             # (epochs are in event order, which matches the sorted fic_rec rows)
             features = []
             hr_sub = []  # added to hr_timecourse only if the whole task succeeds
             for k, (epoch_ecg, epoch_eda) in enumerate(
                 zip(epochs_ecg.values(), epochs_eda.values())
             ):
-                base_ecg = epoch_ecg[epoch_ecg.index < 0]
+                # Baseline = the value at image onset (the sample closest to 0 s)
+                onset_ecg = epoch_ecg.iloc[np.argmin(np.abs(epoch_ecg.index))]
+                onset_eda = epoch_eda.iloc[np.argmin(np.abs(epoch_eda.index))]
                 resp_ecg = epoch_ecg[epoch_ecg.index >= 0]
-                base_eda = epoch_eda[epoch_eda.index < 0]
                 resp_eda = epoch_eda[epoch_eda.index >= 0]
                 features.append(
                     {
-                        "ECG_Rate_Baseline": base_ecg["ECG_Rate"].mean(),
+                        "ECG_Rate_Baseline": onset_ecg["ECG_Rate"],
                         "ECG_Rate_Mean": resp_ecg["ECG_Rate"].mean(),
                         "ECG_Rate_Min": resp_ecg["ECG_Rate"].min(),
-                        "ECG_Rate_Change": resp_ecg["ECG_Rate"].mean() - base_ecg["ECG_Rate"].mean(),
-                        "RSP_Rate_Change": resp_eda["RSP_Rate"].mean() - base_eda["RSP_Rate"].mean(),
+                        "ECG_Rate_Change": resp_ecg["ECG_Rate"].mean() - onset_ecg["ECG_Rate"],
+                        "RSP_Rate_Change": resp_eda["RSP_Rate"].mean() - onset_eda["RSP_Rate"],
                         "RSP_Amplitude_Mean": resp_eda["RSP_Amplitude"].mean(),
-                        "EDA_Tonic_Baseline": base_eda["EDA_Tonic"].mean(),
-                        "EDA_Phasic_Max": resp_eda["EDA_Phasic"].max() - base_eda["EDA_Phasic"].mean(),
-                        "EDA_Phasic_Mean": resp_eda["EDA_Phasic"].mean() - base_eda["EDA_Phasic"].mean(),
+                        "EDA_Tonic_Baseline": onset_eda["EDA_Tonic"],
+                        "EDA_Phasic_Max": resp_eda["EDA_Phasic"].max() - onset_eda["EDA_Phasic"],
+                        "EDA_Phasic_Mean": resp_eda["EDA_Phasic"].mean() - onset_eda["EDA_Phasic"],
                     }
                 )
 
-                # Heart rate time course (change from baseline), in 0.1 s bins
-                hr = epoch_ecg["ECG_Rate"] - base_ecg["ECG_Rate"].mean()
+                # Heart rate time course (change from the value at image onset), in 0.1 s bins
+                hr = epoch_ecg["ECG_Rate"] - onset_ecg["ECG_Rate"]
                 hr = hr.groupby((hr.index * 10).round() / 10).mean()
                 hr_sub.append(
                     pd.DataFrame(
@@ -550,11 +566,14 @@ for i, sub in enumerate(subs):
 
     # Save data at checkpoints ================================================================
     if i in [9, 29, 59, 89, 119]:
-        qc = save_data(qc, sub)
+        save_data()
 
 # Final save (covers the last participants after the last checkpoint)
-qc = save_data(qc, subs[-1])
+save_data()
 update_report()
+
+# One QC image per signal with every participant processed so far (not just this batch)
+make_qc_mosaics()
 
 
 # Heart rate time course: AI-generated vs Photograph ========================================
@@ -571,7 +590,7 @@ if len(hr_timecourse) > 0:
         ax.plot(d["Time"], d["ECG_Rate_Change"], label=label)
     ax.axvline(0, linestyle="--", color="black")  # Image onset
     ax.set_xlabel("Time from image onset (s)")
-    ax.set_ylabel("Heart rate change from baseline (bpm)")
+    ax.set_ylabel("Heart rate change from image onset (bpm)")
     ax.set_title(f"N = {n_participants} participants")
     ax.legend()
     os.makedirs("signals", exist_ok=True)
