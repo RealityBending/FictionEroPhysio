@@ -1,0 +1,487 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Physio Script Guide</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #24202a; --muted: #6b6470; --card: #f7f5f8; --border: #ddd6df;
+    --code-bg: #1f1d24; --code-fg: #ece8f0; --accent: #6a596a;
+    --std: #1f6f4a; --std-bg: #dff2e8; --ours: #8a4b00; --ours-bg: #fde9cf;
+    --infra: #3b4a9a; --infra-bg: #e2e6fb; --warn: #9b1c1c; --warn-bg: #fbe1e1;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17151b; --fg: #ece8f0; --muted: #a39cab; --card: #221f28; --border: #3a3542;
+      --code-bg: #0f0e12; --code-fg: #ece8f0; --accent: #b9a3bd;
+      --std: #7fd6a8; --std-bg: #173a2a; --ours: #f2b56b; --ours-bg: #3d2a12;
+      --infra: #a9b5f5; --infra-bg: #222a52; --warn: #f19a9a; --warn-bg: #431c1c;
+    }
+  }
+  body { background: var(--bg); color: var(--fg); font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+         line-height: 1.55; margin: 0; padding: 24px 16px 80px; }
+  main { max-width: 980px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 2em; }
+  h2 { margin-top: 48px; padding-bottom: 6px; border-bottom: 3px solid var(--accent); }
+  h3 { margin: 0 0 8px; font-size: 1.1em; }
+  p, li { max-width: 78ch; }
+  .lead { color: var(--muted); font-size: 1.05em; }
+  pre { background: var(--code-bg); color: var(--code-fg); padding: 12px 14px; border-radius: 8px;
+        overflow-x: auto; font-size: 13px; line-height: 1.45; margin: 10px 0; }
+  code { font-family: Consolas, "Cascadia Code", Menlo, monospace; }
+  p code, li code, td code { background: var(--card); border: 1px solid var(--border); padding: 0 4px; border-radius: 4px; font-size: 0.92em; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 14px 16px; margin: 16px 0; }
+  .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 999px; margin-right: 6px; vertical-align: middle; }
+  .std { color: var(--std); background: var(--std-bg); }
+  .ours { color: var(--ours); background: var(--ours-bg); }
+  .infra { color: var(--infra); background: var(--infra-bg); }
+  .warn { color: var(--warn); background: var(--warn-bg); }
+  .why { margin-top: 6px; }
+  .label { font-weight: 700; }
+  .note { border-left: 5px solid var(--warn); background: var(--warn-bg); padding: 8px 12px; border-radius: 0 8px 8px 0; margin: 10px 0; }
+  .note.info { border-left-color: var(--infra); background: var(--infra-bg); }
+  table { border-collapse: collapse; margin: 10px 0; font-size: 14px; width: 100%; }
+  th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: var(--card); }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 12px 0; }
+  .flow span { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; font-size: 14px; }
+  .flow b { color: var(--accent); }
+  nav { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; margin: 20px 0; }
+  nav a { color: var(--accent); }
+  nav ol { margin: 4px 0; }
+</style>
+</head>
+<body>
+<main>
+
+<h1>Physio script guide</h1>
+<p class="lead">A walkthrough of <code>1_physio.py</code> (and the loaders in <code>func_load_physio.py</code>): what each piece of code does, why it is there, and whether it is a standard step or a decision we made for this experiment.</p>
+
+<p>Each code box has a label:</p>
+<p>
+  <span class="badge std">Standard</span> common practice in psychophysiology, or a NeuroKit default you would find in most pipelines<br>
+  <span class="badge ours">Our decision</span> chosen because of how this experiment was designed or how the data turned out (worth reporting in the methods)<br>
+  <span class="badge infra">Infrastructure</span> housekeeping that keeps the script running and the data safe; it does not change any result<br>
+  <span class="badge warn">To decide</span> an open question you may want to discuss with your supervisor
+</p>
+
+<nav>
+<b>Contents</b>
+<ol>
+  <li><a href="#primer">Physiology primer: what the signals are</a></li>
+  <li><a href="#pipeline">The pipeline at a glance</a></li>
+  <li><a href="#setup">Setup and settings</a></li>
+  <li><a href="#loaders">Loading a recording (func_load_physio.py)</a></li>
+  <li><a href="#rs">Resting state</a></li>
+  <li><a href="#hct">Heartbeat Counting Task</a></li>
+  <li><a href="#fic">Fiction task</a></li>
+  <li><a href="#end">End of each participant, saving and the plot</a></li>
+  <li><a href="#decisions">Summary: standard vs our decisions</a></li>
+  <li><a href="#open">Open questions</a></li>
+</ol>
+</nav>
+
+<!-- ======================================================================== -->
+<h2 id="primer">1. Physiology primer</h2>
+
+<div class="card">
+<h3>ECG (electrocardiography) and heart rate</h3>
+<p>The ECG records the heart's electrical activity through electrodes on the chest. Each heartbeat produces a characteristic wave; its tallest spike is the <b>R-peak</b>. The time between two R-peaks is the <b>RR interval</b> (or NN interval). Heart rate in beats per minute is <code>60 / RR interval in seconds</code>.</p>
+<p>Because a beat only happens about once a second, heart rate is only "measured" at each beat. NeuroKit fills in the values between beats (interpolation) so that <code>ECG_Rate</code> has a value at every sample. That is why a 2-second window only really contains 2–3 independent heart rate values.</p>
+<p><b>What it tells us:</b> heart rate is controlled by both branches of the autonomic nervous system. Emotional and attention-grabbing images typically produce a brief <b>slowing</b> (orienting response) in the first 1–3 s, followed by a speed-up.</p>
+</div>
+
+<div class="card">
+<h3>HRV (heart rate variability)</h3>
+<p>The heart does not beat like a metronome: RR intervals vary from beat to beat. HRV indices summarise that variation. Higher beat-to-beat variability generally reflects stronger parasympathetic (vagal, "rest and digest") influence on the heart.</p>
+<table>
+<tr><th>Index</th><th>What it measures</th></tr>
+<tr><td><code>MeanNN</code></td><td>Average RR interval (the inverse of mean heart rate)</td></tr>
+<tr><td><code>SDNN</code></td><td>Standard deviation of RR intervals: overall variability</td></tr>
+<tr><td><code>RMSSD</code></td><td>Root mean square of successive differences: fast, beat-to-beat variability, the most common vagal index</td></tr>
+<tr><td><code>HF</code></td><td>Power in the high-frequency band (0.15–0.4 Hz), linked to breathing and vagal activity</td></tr>
+<tr><td><code>LFHF</code></td><td>Ratio of low- to high-frequency power (its interpretation as "sympathovagal balance" is disputed)</td></tr>
+<tr><td><code>SampEn</code>, <code>HFD</code></td><td>Complexity / irregularity of the RR series (sample entropy, Higuchi fractal dimension)</td></tr>
+<tr><td><code>IALS</code>, <code>Ca</code>, <code>AI</code></td><td>Heart rate asymmetry: whether accelerations and decelerations contribute differently to variability</td></tr>
+</table>
+<p>Standard guidelines (Task Force, 1996) recommend at least ~5 minutes of recording for short-term HRV. The 8-minute resting state meets this.</p>
+</div>
+
+<div class="card">
+<h3>Respiration (RSP)</h3>
+<p>A belt around the lower chest stretches as the participant breathes, giving a wave with one peak per breath. From it we get <b>breathing rate</b> (breaths per minute) and <b>amplitude</b> (depth). Breathing matters for two reasons: it changes with arousal, and it directly affects heart rate (heart rate rises when you breathe in and falls when you breathe out, called respiratory sinus arrhythmia).</p>
+</div>
+
+<div class="card">
+<h3>EDA (electrodermal activity, skin conductance)</h3>
+<p>Two electrodes on the fingers measure how well the skin conducts a tiny current, in microsiemens (µS). Sweat glands in the fingers are controlled only by the <b>sympathetic</b> ("fight or flight") nervous system, so EDA is a fairly pure marker of arousal.</p>
+<ul>
+  <li><b>Tonic</b> component (skin conductance level, SCL): the slow background level, drifting over minutes.</li>
+  <li><b>Phasic</b> component (skin conductance responses, SCRs): fast bumps on top of it, typically starting 1–3 s after a stimulus and peaking a few seconds later.</li>
+</ul>
+<p>EDA is slow, which is why its epochs are longer (up to 8 s after image onset). It also has known problems: some people are "non-responders" (cold hands, little sweating), the gel can dry, and the BITalino sensor maxes out ("clips") at about 25 µS.</p>
+</div>
+
+<div class="card">
+<h3>Sampling rate</h3>
+<p>The number of measurements per second (Hz). The BITalino records at 1000 Hz and the Muse EEG at 256 Hz. When the streams were combined into one file, everything was resampled to a shared 2000 Hz timeline (twice the highest rate). So your data are at 2000 Hz: 1 second = 2000 samples. Many numbers in the script are written as <code>srate * seconds</code> to convert seconds into samples.</p>
+</div>
+
+<div class="card">
+<h3>Photosensor (PHOTO channel), events and epochs</h3>
+<p>The experiment draws a black square in the corner of the screen whenever something important is shown (e.g. an image), and a light sensor taped over that corner records it. The PHOTO channel therefore drops (goes dark) exactly when the image is on screen. This is the most precise way to know when things appeared, because it measures the screen itself rather than when the computer <i>asked</i> for the image.</p>
+<ul>
+  <li><b>Event</b>: a moment in the recording (here, each image onset and how long it lasted), found from the PHOTO channel.</li>
+  <li><b>Epoch</b>: a window of signal cut out around an event (e.g. 2 s before to 5 s after each image), with time re-set so that 0 = the event.</li>
+  <li><b>Baseline correction</b>: subtracting a reference value from each trial, so its response is measured relative to its own starting level. This script uses the value <i>at the moment the image appears</i> (time 0); another common choice is the average of the pre-event part of the epoch.</li>
+</ul>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="pipeline">2. The pipeline at a glance</h2>
+
+<div class="flow">
+  <span>Raw recording<br><small>36 channels, 2000 Hz</small></span><b>→</b>
+  <span>Load + crop<br><small>using PHOTO</small></span><b>→</b>
+  <span>Keep ECG, RSP, EDA, PHOTO</span><b>→</b>
+  <span>Find events<br><small>check against behaviour</small></span><b>→</b>
+  <span>Clean signals<br><small>nk.bio_process</small></span><b>→</b>
+  <span>QC plots<br><small>one PNG per participant</small></span><b>→</b>
+  <span>Epochs / intervals</span><b>→</b>
+  <span>Features<br><small>HRV, HCT scores, trial responses</small></span><b>→</b>
+  <span>Save CSVs<br><small>after every participant</small></span>
+</div>
+
+<table>
+<tr><th>Task</th><th>Unit of output</th><th>Main outputs</th><th>Saved to</th></tr>
+<tr><td>Resting state</td><td>One row per participant</td><td>Resting HRV (<code>_RS</code>)</td><td><code>rawdata_participants.csv</code></td></tr>
+<tr><td>HCT</td><td>One row per participant</td><td>Interoceptive accuracy, sensibility, awareness; HRV during the task (<code>_HCT</code>)</td><td><code>rawdata_participants.csv</code></td></tr>
+<tr><td>Fiction (Phase 1)</td><td>One row per image</td><td>Heart rate, breathing and EDA responses to each image</td><td><code>rawdata_trials.csv</code>, <code>rawdata_hr_timecourse.csv</code></td></tr>
+<tr><td>All tasks</td><td>One image per signal</td><td>QC plots of every participant</td><td><code>signals/participants/&lt;signal&gt;/&lt;sub&gt;.png</code>, <code>signals/&lt;signal&gt;_all.png</code></td></tr>
+</table>
+
+<!-- ======================================================================== -->
+<h2 id="setup">3. Setup and settings</h2>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code># Loading functions (run this script from the analysis/ folder)
+from func_load_physio import load_fiction, load_hct, load_rs</code></pre>
+<p><span class="label">What:</span> imports the loading functions from the local <code>func_load_physio.py</code>.</p>
+<p class="why"><span class="label">Why:</span> local edits to the loaders take effect straight away, with no need to push them to GitHub first. The script must be run from the <code>analysis/</code> folder so Python can find the file (and so the relative paths <code>../data/</code> and <code>signals/</code> point to the right place).</p>
+</div>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code>def qc_physio(df, info, sub, plot_ecg=[], plot_rsp=[], plot_eda=[]):
+    nk.ecg_plot(df, info)
+    ...
+def save_qc(images, sub): ...      # signals/participants/&lt;signal&gt;/&lt;sub&gt;.png
+def make_qc_mosaics(): ...         # signals/&lt;signal&gt;_all.png</code></pre>
+<p><span class="label">What:</span> makes NeuroKit's summary plot of each cleaned signal (with detected peaks) and labels it with the participant ID. <code>save_qc</code> writes each participant's plot to its own PNG straight away. At the end of the run, <code>make_qc_mosaics</code> combines every PNG in each folder (including participants from earlier runs) into one grid per signal: <code>rs_ecg</code>, <code>rs_rsp</code>, <code>hct_ecg</code>, <code>hct_rsp</code>, <code>fic_ecg</code>, <code>fic_rsp</code>, <code>fic_eda</code>.</p>
+<p class="why"><span class="label">Why:</span> visual quality control is <span class="badge std">Standard</span> and essential: automatic peak detection can fail on noisy data, and you need to look before trusting the numbers (this is where you will check EDA before deciding exclusions). Saving each plot immediately keeps them out of memory and means they survive a crash.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>if sub not in []:  # No RS file
+    ...
+if sub not in []:  # No photosensor
+    ...
+if sub not in []:  # Fiction
+    ...</code></pre>
+<p><span class="label">What:</span> each task sits inside an <code>if sub not in [...]</code> block. Adding a participant ID to the list skips that task for them. The lists are currently all empty, so every task is run for every participant.</p>
+<p class="why"><span class="label">Why:</span> the place to record task-level exclusions once they are decided (from the session notes and the QC plots). Write the reason next to each ID so it can be reported.</p>
+<div class="note">An earlier version listed exclusions and missing trials here (sub-003, sub-012 Fiction, sub-005 trial 23, sub-006 trial 1). These are no longer handled. Participants whose Fiction recording is missing images will now stop the run at the event-count check (section 7) until they are added to a list. sub-014's split recording is now joined by the loader (section 4).</div>
+</div>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code>resume = False
+
+if resume:
+    df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
+    df_trials = pd.read_csv("../data/rawdata_trials.csv")  # one row per image (fiction)
+    hr_timecourse = [pd.read_csv("../data/rawdata_hr_timecourse.csv")]
+else:
+    df = pd.DataFrame()
+    df_trials = pd.DataFrame()
+    hr_timecourse = []</code></pre>
+<p><span class="label">What:</span> <code>resume = False</code> starts from empty tables; <code>True</code> loads the saved CSVs and carries on. Inside the loop, a participant already in <code>df</code> is skipped (<i>"Already processed"</i>).</p>
+<p class="why"><span class="label">Why:</span> processing everyone at once needs more memory than the computer has, so participants can be done in batches or picked up after a crash. When starting from scratch, delete <code>signals/participants/</code> first so old QC images are not mixed into the grids.</p>
+<div class="note">In the current script this block is commented out, so <code>df</code>, <code>df_trials</code> and <code>hr_timecourse</code> are never created and the loop fails. Un-comment it before running.</div>
+</div>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code>for i, sub in enumerate(meta["participant_id"].values[0:5]):
+    ...</code></pre>
+<p><span class="label">What:</span> loops over participants; the slice (<code>[0:5]</code>) chooses the batch. There is no <code>try / except</code>: any error (including the safety checks below) stops the run at that participant, with the error message showing what went wrong.</p>
+<p class="why"><span class="label">Why:</span> a problem is seen and fixed immediately rather than logged and possibly overlooked. Because results are saved after every participant, everything processed before the error is kept.</p>
+<div class="note">The current script has <code>enumerate(meta["participant_id"]).values[0:5]</code>, which errors. The slice belongs inside the brackets, as shown above.</div>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="loaders">4. Loading a recording (<code>func_load_physio.py</code>)</h2>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>rs = mne.io.read_raw_brainvision(file, preload=True)
+rs = rs.set_channel_types({"ECG": "ecg", "RSP": "resp", "EDA": "gsr"})
+rs = rs.set_montage("standard_1020")</code></pre>
+<p><span class="label">What:</span> reads the BrainVision file (the BIDS format your recordings were converted to) with MNE, tells MNE which channel is which type, and gives the EEG channels their standard scalp positions.</p>
+<div class="note info">sub-036 has no EDA channel in its resting-state file, so <code>load_rs</code> leaves EDA out of the channel types for that participant.</div>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>events = nk.events_find(rs["PHOTO"][0][0], threshold_keep="below",
+                        duration_min=int(sfreq * 5))
+start_end = [events["onset"][0], events["onset"][-1] + events["duration"][-1]]
+rs = nk.mne_crop(rs, smin=..., smax=...)</code></pre>
+<p><span class="label">What:</span> finds the dark periods on the photosensor (<code>"below"</code> = the signal drops when the square is black) and crops the recording from the first to the last one, plus a margin. Each loader uses a minimum duration that fits its task:</p>
+<table>
+<tr><th>Loader</th><th>Minimum dark period</th><th>Margin kept</th><th>Why</th></tr>
+<tr><td><code>load_rs</code></td><td>5 s</td><td>2000 samples (1 s) each side</td><td>The rest period is one long 8-min marker</td></tr>
+<tr><td><code>load_hct</code></td><td>10 s</td><td>2000 samples (1 s) each side</td><td>Counting intervals are 20–45 s</td></tr>
+<tr><td><code>load_fiction</code></td><td>0.5 s</td><td>3 s before, 5 s after</td><td>Images are 4 s; anything under 0.5 s is flicker. The margins leave room for the −2 s start and the 8 s end of the epochs</td></tr>
+</table>
+<p class="why"><span class="label">Why:</span> recordings include set-up time and instructions before and after the task; cropping removes them. The minimum durations are tuned to this experiment's timings.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>files = sorted([f for f in os.listdir(path_eeg) if "FIC" in f and ".vhdr" in f])
+...
+fic = mne.concatenate_raws(mne.match_channel_orders(runs)) if len(runs) &gt; 1 else runs[0]</code></pre>
+<p><span class="label">What:</span> if the Fiction recording was split into several files (e.g. sub-014 stopped at the break and restarted), <code>load_fiction</code> crops each file and joins them in order. Files with no images on the photosensor are skipped.</p>
+<p class="why"><span class="label">Why:</span> keeps those participants' trials instead of excluding them. Epochs are cut around each image, so the join between files does not fall inside a trial as long as the break happened between images.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>fic = fic.pick(["ECG", "RSP", "EDA", "PHOTO"])  # in 1_physio.py, right after loading</code></pre>
+<p><span class="label">What:</span> keeps only the channels this script uses (out of 36; the rest are Muse EEG, motion and battery channels). Resting state and HCT keep ECG, RSP and PHOTO.</p>
+<p class="why"><span class="label">Why:</span> memory. It does not change any result, because only these channels are ever processed here.</p>
+</div>
+
+<div class="note info"><code>func_load_physio.py</code> also contains <code>load_tap</code> for the tapping task. <code>1_physio.py</code> does not use it.</div>
+
+<!-- ======================================================================== -->
+<h2 id="rs">5. Resting state</h2>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>rs, info = nk.bio_process(ecg=rs["ECG"][0][0], rsp=rs["RSP"][0][0], sampling_rate=srate)</code></pre>
+<p><span class="label">What:</span> NeuroKit's all-in-one processing with its default methods:</p>
+<ul>
+  <li><b>ECG</b>: filtered to remove slow baseline wander (0.5 Hz high-pass) and mains electrical noise (50 Hz), R-peaks detected, heart rate computed and interpolated between beats → <code>ECG_Clean</code>, <code>ECG_R_Peaks</code>, <code>ECG_Rate</code>.</li>
+  <li><b>RSP</b>: filtered to the breathing range (about 0.05–3 Hz), breaths detected → <code>RSP_Rate</code>, <code>RSP_Amplitude</code>.</li>
+</ul>
+<p class="why"><span class="label">Why:</span> these are well-validated default pipelines; using defaults (and saying so) is standard and reproducible.</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span> <span class="badge ours">Our decision</span>
+<pre><code>hrv = nk.hrv(rs["ECG_R_Peaks"].values.nonzero()[0], sampling_rate=srate)
+idx = ["MeanNN", "SDNN", "RMSSD", "SampEn", "HF", "HFD", "LFHF", "IALS", "Ca", "AI"]
+hrv.columns = [s + "_RS" for s in hrv.columns]</code></pre>
+<p><span class="label">What:</span> takes the sample positions of all R-peaks, computes NeuroKit's full set of HRV indices, keeps 10 and names them with <code>_RS</code>.</p>
+<p class="why"><span class="label">Why:</span> resting HRV from an 8-min recording is standard (it is a trait-like marker of autonomic regulation, often linked to interoception and emotion regulation). <b>Which</b> 10 indices to keep is a choice: they cover the time domain (MeanNN, SDNN, RMSSD), frequency domain (HF, LFHF), complexity (SampEn, HFD) and asymmetry (IALS, Ca, AI).</p>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="hct">6. Heartbeat Counting Task</h2>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>events = nk.events_find(hct["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 10))
+assert len(events["onset"]) == 6, f"Photosensor shows {len(events['onset'])} intervals, expected 6"</code></pre>
+<p><span class="label">What:</span> finds the counting intervals on the photosensor again (the loader only used them for cropping) and checks there are exactly 6.</p>
+<p class="why"><span class="label">Why:</span> the accuracy score compares the participant's count with the real number of heartbeats <i>in that interval</i>, so the intervals must be right. If one is missing, the run stops instead of pairing counts with the wrong intervals. The length of each interval is not checked against the programmed length (20–45 s); an earlier version did this with a 0.5 s tolerance.</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>epochs = nk.epochs_create(hct, events, sampling_rate=srate,
+                          epochs_start=0, epochs_end="from_events")
+hct_beh["N_R_peaks"] = [epoch["ECG_R_Peaks"].sum() for j, epoch in epochs.items()]
+hct_beh["HCT_Accuracy"] = 1 - (np.abs(hct_beh["HCT_count"] - peaks) / peaks)</code></pre>
+<p><span class="label">What:</span> cuts out each counting interval exactly (start to end), counts the R-peaks in it (the true number of heartbeats), and computes accuracy for each interval: 1 means perfect, lower means further off.</p>
+<p class="why"><span class="label">Why:</span> this is the classic Schandry (1981) heartbeat counting accuracy formula.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code># a count of 0 is a real answer
+valid = hct_beh["HCT_count"].notna()</code></pre>
+<p><span class="label">What:</span> a count of 0 is kept as a real answer ("felt no heartbeats"), giving an accuracy near 0 for that interval. Only missing counts (NaN) are left out: their accuracy is NaN, which <code>np.nanmean</code> skips, and they are excluded from the awareness correlation.</p>
+<p class="why"><span class="label">Why:</span> 0 is a valid response on this task; leaving it out would make poor counters look more accurate.</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>dfsub["HCT_Accuracy"]    = np.nanmean(hct_beh["HCT_Accuracy"])
+dfsub["HCT_Sensibility"] = np.nanmean(hct_beh["HCT_confidence"])
+dfsub["HCT_Awareness"]   = scipy.stats.spearmanr(confidence[valid], accuracy[valid]).statistic</code></pre>
+<p><span class="label">What:</span> the three dimensions of interoception from Garfinkel et al. (2015):</p>
+<ul>
+  <li><b>Accuracy</b>: how close counts are to reality (objective performance).</li>
+  <li><b>Sensibility</b>: how confident people feel (self-report).</li>
+  <li><b>Awareness</b> (metacognitive): whether confidence tracks accuracy; here the correlation across the 6 intervals.</li>
+</ul>
+<p class="why"><span class="label">Why:</span> the three-dimension model is standard. Using a Spearman correlation for awareness is a common, simple choice; Garfinkel et al. used a ROC-based measure, so worth stating which you use.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span> <span class="badge warn">To decide</span>
+<pre><code>hrv = pd.concat([nk.hrv_time(e["ECG_R_Peaks"].values.nonzero()[0], sampling_rate=srate)
+                 for e in epochs.values()])
+hrv = hrv[["HRV_" + s for s in ["MeanNN", "SDNN", "RMSSD"]]].mean(axis=0)</code></pre>
+<p><span class="label">What:</span> time-domain HRV for each counting interval, averaged across the 6.</p>
+<p class="why"><span class="label">Why / caution:</span> HRV while attending to the heart is a reasonable measure, but intervals are only 20–45 s (about 20–50 beats), too short for frequency-domain and nonlinear indices. <code>MeanNN</code> is fine at this length; <code>SDNN</code> and <code>RMSSD</code> are "ultra-short" HRV here and much noisier than the 5-minute standard, so interpret them cautiously.</p>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="fic">7. Fiction task (Phase 1)</h2>
+
+<div class="card">
+<p><b>Reminder of one trial:</b> fixation 3 s → <b>label</b> 2 s → fixation 3–5 s (random) → <b>image 4 s</b> → ratings (self-paced). The photosensor only marks the image. Phase 2 has no physiological recording.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>fic_beh = fic_beh.sort_values("Trial_Order_Phase1").reset_index(drop=True)
+events = nk.events_find(fic["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 2))</code></pre>
+<p><span class="label">What:</span> puts the behavioural rows in the order the images were shown, then finds the images on the photosensor, keeping dark periods of at least 2 s.</p>
+<p class="why"><span class="label">Why:</span> events and trials are matched <b>by position</b> (1st event = 1st trial), so the rows must be in presentation order. The 2 s minimum is stricter than the loader's 0.5 s (which is only used for cropping): images last 4 s, while the start-up blip and flicker are shorter.</p>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>print(f"   - {len(events['onset'])} events found, {len(fic_beh)} trials in behavioral data")
+assert len(events["onset"]) == len(fic_beh), "Number of events and trials differ"</code></pre>
+<p><span class="label">What:</span> the number of images found on the photosensor must equal the number of trials in the behavioural file.</p>
+<p class="why"><span class="label">Why:</span> if even one marker were missing, every later trial would be paired with the wrong label. The run stops instead. Image durations are not checked against 4 s (an earlier version did, with a 0.3 s tolerance), and there is no longer a way to mark single trials as unrecorded: a participant with a missing marker has to be excluded from Fiction or handled separately.</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>fic, info = nk.bio_process(ecg=..., rsp=..., eda=fic["EDA"][0][0], sampling_rate=srate, keep=...)</code></pre>
+<p><span class="label">What:</span> same as resting state, plus <b>EDA</b>: smoothed (low-pass filter) and split into <code>EDA_Tonic</code> (slow level) and <code>EDA_Phasic</code> (fast responses, NeuroKit's default high-pass method), with SCR peaks detected.</p>
+<p class="why"><span class="label">Why:</span> separating tonic from phasic is standard EDA practice. Because the slow part is removed from <code>EDA_Phasic</code>, it is already free of slow drift (gel drying etc.).</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span> <span class="badge ours">Our decision</span>
+<pre><code>epochs_ecg = nk.epochs_create(fic, events, sampling_rate=srate, epochs_start=-2, epochs_end=5)
+epochs_eda = nk.epochs_create(fic, events, sampling_rate=srate, epochs_start=-2, epochs_end=8)</code></pre>
+<p><span class="label">What:</span> cuts a window around every image: −2 to 5 s for heart rate, −2 to 8 s for EDA and breathing.</p>
+<p class="why"><span class="label">Why:</span> epoching around stimulus onset is standard. The windows are our choice:</p>
+<ul>
+  <li><b>−2 s</b>: shows what heart rate was doing just before the image in the time-course plot. The trial features do not use this part (see the baseline below). It cannot be much longer, because the label appears only 3–5 s before the image.</li>
+  <li><b>5 s for ECG</b>: covers the 4 s image plus 1 s, enough for the initial heart rate slowing and speeding up.</li>
+  <li><b>8 s for EDA</b>: skin conductance responses start 1–3 s after a stimulus and peak a few seconds later, so the window runs well past the 4 s image.</li>
+</ul>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span> <span class="badge ours">Our decision</span>
+<pre><code>onset_ecg = epoch_ecg.iloc[np.argmin(np.abs(epoch_ecg.index))]   # sample closest to 0 s
+resp_ecg  = epoch_ecg[epoch_ecg.index &gt;= 0]
+"ECG_Rate_Change": resp_ecg["ECG_Rate"].mean() - onset_ecg["ECG_Rate"],
+"EDA_Phasic_Max":  resp_eda["EDA_Phasic"].max() - onset_eda["EDA_Phasic"],
+...</code></pre>
+<p><span class="label">What:</span> for each trial, takes the <b>value at image onset</b> (the sample closest to 0 s) as the baseline and the part of the epoch from 0 s onwards as the <b>response</b>, then computes one number per feature.</p>
+<p class="why"><span class="label">Why:</span> baseline correction is standard: it removes differences in starting level between trials. Using the value at onset (rather than the mean of the 2 s before) measures change from the exact moment the image appears and does not average over the fixation period that follows the label. A single sample is noisier than a mean, but <code>ECG_Rate</code> is interpolated between beats and <code>EDA_Phasic</code> is smoothed, so the onset value is not a raw spike. The specific features are our choice:</p>
+<table>
+<tr><th>Feature</th><th>Meaning</th><th>Corrected?</th></tr>
+<tr><td><code>ECG_Rate_Change</code></td><td>Mean heart rate after onset minus heart rate at onset</td><td>Yes</td></tr>
+<tr><td><code>ECG_Rate_Min</code></td><td>Lowest heart rate after onset (captures the slowing)</td><td>No (raw bpm)</td></tr>
+<tr><td><code>ECG_Rate_Baseline</code></td><td>Heart rate at image onset</td><td>No (raw bpm)</td></tr>
+<tr><td><code>ECG_Rate_Mean</code></td><td>Mean heart rate after onset</td><td>No (raw bpm)</td></tr>
+<tr><td><code>RSP_Rate_Change</code></td><td>Mean breathing rate after onset minus breathing rate at onset (0–8 s)</td><td>Yes</td></tr>
+<tr><td><code>RSP_Amplitude_Mean</code></td><td>Breathing depth after onset (0–8 s)</td><td>No</td></tr>
+<tr><td><code>EDA_Phasic_Max</code>, <code>EDA_Phasic_Mean</code></td><td>Peak / mean skin conductance response after onset (0–8 s), minus the value at onset</td><td>Yes</td></tr>
+<tr><td><code>EDA_Tonic_Baseline</code></td><td>Background skin conductance at image onset</td><td>No</td></tr>
+</table>
+</div>
+
+<div class="card">
+<span class="badge ours">Our decision</span>
+<pre><code>hr = epoch_ecg["ECG_Rate"] - onset_ecg["ECG_Rate"]
+hr = hr.groupby((hr.index * 10).round() / 10).mean()</code></pre>
+<p><span class="label">What:</span> the full heart rate time course of each trial (−2 to 5 s, relative to heart rate at onset), averaged into 0.1 s steps and labelled with the condition.</p>
+<p class="why"><span class="label">Why:</span> to plot how heart rate unfolds over time for AI-generated vs Photograph. The 0.1 s bins only reduce file size; heart rate cannot change meaningfully faster than that anyway.</p>
+</div>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code>features = pd.DataFrame(features)
+trials = fic_beh.join(features)
+trials["participant_id"] = sub</code></pre>
+<p><span class="label">What:</span> attaches the physiological features to the behavioural rows (one row per image, in presentation order) and adds the participant ID.</p>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="end">8. End of each participant, saving and the plot</h2>
+
+<div class="card">
+<span class="badge infra">Infrastructure</span>
+<pre><code>dfsub["participant_id"] = sub
+df = pd.concat([df, dfsub], axis=0)
+save_data()
+for name in ["rs", "hct", "fic", "epochs", "epochs_ecg", "epochs_eda"]:
+    globals().pop(name, None)
+plt.close("all")
+gc.collect()</code></pre>
+<p><span class="label">What:</span> adds the participant's row, then saves all three CSVs (<code>rawdata_participants.csv</code>, <code>rawdata_trials.csv</code>, <code>rawdata_hr_timecourse.csv</code>), overwriting them each time, and frees memory before the next participant. After the loop, <code>make_qc_mosaics()</code> builds the QC grids.</p>
+<p class="why"><span class="label">Why:</span> saving after every participant means nothing is lost if the run stops, and freeing memory lets more participants fit in one run.</p>
+</div>
+
+<div class="card">
+<span class="badge std">Standard</span>
+<pre><code>hr = hr.groupby(["participant_id", "Condition", "Time"])["ECG_Rate_Change"].mean()
+hr = hr.groupby(["Condition", "Time"]).mean().reset_index()
+ax.set_title(f"N = {n_participants} participants")</code></pre>
+<p><span class="label">What:</span> averages each participant's curves first, then averages across participants, and plots AI-generated vs Photograph with image onset at 0. Saved as <code>signals/fic_hr_timecourse.png</code>.</p>
+<p class="why"><span class="label">Why:</span> averaging within participants first (a "grand average") is standard: everyone counts equally, however many usable trials they have.</p>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="decisions">9. Summary: standard vs our decisions</h2>
+
+<table>
+<tr><th>Step</th><th>Type</th><th>Choice and reason</th></tr>
+<tr><td>Signal cleaning, R-peak, breath and EDA decomposition</td><td><span class="badge std">Standard</span></td><td>NeuroKit 0.2.13 default methods</td></tr>
+<tr><td>Resting HRV from 8 min</td><td><span class="badge std">Standard</span></td><td>Meets the ≥5 min recommendation</td></tr>
+<tr><td>HCT accuracy formula</td><td><span class="badge std">Standard</span></td><td>Schandry (1981)</td></tr>
+<tr><td>Accuracy / sensibility / awareness</td><td><span class="badge std">Standard</span></td><td>Garfinkel et al. (2015); awareness computed as a Spearman correlation</td></tr>
+<tr><td>Photosensor for timing</td><td><span class="badge std">Standard</span></td><td>Most precise stimulus timing</td></tr>
+<tr><td>Baseline correction</td><td><span class="badge std">Standard</span> <span class="badge ours">Our decision</span></td><td>Value at image onset, not the pre-onset mean</td></tr>
+<tr><td>Grand average plot</td><td><span class="badge std">Standard</span></td><td>Within participants first</td></tr>
+<tr><td>Crop / event duration floors (loaders 5 s, 10 s, 0.5 s; Fiction events 2 s)</td><td><span class="badge ours">Our decision</span></td><td>Fitted to each task's timings</td></tr>
+<tr><td>Event checks (6 HCT intervals; Fiction events = trials)</td><td><span class="badge ours">Our decision</span></td><td>Stop the run rather than mislabel data</td></tr>
+<tr><td>Joining split Fiction recordings</td><td><span class="badge ours">Our decision</span></td><td>Keeps participants whose recording was restarted</td></tr>
+<tr><td>Zero HCT counts kept</td><td><span class="badge ours">Our decision</span></td><td>A real answer; only missing counts are left out</td></tr>
+<tr><td>Epoch windows (−2 to 5 s ECG, −2 to 8 s EDA)</td><td><span class="badge ours">Our decision</span></td><td>Constrained by the label timing; EDA is slower</td></tr>
+<tr><td>Which HRV indices and trial features</td><td><span class="badge ours">Our decision</span></td><td>Coverage of time, frequency, complexity, asymmetry</td></tr>
+<tr><td>Task exclusions (<code>if sub not in [...]</code>)</td><td><span class="badge ours">Our decision</span></td><td>None yet; to fill in from session notes and QC</td></tr>
+<tr><td>Keeping only the needed channels, batching, saving after every participant</td><td><span class="badge infra">Infrastructure</span></td><td>Memory and safety; no effect on results</td></tr>
+</table>
+
+<!-- ======================================================================== -->
+<h2 id="open">10. Open questions</h2>
+<ul>
+  <li><span class="badge warn">To decide</span> <b>Baseline</b>: value at onset (current) or the mean of a pre-image window? Either way the reference comes after the label, so it may already contain the label's effect. A baseline before the label would need each trial's jittered fixation length added to the behavioural data.</li>
+  <li><span class="badge warn">To decide</span> <b>Exclusions</b>: fill in the <code>if sub not in [...]</code> lists, e.g. participants with missing Fiction markers (previously sub-005, sub-006, sub-012) and sub-003 (only Fiction is split; exclude only Fiction, or the whole participant because of possible phone use?).</li>
+  <li><span class="badge warn">To decide</span> <b>Timing checks</b>: bring back the interval-length check for HCT and the 4 s image-duration check for Fiction?</li>
+  <li><span class="badge warn">To decide</span> <b>HCT HRV</b> from 20–45 s intervals: keep SDNN and RMSSD, or only MeanNN?</li>
+  <li><span class="badge warn">To decide</span> <b>EDA exclusions</b> (flat signal, non-responders, clipping at 25 µS) after visual checks.</li>
+  <li><span class="badge warn">To decide</span> <b>HCT awareness</b>: Spearman correlation (current) or the ROC-based measure used by Garfinkel et al.?</li>
+</ul>
+
+</main>
+</body>
+</html>
