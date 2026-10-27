@@ -81,7 +81,7 @@
 <p class="lead">Study overview: the physiological signals, the four recorded tasks and how their data are coded, the participant exclusions and the processing decisions.</p>
 
 <!-- Update this note each time you process more participants -->
-<div class="note"><b>Processing status (27 Oct 2026):</b> 5 participants run through <code>1_physio.py</code> (sub-001 to sub-005). Next: sub-006 onwards.</div>
+<div class="note"><b>Processing status:</b> 30 participants run through <code>1_physio.py</code></div>
 
 <nav>
 <b>Contents</b>
@@ -349,6 +349,7 @@
 <tr><td>sub-000</td><td>Fiction</td><td><span class="badge excluded">Excluded</span></td><td>Reason</td><td>Session notes / QC plot</td></tr>
 -->
 <tr><td>sub-012</td><td>Fiction</td><td><span class="badge excluded">Excluded</span></td><td>Only 4 of 50 images recorded: the Muse battery died and the recording was not resumed after the battery was replaced.</td><td>Photosensor shows 4 images (4 s each, normal spacing); the raw recording is only 3.6 min long; Comments_Fiction. Resting state and HCT are kept.</td></tr>
+<tr><td>sub-031</td><td>Fiction</td><td><span class="badge proposed">Skipped for now</span></td><td>Sensors were unplugged from the BITalino during the break (water break, 10:35–12:20). This gives a 40.6 s flat period read as dark and a spike to 57.6 when plugged back in, which breaks the automatic event threshold (2 events found for 50 trials). The 50 images themselves are recorded.</td><td>PHOTO plot; Comments_Fiction. Possible fix: threshold = half the median light level, then remove the extra event during the break (51 → 50). Resting state and HCT are kept.</td></tr>
 </table>
 </div>
 
