@@ -111,22 +111,22 @@ meta = pd.read_csv(path + "participants.tsv", sep="\t")
 # Initialize data ============================================================================
 # resume = False starts from scratch (delete signals/participants/ first, so old QC images
 # are not mixed in); True carries on from the saved files, e.g. after a crash
-# resume = False
+resume = False
 
-# if resume:
-#     df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
-#     df_trials = pd.read_csv("../data/rawdata_trials.csv")  # one row per image (fiction)
-#     hr_timecourse = []  # heart rate time course around image onset (fiction)
-#     if os.path.exists("../data/rawdata_hr_timecourse.csv"):
-#         hr_timecourse = [pd.read_csv("../data/rawdata_hr_timecourse.csv")]
-# else:
-#     df = pd.DataFrame()  # one row per participant
-#     df_trials = pd.DataFrame()  # one row per image (fiction)
-#     hr_timecourse = []  # heart rate time course around image onset (fiction)
+if resume:
+    df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
+    df_trials = pd.read_csv("../data/rawdata_trials.csv")  # one row per image (fiction)
+    hr_timecourse = []  # heart rate time course around image onset (fiction)
+    if os.path.exists("../data/rawdata_hr_timecourse.csv"):
+        hr_timecourse = [pd.read_csv("../data/rawdata_hr_timecourse.csv")]
+else:
+    df = pd.DataFrame()  # one row per participant
+    df_trials = pd.DataFrame()  # one row per image (fiction)
+    hr_timecourse = []  # heart rate time course around image onset (fiction)
 
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"]).values[0:5]:
+for i, sub in enumerate(meta["participant_id"].values[0:5]):
     # Print progress and comments
     print(sub)
     print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
@@ -265,13 +265,36 @@ for i, sub in enumerate(meta["participant_id"]).values[0:5]:
 
         # Load data
         fic = load_fiction(path, sub)
-        fic = fic.pick(["ECG", "RSP", "EDA", "PHOTO"])  # drop unused channels (EEG etc.) to save memory
+        fic = fic.pick(["ECG", "RSP", "EDA", "PHOTO", "JsPsychMarker"])  # drop unused channels (EEG etc.) to save memory
         srate = fic.info["sfreq"]
 
         # Find events (again as data was cropped); only phase 1 is recorded.
         # Minimum duration = 2 s: images last 4 s, the startup blip is shorter
         events = nk.events_find(fic["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 2))
+        
+        #### MISSING TRIALS OR EXTRA TRIALS
+        # Diagnostic: jsPsych markers (image sent) vs photosensor (image shown); a blue pulse with no orange = missing trial
+        
+        photo, marker = fic["PHOTO"][0][0], fic["JsPsychMarker"][0][0]
+        onsets = np.where(np.diff(np.nan_to_num(marker)) == 1)[0] + 1  # start of each image sent by jsPsych
+        plt.figure(figsize=(16, 3))
+        plt.plot(marker, label="jsPsych marker (image sent)")
+        plt.plot((photo < (np.nanmin(photo) + np.nanmax(photo)) / 2) * 0.8, label="Photosensor (image shown)")
+        plt.xticks(onsets, range(1, len(onsets) + 1), fontsize=8); plt.grid(axis="x", alpha=0.3)
+        plt.xlabel("Trial (jsPsych marker)"); plt.yticks([]); plt.title(sub)
+        
+        # Extra trials are removed
+        if sub in ["sub-003"]:
+            # Event 26 is not an image: dark period at the end of FP1 while the participant warmed their hands (see Comments_Fiction)
+            events = {key: np.delete(value, 25) for key, value in events.items()}
 
+        # Unrecorded trials are kept as NA
+        fic_rec = fic_beh
+        if sub in ["sub-005"]:
+            # BITalino crashed at 11:10 (see Comments_Fiction): trial 23 has a jsPsych marker but no photosensor event
+            fic_rec = fic_beh[fic_beh["Trial_Order_Phase1"] != 23]
+            
+            
         # Make sure the number of events matches the number of trials in the behavioral data
         print(f"   - {len(events['onset'])} events found, {len(fic_beh)} trials in behavioral data")
         assert len(events["onset"]) == len(fic_beh), "Number of events and trials differ"
