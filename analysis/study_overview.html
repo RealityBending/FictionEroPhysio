@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FictionEroPhysio Overview</title>
+<!--
+  HOW TO EDIT THIS FILE BY HAND
+  - Text: edit anything between the tags. <b>bold</b>, <code>code</code>, <br> = line break.
+  - New tab: copy one <button class="tab" data-tab="..."> and one <div class="panel" id="...">,
+    and give both the same new name (no spaces).
+  - New exclusion: copy the example <tr>...</tr> row in the Exclusions table (section 3), then delete the "No participants excluded" row.
+  - New decision: copy one <tr>...</tr> row in the Decisions table (section 4) and change the cells.
+  - Processing status: update the note under the title.
+  Nothing generates or overwrites this file.
+-->
+<style>
+  :root {
+    --bg: #ffffff; --fg: #24202a; --muted: #6b6470; --card: #f7f5f8; --border: #ddd6df;
+    --accent: #6a596a; --accent-fg: #ffffff;
+    --ok: #1f6f4a; --ok-bg: #dff2e8; --warn: #9b1c1c; --warn-bg: #fbe1e1;
+    --maybe: #8a4b00; --maybe-bg: #fde9cf; --info: #3b4a9a; --info-bg: #e2e6fb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #17151b; --fg: #ece8f0; --muted: #a39cab; --card: #221f28; --border: #3a3542;
+      --accent: #b9a3bd; --accent-fg: #17151b;
+      --ok: #7fd6a8; --ok-bg: #173a2a; --warn: #f19a9a; --warn-bg: #431c1c;
+      --maybe: #f2b56b; --maybe-bg: #3d2a12; --info: #a9b5f5; --info-bg: #222a52;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #17151b; --fg: #ece8f0; --muted: #a39cab; --card: #221f28; --border: #3a3542;
+    --accent: #b9a3bd; --accent-fg: #17151b;
+    --ok: #7fd6a8; --ok-bg: #173a2a; --warn: #f19a9a; --warn-bg: #431c1c;
+    --maybe: #f2b56b; --maybe-bg: #3d2a12; --info: #a9b5f5; --info-bg: #222a52;
+  }
+  * { box-sizing: border-box; }
+  body { background: var(--bg); color: var(--fg); font-family: "Segoe UI", Helvetica, Arial, sans-serif;
+         line-height: 1.55; margin: 0; padding: 24px 16px 80px; }
+  main { max-width: 980px; margin: 0 auto; }
+  h1 { margin: 0 0 4px; font-size: 2em; }
+  h2 { margin-top: 48px; padding-bottom: 6px; border-bottom: 3px solid var(--accent); }
+  h3 { margin: 18px 0 6px; font-size: 1.08em; }
+  p, li { max-width: 80ch; }
+  .lead { color: var(--muted); font-size: 1.05em; }
+  code { font-family: Consolas, "Cascadia Code", Menlo, monospace; background: var(--card);
+         border: 1px solid var(--border); padding: 0 4px; border-radius: 4px; font-size: 0.92em; }
+  nav { background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 10px 16px; margin: 20px 0; }
+  nav a { color: var(--accent); }
+  table { border-collapse: collapse; margin: 10px 0; font-size: 14px; width: 100%; }
+  th, td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; }
+  th { background: var(--card); }
+  .scroll { overflow-x: auto; }
+  .note { border-left: 5px solid var(--info); background: var(--info-bg); padding: 8px 12px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .note.warn { border-left-color: var(--warn); background: var(--warn-bg); }
+  .badge { display: inline-block; font-size: 12px; font-weight: 700; padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+  .excluded { color: var(--warn); background: var(--warn-bg); }
+  .proposed { color: var(--maybe); background: var(--maybe-bg); }
+  .kept { color: var(--ok); background: var(--ok-bg); }
+  .flow { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 10px 0; }
+  .flow span { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 5px 9px; font-size: 14px; }
+  .flow b { color: var(--accent); }
+
+  /* Tabs */
+  .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px; border-bottom: 2px solid var(--border); }
+  .tab { font: inherit; font-size: 15px; background: none; color: var(--muted); border: 1px solid transparent;
+         border-bottom: none; border-radius: 8px 8px 0 0; padding: 7px 14px; cursor: pointer; margin-bottom: -2px; }
+  .tab:hover { color: var(--fg); }
+  .tab.active { color: var(--fg); background: var(--card); border-color: var(--border); border-bottom: 2px solid var(--card); font-weight: 600; }
+  .panel { display: none; background: var(--card); border: 1px solid var(--border); border-top: none;
+           border-radius: 0 0 10px 10px; padding: 6px 18px 16px; }
+  .panel.active { display: block; }
+  .panel table th { background: var(--bg); }
+</style>
+</head>
+<body>
+<main>
+
+<h1>FictionEroPhysio</h1>
+<p class="lead">Study overview: the physiological signals, the four recorded tasks and how their data are coded, the participant exclusions and the processing decisions.</p>
+
+<!-- Update this note each time you process more participants -->
+<div class="note"><b>Processing status (27 Oct 2026):</b> 5 participants run through <code>1_physio.py</code> (sub-001 to sub-005). Next: sub-006 onwards.</div>
+
+<nav>
+<b>Contents</b>
+<ol>
+  <li><a href="#primer">Physiology primer</a></li>
+  <li><a href="#tasks">Tasks</a></li>
+  <li><a href="#exclusions">Exclusions</a></li>
+  <li><a href="#decisions">Decisions</a></li>
+</ol>
+</nav>
+
+<!-- ======================================================================== -->
+<h2 id="primer">1. Physiology</h2>
+<p>Physiological signals were recorded with a BITalino (ECG, respiration, EDA, photosensor) and EEG with a Muse headband, streamed together to lab recorder and saved as BrainVision files (BIDS format).</p>
+
+<div class="tabs" data-group="primer">
+  <button class="tab active" data-tab="ecg">ECG &amp; heart rate</button>
+  <button class="tab" data-tab="hrv">HRV</button>
+  <button class="tab" data-tab="rsp">Respiration</button>
+  <button class="tab" data-tab="eda">EDA</button>
+  <button class="tab" data-tab="photo">Photosensor &amp; events</button>
+  <button class="tab" data-tab="srate">Sampling rate</button>
+</div>
+
+<div class="panel active" id="ecg">
+<h3>ECG (electrocardiography)</h3>
+<p>Electrodes on the chest record the heart's electrical activity. Each heartbeat produces a characteristic wave whose tallest spike is the <b>R-peak</b>. The time between two R-peaks is the <b>RR interval</b> (or NN interval); heart rate in beats per minute is <code>60 / RR interval in seconds</code>.</p>
+<p>Heart rate is only "measured" once per beat. NeuroKit interpolates between beats so that <code>ECG_Rate</code> has a value at every sample, which means a 2-second window really holds only 2–3 independent values.</p>
+<h3>What it tells us</h3>
+<p>Heart rate is controlled by both branches of the autonomic nervous system. Emotional or attention-grabbing images typically cause a brief <b>slowing</b> (orienting response) in the first 1–3 s, followed by a speed-up.</p>
+<h3>Common problems</h3>
+<ul>
+  <li>Movement on the chair or electrodes touching clothing add noise and can create false or missed R-peaks.</li>
+  <li>Unusually large R-peaks or arrhythmias (noted for some participants) affect heart rate and HRV.</li>
+</ul>
+<p><b>Processing:</b> <code>nk.bio_process</code> with NeuroKit defaults: 0.5 Hz high-pass and 50 Hz mains filter, R-peak detection → <code>ECG_Clean</code>, <code>ECG_R_Peaks</code>, <code>ECG_Rate</code>.</p>
+</div>
+
+<div class="panel" id="hrv">
+<h3>Heart rate variability</h3>
+<p>The heart does not beat like a metronome: RR intervals vary from beat to beat. HRV indices summarise that variation. Higher beat-to-beat variability generally reflects stronger parasympathetic (vagal, "rest and digest") influence.</p>
+<table>
+<tr><th>Index</th><th>What it measures</th></tr>
+<tr><td><code>MeanNN</code></td><td>Average RR interval (the inverse of mean heart rate)</td></tr>
+<tr><td><code>SDNN</code></td><td>Standard deviation of RR intervals: overall variability</td></tr>
+<tr><td><code>RMSSD</code></td><td>Root mean square of successive differences: fast, beat-to-beat variability; the most common vagal index</td></tr>
+<tr><td><code>HF</code></td><td>Power in the high-frequency band (0.15–0.4 Hz), linked to breathing and vagal activity</td></tr>
+<tr><td><code>LFHF</code></td><td>Ratio of low- to high-frequency power (interpretation as "sympathovagal balance" is disputed)</td></tr>
+<tr><td><code>SampEn</code>, <code>HFD</code></td><td>Complexity / irregularity of the RR series</td></tr>
+<tr><td><code>IALS</code>, <code>Ca</code>, <code>AI</code></td><td>Heart rate asymmetry: whether accelerations and decelerations contribute differently</td></tr>
+</table>
+<p>Guidelines (Task Force, 1996) recommend at least ~5 minutes for short-term HRV. The 8-minute resting state meets this; the 20–45 s HCT intervals only allow time-domain "ultra-short" HRV.</p>
+</div>
+
+<div class="panel" id="rsp">
+<h3>Respiration (RSP)</h3>
+<p>A belt around the lower chest stretches with each breath, giving one peak per breath. From it we get <b>breathing rate</b> (breaths per minute) and <b>amplitude</b> (depth).</p>
+<p>Breathing changes with arousal and directly affects heart rate: heart rate rises on the in-breath and falls on the out-breath (respiratory sinus arrhythmia).</p>
+<h3>Common problems</h3>
+<ul>
+  <li>A belt that is too tight or too loose flattens the signal (several session notes mention adjusting it).</li>
+  <li>Talking, yawning, sighing and moving distort single breaths; asthma can make the wave jagged.</li>
+</ul>
+<p><b>Processing:</b> NeuroKit defaults, filtered to the breathing range (about 0.05–3 Hz), breaths detected → <code>RSP_Rate</code>, <code>RSP_Amplitude</code>.</p>
+</div>
+
+<div class="panel" id="eda">
+<h3>EDA (electrodermal activity, skin conductance)</h3>
+<p>Two electrodes on the fingers measure how well the skin conducts a tiny current (microsiemens, µS). Sweat glands there are controlled only by the <b>sympathetic</b> ("fight or flight") nervous system, so EDA is a fairly pure marker of arousal.</p>
+<ul>
+  <li><b>Tonic</b> (skin conductance level): the slow background level, drifting over minutes.</li>
+  <li><b>Phasic</b> (skin conductance responses, SCRs): fast bumps starting 1–3 s after a stimulus and peaking a few seconds later.</li>
+</ul>
+<h3>Common problems</h3>
+<ul>
+  <li><b>Non-responders</b>: cold hands or poor circulation give a flat signal (checked with the double-sniff and pinch tests).</li>
+  <li>Gel drying gives a steadily falling signal; extra isotonic gel was added at the break when needed.</li>
+  <li>The BITalino sensor saturates ("clips") at about 25 µS.</li>
+</ul>
+<p><b>Recorded in:</b> the Fiction task only (analysed). <b>Processing:</b> smoothed and split into <code>EDA_Tonic</code> and <code>EDA_Phasic</code> (NeuroKit default high-pass method), SCR peaks detected.</p>
+</div>
+
+<div class="panel" id="photo">
+<h3>Photosensor (PHOTO channel)</h3>
+<p>The experiment draws a black square (100 × 100 px, top-left corner of the screen) whenever an important event is on screen, and a light sensor taped over that corner records it. The PHOTO signal drops when the square is black, so it marks exactly when something was <i>displayed</i>, not just when the computer asked for it. Between events the square is white. Every marker is also sent as an LSL marker (<code>"1"</code> on, <code>"0"</code> off).</p>
+<h3>Events, epochs and baseline</h3>
+<ul>
+  <li><b>Event</b>: a dark period on the PHOTO channel (onset and duration), found with <code>nk.events_find(..., threshold_keep="below")</code> and a minimum duration that fits the task.</li>
+  <li><b>Epoch</b>: a window of signal cut around an event (e.g. 2 s before to 5 s after an image), with time 0 = the event.</li>
+  <li><b>Baseline correction</b>: subtracting a reference value so each trial's response is measured from its own starting level. This study uses the value at image onset.</li>
+</ul>
+<p>What the black square marks in each task is described under <a href="#tasks">Tasks</a>.</p>
+</div>
+
+<div class="panel" id="srate">
+<h3>Sampling rate</h3>
+<p>The number of measurements per second (Hz). The BITalino records at 1000 Hz and the Muse EEG at 256 Hz. When the streams were combined into one file, everything was resampled to a shared <b>2000 Hz</b> timeline, so 1 second = 2000 samples. The scripts write durations as <code>srate * seconds</code> to convert seconds into samples.</p>
+<p>The devices stream independently, so a crash of one device (e.g. "Bitalino crashed, reconnected" in the notes) shows up as a gap of missing values in its channels only.</p>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="tasks">2. Tasks</h2>
+<p>The session runs as three separate experiment files, each saving its own data: <code>RestingState.html</code> (resting state), <code>Interoception.html</code> (TAP, then HCT and questionnaires in random order) and <code>fiction.html</code> (Fiction). Each task has its own physiological recording (<code>sub-XXX_task-RS/TAP/HCT/FIC_run-001_eeg.vhdr</code>) and, apart from the resting state, a behavioural file (<code>sub-XXX_task-TAP/HCT/FIC_beh.tsv</code>).</p>
+<!-- Add the order of the three files in the session here, from the SOP -->
+
+<div class="tabs" data-group="tasks">
+  <button class="tab active" data-tab="task-rs">Resting state</button>
+  <button class="tab" data-tab="task-tap">TAP</button>
+  <button class="tab" data-tab="task-hct">HCT</button>
+  <button class="tab" data-tab="task-fic">Fiction</button>
+</div>
+
+<div class="panel active" id="task-rs">
+<h3>Design</h3>
+<p>8 minutes of rest, eyes closed, without falling asleep (<code>RestingState.js</code>).</p>
+<div class="flow">
+  <span>Grey screen, 1 s</span><b>→</b>
+  <span>Fixation cross, <b>8 min</b></span><b>→</b>
+  <span>Beep + Continue</span><b>→</b>
+  <span>Questionnaire</span>
+</div>
+<p><b>Questionnaire</b> (ARSQ-style): 21 items about what went through their mind, 3 per dimension: <code>DoM</code> (discontinuity of mind), <code>ToM</code> (theory of mind), <code>Self</code>, <code>Plan</code>, <code>Sleep</code>, <code>Comfort</code>, <code>SomA</code> (somatic awareness), named e.g. <code>DoM_1</code>–<code>DoM_3</code>. Shuffled order, one page, rated 0–6 (Completely Disagree → Completely Agree).</p>
+
+<h3>Photosensor</h3>
+<p>Black for the whole 8-minute fixation period (one long event). White during the 1 s grey screen before it.</p>
+
+<h3>Data coding</h3>
+<ul>
+  <li>No behavioural file; the questionnaire answers are added to the participant row (one column per item).</li>
+  <li>Physiology (<code>1_physio.py</code>): ECG and RSP; recording cropped to the 8-min marker (events ≥ 5 s); <code>nk.bio_process</code>; 10 HRV indices from all R-peaks, named with <code>_RS</code>: <code>HRV_MeanNN_RS</code>, <code>HRV_SDNN_RS</code>, <code>HRV_RMSSD_RS</code>, <code>HRV_SampEn_RS</code>, <code>HRV_HF_RS</code>, <code>HRV_HFD_RS</code>, <code>HRV_LFHF_RS</code>, <code>HRV_IALS_RS</code>, <code>HRV_Ca_RS</code>, <code>HRV_AI_RS</code> → <code>rawdata_participants.csv</code>.</li>
+  <li>QC plots: <code>signals/rs_ecg_all.png</code>, <code>signals/rs_rsp_all.png</code>.</li>
+</ul>
+</div>
+
+<div class="panel" id="task-tap">
+<h3>Design</h3>
+<p>Two families of tapping tasks (<code>TAP.js</code>), all responses with the spacebar. A 3-2-1 countdown (3 s) precedes every block except Heart.</p>
+<p><b>Voluntary tapping (clock):</b> a rotating hand sweeps around a circle in one full revolution of 4–6 s (random).</p>
+<ul>
+  <li><b>External</b>: press when the hand reaches a red target arrow (placed 0.5–0.95 of a revolution after the start).</li>
+  <li><b>Internal</b>: press at a self-chosen moment before the sweep ends.</li>
+  <li>Blocks: 40 External → 40 Internal → 80 Mixed (half each, shuffled; the circle is green for External and blue for Internal). One press per trial; a warning appears if no press.</li>
+</ul>
+<p><b>Rhythmic tapping:</b> 120 taps each.</p>
+<ul>
+  <li><b>Synchrony</b>: 10 beeps at about 42 per minute (1.43 s apart) to tap along with, then 120 taps keeping that rhythm.</li>
+  <li><b>Random</b>: tap at random, irregular intervals.</li>
+  <li><b>Heart</b>: tap at each felt heartbeat.</li>
+</ul>
+
+<h3>Photosensor</h3>
+<ul>
+  <li><b>Clock trials</b>: black from trial start <b>until the spacebar press</b> (about 0.5–6 s), or until the trial ends if there was no press.</li>
+  <li><b>Rhythmic trials</b>: white while waiting; black for <b>60 ms</b> after each tap.</li>
+</ul>
+<div class="note warn">The 60 ms markers are only 3–4 screen frames, so they may be weak or missed by the sensor. <code>load_tap</code> therefore uses the photosensor only to crop the recording (events ≥ 0.05 s); the timing of individual taps should come from the behavioural file.</div>
+
+<h3>Data coding</h3>
+<p><code>sub-XXX_task-TAP_beh.tsv</code>, one row per trial (520 rows):</p>
+<table>
+<tr><th>Column</th><th>Coding</th></tr>
+<tr><td><code>Condition</code></td><td><code>Voluntary Tapping - External</code> (80), <code>Voluntary Tapping - Internal</code> (80), <code>Rythmic Tapping - Synchrony</code> / <code>- Random</code> / <code>- Heart</code> (120 each). Note the spelling "Rythmic".</td></tr>
+<tr><td><code>Trial_Order</code></td><td>Trial number within the condition</td></tr>
+<tr><td><code>RT</code></td><td>Time of the press in ms (clock trials: from trial start). <!-- check what RT means for the rhythmic trials --></td></tr>
+<tr><td><code>Response_Angle</code></td><td>Clock trials: position of the hand at the press, in radians</td></tr>
+</table>
+<ul>
+  <div class="note warn">Physiology: <b>not processed yet</b>. <code>1_physio.py</code> does not use the TAP recording.</li>
+</ul>
+</div>
+
+<div class="panel" id="task-hct">
+<h3>Design</h3>
+<p>Heartbeat Counting Task (Schandry, 1981; <code>HCT.js</code>): silently count heartbeats without touching the body, from "3-2-1" until a beep.</p>
+<div class="flow">
+  <span>Countdown 3 s</span><b>→</b>
+  <span>Fixation: <b>counting interval</b></span><b>→</b>
+  <span>Beep + Continue</span><b>→</b>
+  <span>Count + confidence</span>
+</div>
+<ul>
+  <li>6 intervals of 20, 25, 30, 35, 40 and 45 s, in random order.</li>
+  <li>After each: <b>count</b> (number, under 100) and <b>confidence</b> (0 = Not confident → 5 = Very confident).</li>
+  <li>Run in <code>Interoception.html</code> after TAP; the HCT and the questionnaires (MAIA, MINT, IAS) come in random order.</li>
+</ul>
+
+<h3>Photosensor</h3>
+<p>Black for the whole counting interval (20–45 s). White during the countdown.</p>
+
+<h3>Data coding</h3>
+<p><code>sub-XXX_task-HCT_beh.tsv</code>, one row per interval (6 rows):</p>
+<table>
+<tr><th>Column</th><th>Coding</th></tr>
+<tr><td><code>Trial_Order</code></td><td>1–6, order of presentation</td></tr>
+<tr><td><code>HCT_count</code></td><td>Number of heartbeats reported (0 kept as a real answer)</td></tr>
+<tr><td><code>HCT_confidence</code></td><td>0–5</td></tr>
+<tr><td><code>Duration_Interval</code>, <code>Duration_Actual</code></td><td>Programmed and measured interval length (s). Empty for the first participants (not saved at the time).</td></tr>
+</table>
+<p><b>Physiology</b> (<code>1_physio.py</code>): 6 intervals found on the photosensor (≥ 10 s, must be exactly 6); R-peaks counted in each.</p>
+<ul>
+  <li><code>HCT_Accuracy</code> = mean over intervals of <code>1 − |count − R-peaks| / R-peaks</code></li>
+  <li><code>HCT_Sensibility</code> = mean confidence</li>
+  <li><code>HCT_Awareness</code> = Spearman correlation between confidence and accuracy (Garfinkel et al., 2015)</li>
+  <li><code>HRV_MeanNN_HCT</code>, <code>HRV_SDNN_HCT</code>, <code>HRV_RMSSD_HCT</code>: time-domain HRV per interval, averaged</li>
+</ul>
+<p>→ <code>rawdata_participants.csv</code>; QC plots <code>signals/hct_ecg_all.png</code>, <code>signals/hct_rsp_all.png</code>.</p>
+</div>
+
+<div class="panel" id="task-fic">
+<h3>Design</h3>
+<p>Images from NAPS-ERO presented as either real photographs or AI-generated (<code>fiction.js</code>). Cover story: a GAN developed by a Sussex / AI-startup partnership.</p>
+<ul>
+  <li><b>Stimuli:</b> 125 images (25 each: Female, Male, Female Couple, Male Couple, Opposite-sex Couple). The 2 categories matching the participant's gender/sexual orientation (or their choice) are kept: about <b>50 images</b>.</li>
+  <li><b>Condition:</b> within each category, half labelled <code>Reality</code> ("Photograph") and half <code>Fiction</code> ("AI-generated"), randomly per participant. Each label has its own random cue colour (2 of red / blue / green).</li>
+</ul>
+<p><b>Phase 1</b> (physiology recorded), split in two halves with a break and eye-tracker recalibration:</p>
+<div class="flow">
+  <span>Fixation 3 s</span><b>→</b>
+  <span>Label 2 s</span><b>→</b>
+  <span>Fixation 3–5 s</span><b>→</b>
+  <span><b>Image 4 s</b></span><b>→</b>
+  <span>Ratings</span>
+</div>
+<p>Ratings: <code>Body_Reaction</code> (slider 0–100), <code>Valence</code> (0–6, negative → positive), <code>Enticement</code> (0–6, not at all → very much), plus an attention check on the label.</p>
+<p><b>Phase 2</b> (no physiology): told the labels were mixed up; each image shown again for 1 s and rated on <code>Realness</code> (−100 AI-generated → +100 Photograph).</p>
+
+<h3>Photosensor</h3>
+<p>Black during each image: <b>4 s</b> in Phase 1 (1 s in Phase 2, not recorded). The label is not marked.</p>
+
+<h3>Data coding</h3>
+<p><code>sub-XXX_task-FIC_beh.tsv</code>, one row per image:</p>
+<table>
+<tr><th>Column</th><th>Coding</th></tr>
+<tr><td><code>Stimulus</code></td><td>Image file name</td></tr>
+<tr><td><code>Condition</code></td><td><code>Reality</code> (labelled Photograph) / <code>Fiction</code> (labelled AI-generated)</td></tr>
+<tr><td><code>Cue_Color</code></td><td>Colour of the label</td></tr>
+<tr><td><code>Trial_Order_Phase1</code>, <code>Trial_Order_Phase2</code></td><td>Presentation order in each phase</td></tr>
+<tr><td><code>Trial_Duration_Phase1/2</code>, <code>Rating_RT_Phase1/2</code></td><td>Trial and rating durations</td></tr>
+<tr><td><code>Body_Reaction</code>, <code>Valence</code>, <code>Enticement</code></td><td>Phase 1 ratings (0–100, 0–6, 0–6)</td></tr>
+<tr><td><code>Realness</code></td><td>Phase 2 rating, −100 to 100</td></tr>
+</table>
+<p><b>Physiology</b> (<code>1_physio.py</code>): ECG, RSP and EDA. Images found on the photosensor (≥ 2 s) and matched to the trials by presentation order; the number of images must equal the number of trials. Epochs −2 to 5 s (ECG) and −2 to 8 s (RSP, EDA). Per trial, corrected for the value at image onset: <code>ECG_Rate_Baseline</code>, <code>ECG_Rate_Mean</code>, <code>ECG_Rate_Min</code>, <code>ECG_Rate_Change</code>, <code>RSP_Rate_Change</code>, <code>RSP_Amplitude_Mean</code>, <code>EDA_Tonic_Baseline</code>, <code>EDA_Phasic_Max</code>, <code>EDA_Phasic_Mean</code>.</p>
+<p>→ <code>rawdata_trials.csv</code> (one row per image), <code>rawdata_hr_timecourse.csv</code> and <code>signals/fic_hr_timecourse.png</code>; QC plots <code>signals/fic_ecg_all.png</code>, <code>fic_rsp_all.png</code>, <code>fic_eda_all.png</code>.</p>
+<div class="note">If a recording was restarted (several <code>FIC_run-00X</code> files), <code>load_fiction</code> joins the runs in order.</div>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="exclusions">3. Exclusions</h2>
+<p>One row per participant and task. Status: <span class="badge excluded">Excluded</span> confirmed and in the script; <span class="badge proposed">Proposed</span> to check or decide; <span class="badge kept">Kept</span> checked and kept (with a note). Once confirmed, add the ID to the matching <code>if sub not in [...]</code> list in <code>1_physio.py</code>.</p>
+
+<h3>Criteria</h3>
+<!-- Edit this list as you agree on the criteria -->
+<ul>
+  <li><b>Fiction:</b> </li>
+  <li><b>EDA:</b></li>
+  <li><b>HCT:</b></li>
+  <li><b>Any task:</b> recording missing, unusable signal in the QC plots, or the participant did not follow instructions.</li>
+</ul>
+
+<h3>Participants</h3>
+<div class="scroll">
+<table>
+<tr><th>Participant</th><th>Task</th><th>Status</th><th>Reason</th><th>Evidence / source</th></tr>
+<!-- Copy this row to add a participant, e.g.:
+<tr><td>sub-000</td><td>Fiction</td><td><span class="badge excluded">Excluded</span></td><td>Reason</td><td>Session notes / QC plot</td></tr>
+-->
+<tr><td>sub-012</td><td>Fiction</td><td><span class="badge excluded">Excluded</span></td><td>Only 4 of 50 images recorded: the Muse battery died and the recording was not resumed after the battery was replaced.</td><td>Photosensor shows 4 images (4 s each, normal spacing); the raw recording is only 3.6 min long; Comments_Fiction. Resting state and HCT are kept.</td></tr>
+</table>
+</div>
+
+<!-- ======================================================================== -->
+<h2 id="decisions">4. Decisions</h2>
+<p>A history of every participant-specific fix made in <code>1_physio.py</code> (data kept, but handled differently), newest at the bottom. Exclusions go in the table above.</p>
+
+<div class="scroll">
+<table>
+<tr><th>Participant</th><th>Task</th><th>Problem</th><th>Decision</th><th>How it was found</th></tr>
+<!-- Copy a row below to add a decision -->
+<tr><td>sub-003</td><td>Fiction</td><td>51 photosensor events for 50 trials. Event 26 lasts 194 s: the dark period at the end of the first recording (FP1), while the participant warmed their hands at the break, before the Muse died and a second recording (FP1b) was started.</td><td><b>Extra event removed.</b> Event 26 is deleted from <code>events</code>; all 50 trials kept.</td><td>Event durations (all ~4 s except event 26); 25 images before and after it; 8 s gap after it = the join between FP1 and FP1b; Comments_Fiction.</td></tr>
+<tr><td>sub-005</td><td>Fiction</td><td>49 photosensor events for 50 trials. The BITalino crashed at 11:10 and reconnected at 11:30, so trial 23 was shown but not recorded.</td><td><b>Missing trial kept as NA.</b> Trial 23 (<code>Trial_Order_Phase1</code>) is left out of the event matching (<code>fic_rec</code>) and keeps its ratings with NA physiology.</td><td>jsPsych markers show 50 images, the photosensor 49, with no pulse at trial 23; 51 s gap between events 22 and 23 (= two trials); Comments_Fiction.</td></tr>
+<tr><td>sub-006</td><td>Fiction</td><td>49 photosensor events for 50 trials. The recording started while the participant was rating trial 1, so trial 1's image was not recorded.</td><td><b>Missing trial kept as NA.</b> Trial 1 (<code>Trial_Order_Phase1</code>) is left out of the event matching (<code>fic_rec</code>), so the first event is matched to trial 2; trial 1 keeps its ratings with NA physiology.</td><td>24 events before the break instead of 25, with no long gap between them; the gaps between images only match the behavioural ratings when trial 1 is skipped; the raw file starts with 27 s of light screen and no jsPsych marker before the first image; Comments_Fiction.</td></tr>
+</table>
+</div>
+
+</main>
+
+<script>
+  // Tabs: clicking a button shows the panel with the same id as its data-tab
+  document.querySelectorAll(".tabs").forEach(function (bar) {
+    bar.addEventListener("click", function (e) {
+      var btn = e.target.closest(".tab");
+      if (!btn) return;
+      bar.querySelectorAll(".tab").forEach(function (b) {
+        b.classList.remove("active");
+        var p = document.getElementById(b.dataset.tab);
+        if (p) p.classList.remove("active");
+      });
+      btn.classList.add("active");
+      document.getElementById(btn.dataset.tab).classList.add("active");
+    });
+  });
+</script>
+</body>
+</html>
