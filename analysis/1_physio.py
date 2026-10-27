@@ -111,7 +111,7 @@ meta = pd.read_csv(path + "participants.tsv", sep="\t")
 # Initialize data ============================================================================
 # resume = False starts from scratch (delete signals/participants/ first, so old QC images
 # are not mixed in); True carries on from the saved files, e.g. after a crash
-resume = False
+resume = True
 
 if resume:
     df = pd.read_csv("../data/rawdata_participants.csv")  # one row per participant
@@ -126,7 +126,7 @@ else:
 
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"].values[0:5]):
+for i, sub in enumerate(meta["participant_id"].values[15:20]): 
     # Print progress and comments
     print(sub)
     print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
@@ -251,7 +251,9 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]):
 
     # ___FICTION (FIC)________________________________________________________________________
     # Trial-level rather than participant-level: one row per image
-    if sub not in []:
+    if sub not in ["sub-012"]:
+        # sub-012: only 4 of 50 images recorded (Muse battery died, recording not resumed)
+
         # Preprocessing ----------------------------------------------------------------------
         print("  - FIC - Preprocessing")
         print("   Comment:" + str(meta[meta["participant_id"] == sub]["Comments_Fiction"].values[0]))
@@ -293,11 +295,13 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]):
         if sub in ["sub-005"]:
             # BITalino crashed at 11:10 (see Comments_Fiction): trial 23 has a jsPsych marker but no photosensor event
             fic_rec = fic_beh[fic_beh["Trial_Order_Phase1"] != 23]
-            
-            
-        # Make sure the number of events matches the number of trials in the behavioral data
-        print(f"   - {len(events['onset'])} events found, {len(fic_beh)} trials in behavioral data")
-        assert len(events["onset"]) == len(fic_beh), "Number of events and trials differ"
+        if sub in ["sub-006"]:
+            # Recording started during the ratings of trial 1 (see Comments_Fiction): first event is trial 2
+            fic_rec = fic_beh[fic_beh["Trial_Order_Phase1"] != 1]
+
+        # Make sure the number of events matches the number of recorded trials
+        print(f"   - {len(events['onset'])} events found, {len(fic_rec)} recorded trials")
+        assert len(events["onset"]) == len(fic_rec), "Number of events and trials differ"
 
         # Process signals
         fic, info = nk.bio_process(
@@ -332,7 +336,7 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]):
         )
 
         # Extract one row of features per trial, corrected for the value at image onset
-        # (epochs are in event order, which matches the sorted fic_beh rows)
+        # (epochs are in event order, which matches the sorted fic_rec rows)
         features = []
         hr_sub = []  # heart rate time course of each trial
         for k, (epoch_ecg, epoch_eda) in enumerate(zip(epochs_ecg.values(), epochs_eda.values())):
@@ -362,17 +366,18 @@ for i, sub in enumerate(meta["participant_id"].values[0:5]):
                 pd.DataFrame(
                     {
                         "participant_id": sub,
-                        "Condition": fic_beh["Condition"].values[k],
+                        "Condition": fic_rec["Condition"].values[k],
                         "Time": hr.index,
                         "ECG_Rate_Change": hr.values,
                     }
                 )
             )
 
-        # One row of physiological features per trial
-        features = pd.DataFrame(features)
+        # One row of physiological features per recorded trial
+        features = pd.DataFrame(features, index=fic_rec.index)
 
         # Add this participant's trials to the main trial-level dataframe
+        # (joined on the row index, so unrecorded trials get NA physiology but keep their ratings)
         trials = fic_beh.join(features)
         trials["participant_id"] = sub
         df_trials = pd.concat([df_trials, trials], axis=0)
