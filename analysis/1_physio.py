@@ -251,8 +251,9 @@ for i, sub in enumerate(meta["participant_id"].values[15:20]):
 
     # ___FICTION (FIC)________________________________________________________________________
     # Trial-level rather than participant-level: one row per image
-    if sub not in ["sub-012"]:
+    if sub not in ["sub-012", "sub-031"]:
         # sub-012: only 4 of 50 images recorded (Muse battery died, recording not resumed)
+        # sub-031: skipped for now; photosensor spike after sensors were unplugged at the break breaks event detection (to fix)
 
         # Preprocessing ----------------------------------------------------------------------
         print("  - FIC - Preprocessing")
@@ -408,13 +409,17 @@ make_qc_mosaics()
 if len(hr_timecourse) > 0:
     hr = pd.concat(hr_timecourse)
     n_participants = hr["participant_id"].nunique()
-    hr = hr.groupby(["participant_id", "Condition", "Time"])["ECG_Rate_Change"].mean()
-    hr = hr.groupby(["Condition", "Time"]).mean().reset_index()
+    hr_ppt = hr.groupby(["participant_id", "Condition", "Time"])["ECG_Rate_Change"].mean().reset_index()  # each participant
+    hr = hr_ppt.groupby(["Condition", "Time"])["ECG_Rate_Change"].mean().reset_index()  # average across participants
 
     fig, ax = plt.subplots()
-    for cond, label in {"Fiction": "AI-generated", "Reality": "Photograph"}.items():
+    for cond, (label, color) in {"Fiction": ("AI-generated", "tab:blue"), "Reality": ("Photograph", "tab:orange")}.items():
+        # Each participant's average (thin, light)
+        for _, d in hr_ppt[hr_ppt["Condition"] == cond].groupby("participant_id"):
+            ax.plot(d["Time"], d["ECG_Rate_Change"], color=color, alpha=0.2, linewidth=0.8)
+        # Average across participants (thick)
         d = hr[hr["Condition"] == cond]
-        ax.plot(d["Time"], d["ECG_Rate_Change"], label=label)
+        ax.plot(d["Time"], d["ECG_Rate_Change"], color=color, linewidth=2.5, label=label)
     ax.axvline(0, linestyle="--", color="black")  # Image onset
     ax.set_xlabel("Time from image onset (s)")
     ax.set_ylabel("Heart rate change from image onset (bpm)")
