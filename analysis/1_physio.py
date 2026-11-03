@@ -126,7 +126,7 @@ else:
 
 
 # Loop through participants ==================================================================
-for i, sub in enumerate(meta["participant_id"].values[15:20]): 
+for i, sub in enumerate(meta["participant_id"].values[35:40]): 
     # Print progress and comments
     print(sub)
     print("General Comment: " + str(meta[meta["participant_id"] == sub]["Comments_General"].values[0]))
@@ -183,7 +183,10 @@ for i, sub in enumerate(meta["participant_id"].values[15:20]):
         dfsub = pd.concat([dfsub, hrv], axis=1)
 
     # ___HEARTBEAT COUNTING TASK (HCT)________________________________________________________
-    if sub not in []:  # No photosensor
+    if sub not in ["sub-033"]:  # No photosensor
+        # sub-033 skipped task on the preprocessing script
+        
+        
         # Preprocessing ----------------------------------------------------------------------
         print("  - HCT - Preprocessing")
         print("   Comment:" + str(meta[meta["participant_id"] == sub]["Comments_HCT"].values[0]))
@@ -268,7 +271,7 @@ for i, sub in enumerate(meta["participant_id"].values[15:20]):
 
         # Load data
         fic = load_fiction(path, sub)
-        fic = fic.pick(["ECG", "RSP", "EDA", "PHOTO", "JsPsychMarker"])  # drop unused channels (EEG etc.) to save memory
+        fic = fic.pick([ch for ch in ["ECG", "RSP", "EDA", "PHOTO", "JsPsychMarker"] if ch in fic.ch_names])  # drop unused channels (EEG etc.) to save memory; sub-040 has no JsPsychMarker        
         srate = fic.info["sfreq"]
 
         # Find events (again as data was cropped); only phase 1 is recorded.
@@ -276,20 +279,41 @@ for i, sub in enumerate(meta["participant_id"].values[15:20]):
         events = nk.events_find(fic["PHOTO"][0][0], threshold_keep="below", duration_min=int(srate * 2))
         
         #### MISSING TRIALS OR EXTRA TRIALS
-        # Diagnostic: jsPsych markers (image sent) vs photosensor (image shown); a blue pulse with no orange = missing trial
-        
-        photo, marker = fic["PHOTO"][0][0], fic["JsPsychMarker"][0][0]
+        # Diagnostic: raw photosensor vs jsPsych markers (image sent); a marker with no photosensor dip = missing trial
+        # (uses the raw, uncropped file, so trials after the last photosensor event are shown too)
+        raw = mne.io.read_raw_brainvision(path_eeg + f"{sub}_task-FIC_run-001_eeg.vhdr", preload=True).pick(["PHOTO", "JsPsychMarker"])
+        photo, marker = raw["PHOTO"][0][0], raw["JsPsychMarker"][0][0]
         onsets = np.where(np.diff(np.nan_to_num(marker)) == 1)[0] + 1  # start of each image sent by jsPsych
+        light = np.nanmedian(photo)  # typical light level of the photosensor
         plt.figure(figsize=(16, 3))
-        plt.plot(marker, label="jsPsych marker (image sent)")
-        plt.plot((photo < (np.nanmin(photo) + np.nanmax(photo)) / 2) * 0.8, label="Photosensor (image shown)")
+        plt.plot(photo, linewidth=0.5, label="Photosensor (raw)")
+        plt.plot(np.nan_to_num(marker) * light * 1.2, linewidth=0.8, label="jsPsych marker (image sent)")
+        plt.ylim(-0.5, light * 1.6)  # spikes go off the top instead of squashing the plot
         plt.xticks(onsets, range(1, len(onsets) + 1), fontsize=8); plt.grid(axis="x", alpha=0.3)
         plt.xlabel("Trial (jsPsych marker)"); plt.yticks([]); plt.title(sub)
+        plt.legend(loc="upper left", bbox_to_anchor=(1, 1))        
+        
         
         # Extra trials are removed
         if sub in ["sub-003"]:
             # Event 26 is not an image: dark period at the end of FP1 while the participant warmed their hands (see Comments_Fiction)
             events = {key: np.delete(value, 25) for key, value in events.items()}
+
+        # Image onsets from the jsPsych markers when the photosensor failed
+        if sub in ["sub-035"]:
+            # Photosensor stopped detecting images after trial 16 (~7.4 min), physiology recorded throughout:
+            # marker onsets + this participant's average marker-to-screen delay (from the 16 photosensor events)
+            markers = nk.events_find(np.nan_to_num(fic["JsPsychMarker"][0][0]), threshold_keep="above", duration_min=int(srate * 2))
+            delay = int(np.mean(events["onset"] - markers["onset"][: len(events["onset"])]))
+            print(f"   - Image onsets from jsPsych markers, delay = {delay / srate * 1000:.0f} ms")
+            events = {"onset": markers["onset"] + delay, "duration": markers["duration"], "label": markers["label"]}
+        if sub in ["sub-036"]:
+            # Photosensor spike at ~2.2 min breaks the automatic threshold (2 events found):
+            # use half the typical light level instead, then remove events 4 and 5
+            # (spike and ~26 s dark period between trials 3 and 4, not images)
+            events = nk.events_find(fic["PHOTO"][0][0], threshold=np.nanmedian(fic["PHOTO"][0][0]) / 2,
+                                    threshold_keep="below", duration_min=int(srate * 2))
+            events = {key: np.delete(value, [3, 4]) for key, value in events.items()}
 
         # Unrecorded trials are kept as NA
         fic_rec = fic_beh
@@ -299,6 +323,7 @@ for i, sub in enumerate(meta["participant_id"].values[15:20]):
         if sub in ["sub-006"]:
             # Recording started during the ratings of trial 1 (see Comments_Fiction): first event is trial 2
             fic_rec = fic_beh[fic_beh["Trial_Order_Phase1"] != 1]
+            
 
         # Make sure the number of events matches the number of recorded trials
         print(f"   - {len(events['onset'])} events found, {len(fic_rec)} recorded trials")
