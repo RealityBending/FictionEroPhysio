@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FictionEroPhysio SOP</title>
+<style>
+  :root { --text:#1d1d1f; --muted:#5a5a60; --line:#d9d9de; --bg:#ffffff; --soft:#f5f5f7; --accent:#2f5bd3; --warn-bg:#fff6e0; --warn-line:#e6b54a; --tip-bg:#eef4ff; --tip-line:#9db6f0; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui, "Segoe UI", Arial, sans-serif; }
+  main { max-width: 900px; margin: 0 auto; padding: 16px 16px 80px; }
+  h1 { font-size: 1.7rem; margin: 8px 0 4px; }
+  h2 { font-size: 1.25rem; margin: 32px 0 8px; padding-top: 12px; border-top: 2px solid var(--line); }
+  .sub { color: var(--muted); margin: 0 0 12px; }
+  ul.steps, ul.steps ul { list-style: none; padding-left: 0; margin: 4px 0; }
+  ul.steps ul { padding-left: 28px; }
+  ul.steps li { margin: 6px 0; }
+  label.step { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; padding: 4px 6px; border-radius: 6px; }
+  label.step:hover { background: var(--soft); }
+  label.step input { width: 20px; height: 20px; margin-top: 2px; flex: none; cursor: pointer; }
+  label.step input:checked + span { color: var(--muted); text-decoration: line-through; }
+  .num { font-weight: 600; margin-right: 4px; }
+  code { background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; font-size: .92em; word-break: break-all; }
+  .note, .tip { border-left: 4px solid; border-radius: 4px; padding: 8px 12px; margin: 6px 0 10px 36px; font-size: .95rem; }
+  .note { background: var(--warn-bg); border-color: var(--warn-line); }
+  .tip { background: var(--tip-bg); border-color: var(--tip-line); }
+  .note ul, .tip ul { margin: 4px 0; padding-left: 20px; }
+  figure { margin: 8px 0 14px 36px; }
+  figure img { max-width: 100%; max-height: 380px; border: 1px solid var(--line); border-radius: 6px; display: block; }
+  figure.wide img { max-height: none; }
+  figcaption { color: var(--muted); font-size: .9rem; margin-top: 4px; }
+  .figs { display: flex; flex-wrap: wrap; gap: 12px; margin-left: 36px; }
+  .figs figure { margin: 8px 0 14px; }
+  .bar { position: sticky; top: 0; background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 16px; display: flex; gap: 12px; align-items: center; justify-content: space-between; z-index: 2; }
+  .bar .inner { max-width: 900px; width: 100%; margin: 0 auto; display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+  button { font: inherit; padding: 6px 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--soft); cursor: pointer; }
+  button:hover { border-color: var(--accent); }
+  .diffs { background: var(--warn-bg); border: 1px solid var(--warn-line); border-radius: 8px; padding: 10px 16px; margin-top: 16px; }
+  .diffs h3 { margin: 4px 0; font-size: 1rem; }
+  .diffs ol { margin: 4px 0; padding-left: 20px; font-size: .95rem; }
+  table { border-collapse: collapse; margin: 6px 0; }
+  td, th { border: 1px solid var(--line); padding: 4px 10px; text-align: left; }
+  @media print {
+    .bar, .diffs { display: none; }
+    h2 { break-after: avoid; }
+    figure { break-inside: avoid; }
+    label.step input:checked + span { text-decoration: none; color: var(--text); }
+  }
+</style>
+</head>
+<body>
+<div class="bar"><div class="inner">
+  <strong>FictionEroPhysio SOP</strong>
+  <span><span id="progress">0 / 0 done</span> &nbsp; <button id="reset" type="button">Reset all ticks</button></span>
+</div></div>
+
+<main>
+<h1>FictionEroPhysio: session checklist</h1>
+<p class="sub">Tick each step as you go. Ticks are saved in this browser, so a page refresh will not lose them. Press <b>Reset all ticks</b> before the next participant. More detail is in <code>SOP_FictionEroPhysio.docx</code> and <code>FEP_Verbal_Instructions.pdf</code>.</p>
+
+<h2>Study overview</h2>
+<figure class="wide">
+  <img src="img/study-overview.png" alt="Study overview: resting state 8 min, then counterbalanced Fiction (Phase 1 affective evaluation, BAIT questionnaire, Phase 2 reality beliefs) and Interoception (tapping tasks 6 blocks, heartbeat counting 6 intervals, questionnaires IAS, MAIA-2, MINT)">
+  <figcaption>Resting state (8 min) first, then Fiction and Interoception in counterbalanced order.</figcaption>
+</figure>
+<table>
+  <tr><th>Signal</th><th>Device</th><th>Bitalino port</th></tr>
+  <tr><td>Respiration (RSP)</td><td>Bitalino belt</td><td>A1</td></tr>
+  <tr><td>ECG</td><td>Bitalino, 3 electrodes</td><td>A2</td></tr>
+  <tr><td>Photosensor (LUX)</td><td>Bitalino, taped to participant screen</td><td>A3</td></tr>
+  <tr><td>EDA</td><td>Bitalino, 2 finger electrodes</td><td>A4</td></tr>
+  <tr><td>EEG</td><td>Muse headband (Bluetooth)</td><td>none</td></tr>
+</table>
+<p class="sub">Experimenter codes: Roisin = Exp1, Oliver = Exp2, Ana = Exp3, Ada = Exp4, Asel = Exp5.</p>
+
+<h2>Before the session</h2>
+<div class="note" style="margin-left:0"><ul>
+  <li>Everything charged: Muse (plus spare pods), bitalino.</li>
+  <li>"Do not disturb" sign on the outside of the door.</li>
+  <li>Volume <b>off</b> on the recording machine, <b>on</b> on the participant's machine.</li>
+  <li>Webcam centred on top of the participant's screen (follow the tape markers).</li>
+  <li>Both machines on the <b>same</b> network (University ethernet).</li>
+  <li>EDA isotonic gel ready: scrape off any solidified gel at the top, fill some into the syringe.</li>
+  <li>Thermometer on.</li>
+</ul></div>
+
+<h2>1. Log in</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">1.</span>Log in to both computers.</span></label></li>
+</ul>
+
+<h2>2. Recording computer (experimenter computer)</h2>
+<figure>
+  <img src="img/taskbar-icons.jpg" alt="Taskbar icons: 1 VS Code, 2 OpenSignals, 3 Lab Recorder">
+  <figcaption>Taskbar: 1 = VS Code, 2 = OpenSignals (bitalino), 3 = Lab Recorder.</figcaption>
+</figure>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">2.1</span>Open <a href="https://sussex.app.box.com/folder/0" target="_blank" rel="noopener">Box online</a> and open the <b>comments</b> file (FictionEroPhysio folder). Fill in participant ID, experimenter name, condition and incentive (credits or money).</span></label>
+    <div class="note"><b>Condition is counterbalanced</b> (Interoception first or Fiction first): do the <b>opposite</b> of the previous participant.</div></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">2.2</span>Open VS Code and run <code>lsl_bridge.py</code> (sets up the jsPsych markers).</span></label></li>
+</ul>
+
+<h2>3. Experiment machine (participant computer)</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">3.1</span>Open VS Code (with the FictionEroPhysio repo folder open), open a new terminal and run <code>python -m http.server 8000</code>.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">3.2</span>Set up all the URLs (one browser tab each):</span></label>
+    <div class="tip"><ul>
+      <li>Resting state: <code>http://localhost:8000/experiment/restingstate.html</code></li>
+      <li>Interoception: <code>http://localhost:8000/experiment/interoception.html</code></li>
+      <li>Fiction: <code>http://localhost:8000/experiment/fiction.html</code></li>
+    </ul>Wrong experiment loads? Press F12 → Network → tick "Disable cache", then refresh.</div></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">3.3</span>Press Enter on the RS one and set up the LUX (photosensor): enter full screen and tape the LUX over the marker square in the top-left corner.</span></label>
+    <div class="note"><b>Note:</b> when the black marker appears, the recording machine's python terminal shows marker 1; when it disappears, marker 0.</div></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">3.4</span>Press continue, add the participant name/ID, press continue so the <b>consent form</b> is on screen.</span></label></li>
+</ul>
+
+<h2>4. Back on the recording machine</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">4.1</span>Set up OpenSignals: Settings → Integration → enable <b>Lab Streaming Layer</b>.</span></label>
+    <div class="tip">Check ports are RESP (A1), ECG (A2), LUX (A3), EDA (A4) and sampling rate is 1000 Hz.</div></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">4.2</span>Set up Lab Recorder:</span></label>
+    <ul>
+      <li><label class="step"><input type="checkbox"><span>Study Root = <code>C:\Users\Reality Bending Lab\Desktop\DATA\FEP_data</code></span></label></li>
+      <li><label class="step"><input type="checkbox"><span>Participant = <code>P00x</code> (check the comments file on Box)</span></label></li>
+      <li><label class="step"><input type="checkbox"><span>Block/Task = <code>RS</code></span></label></li>
+    </ul>
+    <figure>
+      <img src="img/lab-recorder.jpg" alt="Lab Recorder window with Study Root, Block/Task, Participant and Update highlighted">
+      <figcaption>Change the highlighted fields. (The photo shows the default Study Root; use the one above.)</figcaption>
+    </figure></li>
+</ul>
+
+<h2>5. When the participant arrives</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">5.1</span>Ask them to read and consent, and fill in the demographic questions.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">5.2</span>Fit the signals:</span></label>
+    <figure>
+      <img src="img/equipment.jpg" alt="Equipment: 1 EDA finger electrodes, 2 Muse headband, 3 respiration belt, 4 ECG cables and electrodes">
+      <figcaption>1 = EDA finger electrodes, 2 = Muse headband, 3 = respiration belt, 4 = ECG cables/electrodes.</figcaption>
+    </figure>
+    <ul>
+      <li><label class="step"><input type="checkbox"><span><span class="num">1.</span><b>ECG</b> first (electrodes are in the grey bag).</span></label>
+        <figure>
+          <img src="img/ecg-resp-placement.png" alt="Body diagram: white ECG electrode below right collarbone, black on the last right rib, red on the last left rib, respiration belt below chest">
+          <figcaption>White below right collarbone; black on the last rib (right); red on the last rib (left); belt below chest.</figcaption>
+        </figure>
+        <div class="tip"><ul>
+          <li>Clip the cable onto the electrode sticker first.</li>
+          <li>Black: on the last rib, middle of the curve (ask them to suck in to find where the ribs end). Red: parallel to black, on the last rib on the left.</li>
+          <li>The line from white to red should cross the heart.</li>
+        </ul></div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">2.</span><b>Respiration belt</b>.</span></label>
+        <div class="note"><b>Note:</b> the fold where the cable comes out must face the participant.</div>
+        <div class="tip"><ul>
+          <li>Just below the chest, snug; sensor on the front, to the right, just below the pectoral muscles. No folded cloth by the sensor.</li>
+          <li>Not so tight they can feel their pulse. If the signal is weak, ask for a deep breath and move the sensor to where the body moves most.</li>
+        </ul></div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">3.</span>Plug the cables into the bitalino and turn it on.</span></label>
+        <div class="tip">Bitalino not working: re-pair Bluetooth and reconnect (PIN 1234).</div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">4.</span>RSP → <b>A1</b>, ECG → <b>A2</b>, LUX → <b>A3</b>.</span></label></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">5.</span>Check the signals in OpenSignals: press the red button, press <b>automatic</b> on the right for each signal, and drag the bar at the bottom to the left.</span></label>
+        <figure>
+          <img src="img/signals-rsp-ecg.png" alt="Good signals in OpenSignals: smooth respiration wave on top, clear ECG beats below">
+          <figcaption>Good signals: smooth breathing wave (RSP, top), clear regular heartbeats (ECG, bottom).</figcaption>
+        </figure>
+        <div class="tip">Show the participant how movement shows up in the signals and ask them to sit back and stay still.</div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">6.</span>Adjust if needed.</span></label></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">7.</span>Set up the <b>Muse</b>.</span></label>
+        <div class="figs">
+          <figure><img src="img/muse-fitting.png" alt="Muse fitting: move hair away and position headband to touch behind ears"><figcaption>Headband touches behind both ears.</figcaption></figure>
+          <figure><img src="img/muse-electrodes.png" alt="Muse electrode positions AF7, AF8, TP9, TP10"><figcaption>Electrodes: AF7, AF8 (forehead), TP9, TP10 (behind ears).</figcaption></figure>
+        </div>
+        <div class="tip"><ul>
+          <li>Wipe their forehead and above the ears with a wipe.</li>
+          <li>Remove glasses and tie up hair if applicable.</li>
+          <li>While loose, clip the Muse around the participant's neck and lift it over the ears.</li>
+          <li>EEG sensor in the centre of the forehead.</li>
+          <li>Put a hand underneath the Muse Athena and pull up the hair above the ears on both sides.</li>
+          <li>Tighten to a snug fit.</li>
+        </ul></div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">8.</span>Connect the Muse on the recording machine (VS Code, each command in its own new terminal):</span></label>
+        <ul>
+          <li><label class="step"><input type="checkbox"><span><code>OpenMuse find</code></span></label></li>
+          <li><label class="step"><input type="checkbox"><span><code>OpenMuse stream --address 00:55:DA:B9:FA:20</code></span></label></li>
+          <li><label class="step"><input type="checkbox"><span><code>OpenMuse view</code></span></label></li>
+        </ul>
+        <div class="note"><ul>
+          <li>Bluetooth off on all task-irrelevant devices (nearby phones, headphones, laptops).</li>
+          <li>No hair in the way; electrodes touching the skin.</li>
+          <li>Slightly dampen the skin under the electrodes with medical wipes.</li>
+        </ul></div></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">9.</span>In Lab Recorder, press <b>Update</b> to refresh the streams. Expected: <b>6 streams</b> (4 Muse, 1 bitalino, 1 jsPsych markers).</span></label></li>
+      <li><label class="step"><input type="checkbox"><span><span class="num">10.</span>Once the signals are checked and set up, the experiment can start.</span></label></li>
+    </ul></li>
+</ul>
+
+<h2>6. Record each task</h2>
+<div class="note"><b>Start a new Lab Recorder recording before each task</b> and change <b>Block/Task</b> each time, otherwise files get overwritten.</div>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.1</span><code>RS</code>: resting state.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.2</span><code>TAP</code>: tapping tasks.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.3</span><code>HCT</code>: heartbeat counting task.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.4</span>Before the fiction task: fit <b>EDA</b> and connect it to <b>A4</b>.</span></label>
+    <div class="note"><b>Note:</b> EDA is only for the fiction task. Fit it when the participant gets to the fiction instructions page.</div>
+    <figure>
+      <img src="img/eda-fingers.webp" alt="EDA electrodes on the index and middle fingers">
+      <figcaption>EDA on the inside of the index and middle fingers.</figcaption>
+    </figure>
+    <div class="tip"><ul>
+      <li>Connect the cable to each electrode, add tape before fitting the electrode, then add a generous drop of gel to the sponge.</li>
+      <li>Place just below the top finger joint, massage the gel in circles, secure with tape: snug, but not so tight they feel their pulse.</li>
+      <li>Hand still, palm down, electrodes not touching the table. Cold hands: blanket or warm water.</li>
+      <li>Check: a sharp sniff (or a loud clap) should raise EDA. No response? Add gel with the syringe, reconnect the wire, or replace the stickers. Some people just don't respond much.</li>
+    </ul></div></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.5</span><code>FP1</code>: fiction phase 1. <b>Note the room temperature</b> before this task starts (add it to the comments file).</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">6.6</span>Debrief: open <code>debrief.html</code>, let the participant go through it, then thank them and answer any questions.</span></label></li>
+</ul>
+<div class="tip"><ul>
+  <li>Order: RS first, then Interoception (TAP, HCT) or Fiction depending on the condition. When a task ends, open the next .html file yourself.</li>
+  <li>Always explain instructions out loud as well (see <code>FEP_Verbal_Instructions.pdf</code>). A "ding" plays on each instruction page.</li>
+  <li>Swap Muse pods between stages if needed. After reconnecting, reopen Lab Recorder and press Update before recording.</li>
+  <li>During the fiction break, ask for a sniff to check the EDA still responds.</li></ul></div>
+
+<h2>7. After the experiment</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">7.1</span>Write the comments (Box comments file).</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">7.2</span>Physio data (recording machine): from Desktop → DATA → FEP_data, drag the participant folder into <b>raw → physio</b> on Box.</span></label></li>
+  <li><label class="step"><input type="checkbox"><span><span class="num">7.3</span>Behavioural data (experiment machine): from the browser downloads, drag all 4 behavioural files (RS, Int, Fic, Deb) into <b>raw → beh</b> on Box.</span></label></li>
+</ul>
+
+<h2>8. Finish</h2>
+<ul class="steps">
+  <li><label class="step"><input type="checkbox"><span><span class="num">8.</span>Clean up, put devices on charge, and leave.</span></label></li>
+</ul>
+</main>
+
+<script>
+(function () {
+  var KEY = "fep-sop-ticks";
+  var boxes = Array.prototype.slice.call(document.querySelectorAll('input[type="checkbox"]'));
+  var saved = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { saved = {}; }
+
+  function update() {
+    var done = boxes.filter(function (b) { return b.checked; }).length;
+    document.getElementById("progress").textContent = done + " / " + boxes.length + " done";
+  }
+  function save() {
+    var state = {};
+    boxes.forEach(function (b, i) { if (b.checked) state[i] = 1; });
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  boxes.forEach(function (b, i) {
+    b.checked = !!saved[i];
+    b.addEventListener("change", function () { save(); update(); });
+  });
+  document.getElementById("reset").addEventListener("click", function () {
+    if (!confirm("Untick every step?")) return;
+    boxes.forEach(function (b) { b.checked = false; });
+    save(); update();
+  });
+  update();
+})();
+</script>
+</body>
+</html>
