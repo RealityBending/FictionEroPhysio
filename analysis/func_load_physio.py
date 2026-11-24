@@ -38,7 +38,6 @@ def load_rs(path, sub):
     file = [file for file in os.listdir(path_eeg) if "RS" in file]
     file = path_eeg + [f for f in file if ".vhdr" in f][0]
 
-    #P036 no EDA channel on RS
     
     rs = mne.io.read_raw_brainvision(file, preload=True)
     # Set channel types, handling missing channels gracefully
@@ -85,7 +84,13 @@ def load_hct(path, sub):
     
     
     hct = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    hct = hct.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
+    # Set channel types, handling missing channels gracefully
+    ch_types = {"ECG": "ecg", "RSP": "resp", "EDA": "gsr"}
+
+    if sub == "sub-036":
+        ch_types.pop("EDA")  # No EDA channel in HCT for this participant (only set up for Fiction)
+
+    hct = hct.set_channel_types(ch_types)
     hct = hct.set_montage("standard_1020")
     # hct.to_data_frame().plot(subplots=True)
     sfreq = hct.info["sfreq"]
@@ -132,7 +137,13 @@ def load_tap(path, sub):
     
     
     tap = mne.io.read_raw_brainvision(file, preload=True, verbose=False)
-    tap = tap.set_channel_types({"ECG": "ecg","RSP": "resp", "EDA": "gsr"})
+    # Set channel types, handling missing channels gracefully
+    ch_types = {"ECG": "ecg", "RSP": "resp", "EDA": "gsr"}
+
+    if sub == "sub-036":
+        ch_types.pop("EDA")  # No EDA channel in TAP for this participant (only set up for Fiction)
+
+    tap = tap.set_channel_types(ch_types)
     tap = tap.set_montage("standard_1020")
     # tap.to_data_frame().plot(subplots=True)
     sfreq = tap.info["sfreq"]
@@ -180,11 +191,20 @@ def load_fiction(path, sub):
         sfreq = fic.info["sfreq"]
 
         # Find events, keeping anything over 0.5 s (images are shown for 4 s)
-        events = nk.events_find(
-            fic["PHOTO"][0][0],
-            threshold_keep="below",
-            duration_min=int(sfreq * 0.5),
-        )
+        if sub in ["sub-035"]:
+            # Photosensor stopped detecting images after trial 16 (~7.4 min): crop on the
+            # jsPsych markers instead (1 = image sent), so the recording is not cut at trial 16
+            events = nk.events_find(
+                np.nan_to_num(fic["JsPsychMarker"][0][0]),
+                threshold_keep="above",
+                duration_min=int(sfreq * 0.5),
+            )
+        else:
+            events = nk.events_find(
+                fic["PHOTO"][0][0],
+                threshold_keep="below",
+                duration_min=int(sfreq * 0.5),
+            )
         if len(events["onset"]) == 0:
             continue
 
