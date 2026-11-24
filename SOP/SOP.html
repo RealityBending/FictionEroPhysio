@@ -71,6 +71,14 @@
   <tr><td>EDA</td><td>Bitalino, 2 finger electrodes</td><td>A4</td></tr>
   <tr><td>EEG</td><td>Muse headband (Bluetooth)</td><td>none</td></tr>
 </table>
+<table>
+  <tr><th>Lab Recorder Block/Task</th><th>Task</th><th>Length</th></tr>
+  <tr><td><code>RS</code></td><td>Resting state</td><td>~8 minutes</td></tr>
+  <tr><td><code>TAP</code></td><td>Tapping tasks</td><td>6 blocks</td></tr>
+  <tr><td><code>HCT</code></td><td>Heartbeat counting task</td><td>6 trials</td></tr>
+  <tr><td><code>FP1</code></td><td>Fiction phase 1</td><td>50 images (break in the middle)</td></tr>
+</table>
+<p class="sub">Participant IDs are written as <code>P</code> + 3 digits: <code>P001</code>, <code>P002</code> … <code>P010</code>, <code>P011</code> … (check the comments file on Box for the next one).</p>
 <p class="sub">Experimenter codes: Roisin = Exp1, Oliver = Exp2, Ana = Exp3, Ada = Exp4, Asel = Exp5.</p>
 
 <h2>Before the session</h2>
@@ -181,7 +189,7 @@
       <li><label class="step"><input type="checkbox"><span><span class="num">8.</span>Connect the Muse on the recording machine (VS Code, each command in its own new terminal):</span></label>
         <ul>
           <li><label class="step"><input type="checkbox"><span><code>OpenMuse find</code></span></label></li>
-          <li><label class="step"><input type="checkbox"><span><code>OpenMuse stream --address 00:55:DA:B9:FA:20</code></span></label></li>
+          <li><label class="step"><input type="checkbox"><span><code>OpenMuse stream</code></span></label></li>
           <li><label class="step"><input type="checkbox"><span><code>OpenMuse view</code></span></label></li>
         </ul>
         <div class="note"><ul>
